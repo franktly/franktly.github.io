@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title><![CDATA[Just Do It]]></title>
+  <subtitle><![CDATA[Love Read | Film | Song | Snooker]]></subtitle>
+  <link href="/atom.xml" rel="self"/>
+  <link href="http://www.franktly.com/"/>
+  <updated>2016-01-10T08:55:43.366Z</updated>
+  <id>http://www.franktly.com/</id>
+  
+  <author>
+    <name><![CDATA[Frank Tao]]></name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[使用Hexo搭建个人博客(1)]]></title>
+    <link href="http://www.franktly.com/2016/01/10/%E4%BD%BF%E7%94%A8Hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-1/"/>
+    <id>http://www.franktly.com/2016/01/10/使用Hexo搭建个人博客-1/</id>
+    <published>2016-01-10T13:33:07.046Z</published>
+    <updated>2016-01-10T08:55:43.366Z</updated>
+    <content type="html"><![CDATA[<h2 id="u524D_u8A00"><a href="#u524D_u8A00" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>写个人Blog大部分情况下是在使用现有的网站提供的博客系统，使用比较多的有sina博客、网易博客、CSDN等，如果想DIY个人的博客，可以选择静态网站的方式，使用的比较多的静态博客框架有:</p>
+<ul>
+<li><strong>Jekyll</strong>:<br>Jekyll是一种基于Ruby开发的、适用于博客的静态网站生成引擎。使用一个模板目录作为网站布局的基础框架，提供了模板、变量、插件等功能，最终生成一个完整的静态Web站点。即只要安装Jekyll的规范和结构，不需写html，便可生成网站</li>
+<li><strong>Octopress</strong>:<br>Octopress是一款基于Ruby开发的静态化、本地化的博客系统。其最大的优势就是静态化，不依赖脚本程序，没有MysqL等数据库，因此它可在一些性能差的服务器或者虚拟空间上运行，同等条件下打开页面的速度会比较快 </li>
+<li><strong>Hexo</strong>:<br>Hexo是一款基于node.js开发的博客程序，拥有简单的服务器，可用作简单的动态博客使用。也有生成器，生成的静态文件可以一键部署到Github Pages上，也可以部署到任意静态文件服务器上。它相当简约，并且可使用Markdown来编写文章<br>考虑到简单易用，生成效率问题，选用Hexo作为搭建个人博客的框架</li>
+</ul>
+<a id="more"></a>
+<h2 id="Hexo_u7B80_u4ECB"><a href="#Hexo_u7B80_u4ECB" class="headerlink" title="Hexo简介"></a>Hexo简介</h2><hr>
+<p>Hexo是一个快速、简单且高效的博客框架,使用Markown(或其他渲染引擎)解析文章，可以高效的利用各种主题插件生成自定义的静态页面，使用Hexo时候，一般是在本地编辑文章，转化为生成HTML文件，然后上传到部署的服务器上</p>
+<h2 id="Hexo_u5B89_u88C5"><a href="#Hexo_u5B89_u88C5" class="headerlink" title="Hexo安装"></a>Hexo安装</h2><hr>
+<h3 id="u5B89_u88C5Hexo_u524D_u9700_u8981_u7684_u51C6_u5907"><a href="#u5B89_u88C5Hexo_u524D_u9700_u8981_u7684_u51C6_u5907" class="headerlink" title="安装Hexo前需要的准备"></a>安装Hexo前需要的准备</h3><ul>
+<li>Node.js:<br>[Node.js下载地址]（<a href="https://nodejs.org/en/）" target="_blank" rel="external">https://nodejs.org/en/）</a><br>笔者安装的是Window版本的node-v5.3.0-x64.msi，安装完成后，在cmd输入<code>node -v</code>可以查看安装的版本和是否正确</li>
+<li>Git：<br>[git下载地址]（<a href="http://git-scm.com/download/）" target="_blank" rel="external">http://git-scm.com/download/）</a><br>笔者安装的是Windows版本的git version 1.9.5.msysgit.0,安装完成后，<code>git --version</code>可以查看安装的版本和是否正确</li>
+</ul>
+<h3 id="u5B89_u88C5Hexo"><a href="#u5B89_u88C5Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h3><p>使用npm（npm是node.js的模块管理和发布工具,安装node的时候会自动安装此工具）安装Hexo，shell中输入下面命令：</p>
+<p><code>$ npm install -g hexo-cli</code></p>
+<p>安装完成后，shell中输入<code>hexo -v</code>或<code>hexo version</code>查看安装的版本</p>
+<blockquote>
+<p><code>-g</code>: 表示全局安装，未带此参数表示本地安装</p>
+<ul>
+<li>全局安装：模块将被安装到<strong>全局目录</strong>中，全局目录可以通过<code>npm config set prefix &quot;目录路径&quot;</code>来设置，通过<code>npm config get prefix</code> 来获取</li>
+<li>本地安装：模块将被安装到<strong>当前命令行所在目录中</strong><br>一般采用全局安装方式统一安装到一个目录中去，方便管理、结构清晰、可以重复利用</li>
+</ul>
+</blockquote>
+<h2 id="Hexo_u672C_u5730_u5EFA_u7AD9"><a href="#Hexo_u672C_u5730_u5EFA_u7AD9" class="headerlink" title="Hexo本地建站"></a>Hexo本地建站</h2><hr>
+<h3 id="u521D_u59CB_u5316Blog_u7F51_u7AD9_u6846_u67B6"><a href="#u521D_u59CB_u5316Blog_u7F51_u7AD9_u6846_u67B6" class="headerlink" title="初始化Blog网站框架"></a>初始化Blog网站框架</h3><p>在本地电脑上建立一个Blog目录，并在shell中进行下面命令，初始化框架:</p>
+<pre><code>$ hexo init &lt;your blog folder&gt;
+$ cd folder
+$ npm install
+</code></pre><blockquote>
+<p>或者直接进入Blog目录中，执行<code>hexo init</code>和<code>npm install</code></p>
+</blockquote>
+<h3 id="u4FEE_u6539Blog_u7F51_u7AD9_u914D_u7F6E"><a href="#u4FEE_u6539Blog_u7F51_u7AD9_u914D_u7F6E" class="headerlink" title="修改Blog网站配置"></a>修改Blog网站配置</h3><p>初始化完成后，该Blog目录就会出现下面几个文件夹：</p>
+<pre><code>|—— _config.yml
+|—— package.json
+|—— scanffolds
+|—— source
+|    |—— _posts
+|—— themes
+</code></pre><blockquote>
+<ul>
+<li>_config.yml:<br>整个站点的<strong>配置</strong>信息：可以配置网站的title、author、language、目录、文章、日期、分页、扩展（主题名称、部署）信息</li>
+<li>package.json: 应用程序信息</li>
+<li>scanffolds: 模板文件夹,创建新文章时,Hexo会根据此建立文件</li>
+<li>source: 资源文件夹,存放用户资源</li>
+<li>themes: 主题文件夹，Hexo会根据此来生成静态页面，默认是官方的<em>landscape</em>主题</li>
+</ul>
+</blockquote>
+<h3 id="u5199Blog_u6587_u7AE0"><a href="#u5199Blog_u6587_u7AE0" class="headerlink" title="写Blog文章"></a>写Blog文章</h3><p>执行下面的命令创建一篇新的文章:</p>
+<p><code>$ hexo new [layout] &lt;title&gt;</code></p>
+<p>建立的文章后，在/source/_post里会出现该title的文章，之后的文章均保持在此目录</p>
+<blockquote>
+<p>可选参数：文章布局layout，默认是post,可以修改_config.yml中的default_layout来修改默认布局<br>文章的默认布局有3种： post、page、draft，分别对应不同的路径：</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Layout</th>
+<th>Path       </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> post</td>
+<td>source/_posts  </td>
+</tr>
+<tr>
+<td> page</td>
+<td>source         </td>
+</tr>
+<tr>
+<td> draft</td>
+<td>source/_drafts </td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>将草稿发布,执行下面publish命令， 将草稿移动到source/_post文件夹下：<br><code>$ hexo publish [layout] &lt;title&gt;</code><br>草稿默认不会显示在页面中，执行时候加上–draft参数或render_drafts参数设置为true来预览草稿</p>
+</blockquote>
+<h3 id="u751F_u6210_u7F51_u7AD9"><a href="#u751F_u6210_u7F51_u7AD9" class="headerlink" title="生成网站"></a>生成网站</h3><p>写完文章后，在cmd中执行下面命令生成静态文件，生成网站：</p>
+<p><code>$ hexo generate</code></p>
+<p>生成网站后，会在Blog的根目录下生成一个pulic临时文件，存放生成的网站结果，可以通过<code>hexo clean</code>命令清除生成结果，然后再执行<code>hexo generate</code>重新生成</p>
+<h3 id="u542F_u52A8Hexo_u670D_u52A1_u5668"><a href="#u542F_u52A8Hexo_u670D_u52A1_u5668" class="headerlink" title="启动Hexo服务器"></a>启动Hexo服务器</h3><p><strong>Hexo3.0之后的版本把服务器独立成了单独的模块，必须先安装hexo-sever才能使用</strong>:</p>
+<p><code>$ npm install hexo-server --save</code></p>
+<blockquote>
+<p><code>--save</code>:安装的同时将信息写入package.json中项目路径中如果有package.json文件时，使用<code>npm install</code>方法就可以根据dependencies配置安装所有的依赖包，这样代码提交到github时，就不用提交node_modules这个文件夹了</p>
+</blockquote>
+<p>安装hexo-server后，执行下面命令启动服务器,启动服务器之后，Hexo会自动监视文件变动并自动更新，无需重启服务器：</p>
+<p><code>$ hexo server</code></p>
+<blockquote>
+<p>如果想更改服务器的端口(默认是4000)，或启动时遇到EADDRINUSE 错误可以加-p选项指定其他端口:<br><code>$ hexo server -p 3000</code><br>服务器默认运行在0.0.0.0，可以覆盖默认的IP:<br><code>$ hexo server -i 192.168.0.1</code></p>
+</blockquote>
+<p>启动服务之后，本地的Blog网站系统搭建完成，可以在输入以下网址查看Blog的搭建效果：<a href="http://localhost:4000" target="_blank" rel="external">http://localhost:4000</a> 或 <a href="http://127.0.0.1:4000" target="_blank" rel="external">http://127.0.0.1:4000</a></p>
+<h3 id="u5C0F_u7ED3"><a href="#u5C0F_u7ED3" class="headerlink" title="小结"></a>小结</h3><hr>
+<p>这样一个本地的Blog网站建立完成，每次需要写Blog时候，就<code>hexo new</code> (hexo n for short)一篇文章，再使用markdown编辑文章，然后<code>hexo generarte</code>(hexo g for short)即可，但是这样Blog只能在本地的机器上访问，要想让别人也可以通过网址访问，需要将Blog deploy部署到服务器上，具体方法见下篇</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="u524D_u8A00"><a href="#u524D_u8A00" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>写个人Blog大部分情况下是在使用现有的网站提供的博客系统，使用比较多的有sina博客、网易博客、CSDN等，如果想DIY个人的博客，可以选择静态网站的方式，使用的比较多的静态博客框架有:</p>
+<ul>
+<li><strong>Jekyll</strong>:<br>Jekyll是一种基于Ruby开发的、适用于博客的静态网站生成引擎。使用一个模板目录作为网站布局的基础框架，提供了模板、变量、插件等功能，最终生成一个完整的静态Web站点。即只要安装Jekyll的规范和结构，不需写html，便可生成网站</li>
+<li><strong>Octopress</strong>:<br>Octopress是一款基于Ruby开发的静态化、本地化的博客系统。其最大的优势就是静态化，不依赖脚本程序，没有MysqL等数据库，因此它可在一些性能差的服务器或者虚拟空间上运行，同等条件下打开页面的速度会比较快 </li>
+<li><strong>Hexo</strong>:<br>Hexo是一款基于node.js开发的博客程序，拥有简单的服务器，可用作简单的动态博客使用。也有生成器，生成的静态文件可以一键部署到Github Pages上，也可以部署到任意静态文件服务器上。它相当简约，并且可使用Markdown来编写文章<br>考虑到简单易用，生成效率问题，选用Hexo作为搭建个人博客的框架</li>
+</ul>]]>
+    
+    </summary>
+    
+      <category term="Git" scheme="http://www.franktly.com/tags/Git/"/>
+    
+      <category term="GitHub" scheme="http://www.franktly.com/tags/GitHub/"/>
+    
+      <category term="Hexo" scheme="http://www.franktly.com/tags/Hexo/"/>
+    
+      <category term="Next" scheme="http://www.franktly.com/tags/Next/"/>
+    
+      <category term="Node.js" scheme="http://www.franktly.com/tags/Node-js/"/>
+    
+      <category term="博客" scheme="http://www.franktly.com/tags/%E5%8D%9A%E5%AE%A2/"/>
+    
+      <category term="博客搭建" scheme="http://www.franktly.com/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[使用Hexo搭建个人博客(2)]]></title>
+    <link href="http://www.franktly.com/2016/01/10/%E4%BD%BF%E7%94%A8Hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-2/"/>
+    <id>http://www.franktly.com/2016/01/10/使用Hexo搭建个人博客-2/</id>
+    <published>2016-01-10T13:32:50.986Z</published>
+    <updated>2016-01-10T13:25:22.476Z</updated>
+    <content type="html"><![CDATA[<h2 id="u524D_u8A00"><a href="#u524D_u8A00" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>上一篇介绍了使用Hexo在本地搭建的过程，本篇将本地搭建的博客网站部署到服务器去，常见的服务器有:</p>
+<ul>
+<li>GitHub</li>
+<li>Heroku</li>
+<li>Rsync</li>
+</ul>
+<p>本文选用使用比较多的GitHub作为目标服务器</p>
+<a id="more"></a>
+<h2 id="GitHub_u7B80_u4ECB"><a href="#GitHub_u7B80_u4ECB" class="headerlink" title="GitHub简介"></a>GitHub简介</h2><hr>
+<p><a href="https://github.com/" target="_blank" rel="external">GitHub</a>是Git工具的远程库，托管各种Git库，并提供Web界面。GitHub为一个项目贡献代码非常简单：首先点击项目站点的“fork”的按钮，然后将代码检出并将修改加入到刚才分出的代码库中，最后通过内建的“pull request”机制向项目负责人申请代码合并，GitHub是软件开发人员的Facebook</p>
+<h2 id="GitHub_u6CE8_u518C"><a href="#GitHub_u6CE8_u518C" class="headerlink" title="GitHub注册"></a>GitHub注册</h2><hr>
+<blockquote>
+<p>已有账户的忽略此步</p>
+</blockquote>
+<h3 id="u6CE8_u518CGitHub_u8D26_u53F7"><a href="#u6CE8_u518CGitHub_u8D26_u53F7" class="headerlink" title="注册GitHub账号"></a>注册GitHub账号</h3><h3 id="u5EFA_u7ACBGitHub_Pages"><a href="#u5EFA_u7ACBGitHub_Pages" class="headerlink" title="建立GitHub Pages"></a>建立GitHub Pages</h3><p>对于<a href="https://pages.github.com/" target="_blank" rel="external">GitHub Pages</a>分两种：</p>
+<ul>
+<li>用户&amp;组织页：根据GitHub用户名建立的<code>username.github.io</code>的repository,如笔者的仓库名为<code>franktly.github.io</code>,此时网页使用的是该仓库的master分支</li>
+<li>项目页: 比前者稍微麻烦些，需要在新的或已有的repository上新建一个gh-pages分支，具体方法见<a href="https://pages.github.com/" target="_blank" rel="external">GitHub Pages 官网</a></li>
+</ul>
+<p>这次我们选择第一种<strong>用户&amp;组织页</strong>类型的GitHub Pages</p>
+<h3 id="u8BBE_u7F6EGitHub_SSH_Key"><a href="#u8BBE_u7F6EGitHub_SSH_Key" class="headerlink" title="设置GitHub SSH Key"></a>设置GitHub SSH Key</h3><h4 id="u672C_u5730_u8BBE_u7F6Egit_u90AE_u7BB1_u3001_u7528_u6237_u540D_u548C_u5BC6_u7801"><a href="#u672C_u5730_u8BBE_u7F6Egit_u90AE_u7BB1_u3001_u7528_u6237_u540D_u548C_u5BC6_u7801" class="headerlink" title="本地设置git邮箱、用户名和密码"></a>本地设置git邮箱、用户名和密码</h4><pre><code>git config --global user.email &quot;your_email_addr&quot;
+git config --global user.name  &quot;user_name&quot;
+</code></pre><h4 id="u672C_u5730_u521B_u5EFASSH_Key"><a href="#u672C_u5730_u521B_u5EFASSH_Key" class="headerlink" title="本地创建SSH Key"></a>本地创建SSH Key</h4><p><code>ssh-keygen -t rsa -C &quot;your_email@your_email.com&quot;</code></p>
+<blockquote>
+<p>首先打开用户根目录（用户根目录一般为为C:\Users\username）查看是否已经有了SSH Key的文件夹<code>.ssh</code>,若有了先备份下，</p>
+</blockquote>
+<h4 id="u6DFB_u52A0_u751F_u6210_u7684SSH_Key_u5230GitHub_u8D26_u6237"><a href="#u6DFB_u52A0_u751F_u6210_u7684SSH_Key_u5230GitHub_u8D26_u6237" class="headerlink" title="添加生成的SSH Key到GitHub账户"></a>添加生成的SSH Key到GitHub账户</h4><p>打开在当前用户的根目录下生成的<code>.ssh</code>文件里面的ssh.pub（ssh 公钥）,拷贝其内容到[Account setting -&gt; SSH Keys -&gt; Add SSH Key]</p>
+<h4 id="u9A8C_u8BC1_u4E0BSSH_u662F_u5426_u8BBE_u7F6E_u6210_u529F"><a href="#u9A8C_u8BC1_u4E0BSSH_u662F_u5426_u8BBE_u7F6E_u6210_u529F" class="headerlink" title="验证下SSH是否设置成功"></a>验证下SSH是否设置成功</h4><p><code>ssh -T git@github.com</code></p>
+<p>第一次提示不能连接，直接输入yes即可</p>
+<p><a href="http://tietuku.com/90e5a1a0e801d22a1" target="_blank" rel="external"><img src="http://i4.tietuku.com/90e5a1a0e801d22as.png"></a></p>
+<h2 id="GitHub_u90E8_u7F72"><a href="#GitHub_u90E8_u7F72" class="headerlink" title="GitHub部署"></a>GitHub部署</h2><hr>
+<p>建立GitHub Pages之后，即可以将本地搭建的Hexo网站部署到GitHub上去</p>
+<h3 id="u4FEE_u6539_u7AD9_u70B9_config-yml_u914D_u7F6E_u6587_u4EF6"><a href="#u4FEE_u6539_u7AD9_u70B9_config-yml_u914D_u7F6E_u6587_u4EF6" class="headerlink" title="修改站点_config.yml配置文件"></a>修改站点_config.yml配置文件</h3><p>如下面所示：类型配置为git，仓库地址为建立的GitHub Pages仓库地址，分支为master</p>
+<pre><code>deploy:
+type: git
+repo: https://github.com/username/username.github.io.git
+branch: master
+</code></pre><h3 id="u6267_u884C_u90E8_u7F72_u547D_u4EE4"><a href="#u6267_u884C_u90E8_u7F72_u547D_u4EE4" class="headerlink" title="执行部署命令"></a>执行部署命令</h3><p><code>$ hexo deploy</code></p>
+<blockquote>
+<p>可以使用<code>-g，--generate</code>可选参数部署之前预先生成静态文件</p>
+</blockquote>
+<p>在GitHub上部署完成之后，以后别人也可以通过<a href="http://username.github.io网站访问你的个人博客网站了" target="_blank" rel="external">http://username.github.io网站访问你的个人博客网站了</a></p>
+<h2 id="u57DF_u540D_u7ED1_u5B9A"><a href="#u57DF_u540D_u7ED1_u5B9A" class="headerlink" title="域名绑定"></a>域名绑定</h2><hr>
+<h3 id="Godaddy_u57DF_u540D_u7533_u8BF7"><a href="#Godaddy_u57DF_u540D_u7533_u8BF7" class="headerlink" title="Godaddy域名申请"></a>Godaddy域名申请</h3><p>如果想使用自己申请的域名来访问GitHub上部署的个人博客，可以先到<a href="https://www.godaddy.com/" target="_blank" rel="external">Godaddy</a>上申请域名,笔者申请的域名为<a href="http://www.franktly.com">http://www.franktly.com</a></p>
+<p>Godaddy的域名申请一般分为：</p>
+<ol>
+<li>Search Domain： 查找自己想要申请的域名，若未被别人申请才行</li>
+<li>Select Extensions: 选择域名的扩展名，有.com、.net等等可以选择</li>
+<li>Continue To Chart: 选择提供的相应的服务去付款，支持支付宝支付</li>
+</ol>
+<h3 id="Godaddy_u57DF_u540D_u8BBE_u7F6E"><a href="#Godaddy_u57DF_u540D_u8BBE_u7F6E" class="headerlink" title="Godaddy域名设置"></a>Godaddy域名设置</h3><p>申请成功后，需要设置Godaddy的域名，将申请到的域名关联到username.github.io网址上,具体步骤如下：</p>
+<ol>
+<li>打开个人Godday主页查看购买的Products:<br><a href="http://tietuku.com/fd409d6268e1685a" target="_blank" rel="external"><img src="http://i4.tietuku.com/fd409d6268e1685at.jpg"></a></li>
+<li>选择管理DNS，在DNS ZONE FILE中选择Add Record：<br><a href="http://tietuku.com/82206ce303e96a36" target="_blank" rel="external"><img src="http://i4.tietuku.com/82206ce303e96a36t.jpg"></a></li>
+<li>在ZONE RECORD中选择CNAME文件类型，HOST为www或www.yourdomain,POINTS TO为github地址：<br><a href="http://tietuku.com/82206ce303e96a36" target="_blank" rel="external"><img src="http://i4.tietuku.com/82206ce303e96a36t.jpg"></a></li>
+<li>设置成功后，会在CNAME记录上显示新加的记录：<br><a href="http://tietuku.com/1ef4d6ef67ddf690" target="_blank" rel="external"><img src="http://i4.tietuku.com/1ef4d6ef67ddf690t.jpg"></a></li>
+</ol>
+<h3 id="GitHub_u57DF_u540D_u8BBE_u7F6E"><a href="#GitHub_u57DF_u540D_u8BBE_u7F6E" class="headerlink" title="GitHub域名设置"></a>GitHub域名设置</h3><p>在GitHub端也相应的设置下域名，只需在本地博客的根目录下source文件夹下增加一个CNAME文件，文件内容为你申请的域名地址，如本人的是：<code>www.franktly.com</code></p>
+<blockquote>
+<p>本地根目录下的source文件夹下的增加CNAME文件后，需要重新执行下<code>hexo deploy</code>命令将CNAME文件部署到GitHub服务器才能生效，成功后，一般需要等十几分钟左右才能通过新申请的域名访问你的博客<br>放到博客根目录的source文件夹下面比直接通过Git客户端将本地CNAME文件push到GitHub上好些，这样可以避免每次<code>hexo deploy</code>后，hexo自动将 CNAME文件删除掉</p>
+</blockquote>
+<h2 id="u5C0F_u7ED3"><a href="#u5C0F_u7ED3" class="headerlink" title="小结"></a>小结</h2><hr>
+<p>本篇主要介绍了将本地Hexo搭建的个人博客网站部署到GitHub服务器上的方法，并且简要的介绍了在Godaddy上域名的申请方法和设置，至此，就可以使用域名在网络上访问自己的博客了，如果觉得博客的主题不是自己喜欢的还可以更改Hexo的默认主题，下篇将会简介Hexo中的Next主题使用方法</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="u524D_u8A00"><a href="#u524D_u8A00" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>上一篇介绍了使用Hexo在本地搭建的过程，本篇将本地搭建的博客网站部署到服务器去，常见的服务器有:</p>
+<ul>
+<li>GitHub</li>
+<li>Heroku</li>
+<li>Rsync</li>
+</ul>
+<p>本文选用使用比较多的GitHub作为目标服务器</p>]]>
+    
+    </summary>
+    
+      <category term="Git" scheme="http://www.franktly.com/tags/Git/"/>
+    
+      <category term="GitHub" scheme="http://www.franktly.com/tags/GitHub/"/>
+    
+      <category term="Hexo" scheme="http://www.franktly.com/tags/Hexo/"/>
+    
+      <category term="Next" scheme="http://www.franktly.com/tags/Next/"/>
+    
+      <category term="Node.js" scheme="http://www.franktly.com/tags/Node-js/"/>
+    
+      <category term="博客" scheme="http://www.franktly.com/tags/%E5%8D%9A%E5%AE%A2/"/>
+    
+      <category term="博客搭建" scheme="http://www.franktly.com/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[使用Hexo搭建个人博客(3)]]></title>
+    <link href="http://www.franktly.com/2016/01/10/%E4%BD%BF%E7%94%A8Hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-3/"/>
+    <id>http://www.franktly.com/2016/01/10/使用Hexo搭建个人博客-3/</id>
+    <published>2016-01-10T13:32:07.000Z</published>
+    <updated>2016-01-10T13:34:04.941Z</updated>
+    <content type="html"></content>
+    <summary type="html">
+    
+    </summary>
+    
+  </entry>
+  
+</feed>
