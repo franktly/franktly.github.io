@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Love Read | Film | Song | Snooker]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.franktly.com/"/>
-  <updated>2016-01-10T08:55:43.366Z</updated>
+  <updated>2016-01-17T09:52:57.814Z</updated>
   <id>http://www.franktly.com/</id>
   
   <author>
@@ -16,16 +16,16 @@
   
   <entry>
     <title><![CDATA[使用Hexo搭建个人博客(1)]]></title>
-    <link href="http://www.franktly.com/2016/01/10/%E4%BD%BF%E7%94%A8Hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-1/"/>
-    <id>http://www.franktly.com/2016/01/10/使用Hexo搭建个人博客-1/</id>
-    <published>2016-01-10T13:33:07.046Z</published>
-    <updated>2016-01-10T08:55:43.366Z</updated>
+    <link href="http://www.franktly.com/2016/01/17/%E4%BD%BF%E7%94%A8Hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-1/"/>
+    <id>http://www.franktly.com/2016/01/17/使用Hexo搭建个人博客-1/</id>
+    <published>2016-01-17T09:52:57.814Z</published>
+    <updated>2016-01-17T09:52:57.814Z</updated>
     <content type="html"><![CDATA[<h2 id="u524D_u8A00"><a href="#u524D_u8A00" class="headerlink" title="前言"></a>前言</h2><hr>
 <p>写个人Blog大部分情况下是在使用现有的网站提供的博客系统，使用比较多的有sina博客、网易博客、CSDN等，如果想DIY个人的博客，可以选择静态网站的方式，使用的比较多的静态博客框架有:</p>
 <ul>
-<li><strong>Jekyll</strong>:<br>Jekyll是一种基于Ruby开发的、适用于博客的静态网站生成引擎。使用一个模板目录作为网站布局的基础框架，提供了模板、变量、插件等功能，最终生成一个完整的静态Web站点。即只要安装Jekyll的规范和结构，不需写html，便可生成网站</li>
-<li><strong>Octopress</strong>:<br>Octopress是一款基于Ruby开发的静态化、本地化的博客系统。其最大的优势就是静态化，不依赖脚本程序，没有MysqL等数据库，因此它可在一些性能差的服务器或者虚拟空间上运行，同等条件下打开页面的速度会比较快 </li>
-<li><strong>Hexo</strong>:<br>Hexo是一款基于node.js开发的博客程序，拥有简单的服务器，可用作简单的动态博客使用。也有生成器，生成的静态文件可以一键部署到Github Pages上，也可以部署到任意静态文件服务器上。它相当简约，并且可使用Markdown来编写文章<br>考虑到简单易用，生成效率问题，选用Hexo作为搭建个人博客的框架</li>
+<li><a href="http://jekyll.bootcss.com/" target="_blank" rel="external">Jekyll</a>:<br>Jekyll是一种基于Ruby开发的、适用于博客的静态网站生成引擎。使用一个模板目录作为网站布局的基础框架，提供了模板、变量、插件等功能，最终生成一个完整的静态Web站点。即只要安装Jekyll的规范和结构，不需写html，便可生成网站</li>
+<li><a href="http://octopress.org/" target="_blank" rel="external">Octopress</a>:<br>Octopress是一款基于Ruby开发的静态化、本地化的博客系统。其最大的优势就是静态化，不依赖脚本程序，没有MysqL等数据库，因此它可在一些性能差的服务器或者虚拟空间上运行，同等条件下打开页面的速度会比较快 </li>
+<li><a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>:<br>Hexo是一款基于node.js开发的博客程序，拥有简单的服务器，可用作简单的动态博客使用。也有生成器，生成的静态文件可以一键部署到Github Pages上，也可以部署到任意静态文件服务器上。它相当简约，并且可使用Markdown来编写文章<br>考虑到简单易用，生成效率问题，选用Hexo作为搭建个人博客的框架</li>
 </ul>
 <a id="more"></a>
 <h2 id="Hexo_u7B80_u4ECB"><a href="#Hexo_u7B80_u4ECB" class="headerlink" title="Hexo简介"></a>Hexo简介</h2><hr>
@@ -121,9 +121,9 @@ $ npm install
     <![CDATA[<h2 id="u524D_u8A00"><a href="#u524D_u8A00" class="headerlink" title="前言"></a>前言</h2><hr>
 <p>写个人Blog大部分情况下是在使用现有的网站提供的博客系统，使用比较多的有sina博客、网易博客、CSDN等，如果想DIY个人的博客，可以选择静态网站的方式，使用的比较多的静态博客框架有:</p>
 <ul>
-<li><strong>Jekyll</strong>:<br>Jekyll是一种基于Ruby开发的、适用于博客的静态网站生成引擎。使用一个模板目录作为网站布局的基础框架，提供了模板、变量、插件等功能，最终生成一个完整的静态Web站点。即只要安装Jekyll的规范和结构，不需写html，便可生成网站</li>
-<li><strong>Octopress</strong>:<br>Octopress是一款基于Ruby开发的静态化、本地化的博客系统。其最大的优势就是静态化，不依赖脚本程序，没有MysqL等数据库，因此它可在一些性能差的服务器或者虚拟空间上运行，同等条件下打开页面的速度会比较快 </li>
-<li><strong>Hexo</strong>:<br>Hexo是一款基于node.js开发的博客程序，拥有简单的服务器，可用作简单的动态博客使用。也有生成器，生成的静态文件可以一键部署到Github Pages上，也可以部署到任意静态文件服务器上。它相当简约，并且可使用Markdown来编写文章<br>考虑到简单易用，生成效率问题，选用Hexo作为搭建个人博客的框架</li>
+<li><a href="http://jekyll.bootcss.com/">Jekyll</a>:<br>Jekyll是一种基于Ruby开发的、适用于博客的静态网站生成引擎。使用一个模板目录作为网站布局的基础框架，提供了模板、变量、插件等功能，最终生成一个完整的静态Web站点。即只要安装Jekyll的规范和结构，不需写html，便可生成网站</li>
+<li><a href="http://octopress.org/">Octopress</a>:<br>Octopress是一款基于Ruby开发的静态化、本地化的博客系统。其最大的优势就是静态化，不依赖脚本程序，没有MysqL等数据库，因此它可在一些性能差的服务器或者虚拟空间上运行，同等条件下打开页面的速度会比较快 </li>
+<li><a href="https://hexo.io/">Hexo</a>:<br>Hexo是一款基于node.js开发的博客程序，拥有简单的服务器，可用作简单的动态博客使用。也有生成器，生成的静态文件可以一键部署到Github Pages上，也可以部署到任意静态文件服务器上。它相当简约，并且可使用Markdown来编写文章<br>考虑到简单易用，生成效率问题，选用Hexo作为搭建个人博客的框架</li>
 </ul>]]>
     
     </summary>
@@ -146,16 +146,16 @@ $ npm install
   
   <entry>
     <title><![CDATA[使用Hexo搭建个人博客(2)]]></title>
-    <link href="http://www.franktly.com/2016/01/10/%E4%BD%BF%E7%94%A8Hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-2/"/>
-    <id>http://www.franktly.com/2016/01/10/使用Hexo搭建个人博客-2/</id>
-    <published>2016-01-10T13:32:50.986Z</published>
-    <updated>2016-01-10T13:25:22.476Z</updated>
+    <link href="http://www.franktly.com/2016/01/17/%E4%BD%BF%E7%94%A8Hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-2/"/>
+    <id>http://www.franktly.com/2016/01/17/使用Hexo搭建个人博客-2/</id>
+    <published>2016-01-17T09:47:25.123Z</published>
+    <updated>2016-01-17T09:47:25.123Z</updated>
     <content type="html"><![CDATA[<h2 id="u524D_u8A00"><a href="#u524D_u8A00" class="headerlink" title="前言"></a>前言</h2><hr>
 <p>上一篇介绍了使用Hexo在本地搭建的过程，本篇将本地搭建的博客网站部署到服务器去，常见的服务器有:</p>
 <ul>
-<li>GitHub</li>
-<li>Heroku</li>
-<li>Rsync</li>
+<li><a href="https://github.com/" target="_blank" rel="external">GitHub</a></li>
+<li><a href="https://www.heroku.com/" target="_blank" rel="external">Heroku</a></li>
+<li>…</li>
 </ul>
 <p>本文选用使用比较多的GitHub作为目标服务器</p>
 <a id="more"></a>
@@ -219,9 +219,9 @@ branch: master
     <![CDATA[<h2 id="u524D_u8A00"><a href="#u524D_u8A00" class="headerlink" title="前言"></a>前言</h2><hr>
 <p>上一篇介绍了使用Hexo在本地搭建的过程，本篇将本地搭建的博客网站部署到服务器去，常见的服务器有:</p>
 <ul>
-<li>GitHub</li>
-<li>Heroku</li>
-<li>Rsync</li>
+<li><a href="https://github.com/">GitHub</a></li>
+<li><a href="https://www.heroku.com/">Heroku</a></li>
+<li>…</li>
 </ul>
 <p>本文选用使用比较多的GitHub作为目标服务器</p>]]>
     
@@ -248,11 +248,59 @@ branch: master
     <link href="http://www.franktly.com/2016/01/10/%E4%BD%BF%E7%94%A8Hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-3/"/>
     <id>http://www.franktly.com/2016/01/10/使用Hexo搭建个人博客-3/</id>
     <published>2016-01-10T13:32:07.000Z</published>
-    <updated>2016-01-10T13:34:04.941Z</updated>
-    <content type="html"></content>
+    <updated>2016-01-17T09:53:30.304Z</updated>
+    <content type="html"><![CDATA[<h2 id="u524D_u8A00"><a href="#u524D_u8A00" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>上一篇简单介绍了Hexo搭建的静态博客部署到GitHub服务器上，并关联了自己申请的域名，Hexo默认的主题是landscape,如果想选用其他的主题，可以在GitHub上搜索hexo themes,GitHub上Hexo主题Star比较多的有下面几个：</p>
+<ul>
+<li><a href="http://theme-next.iissnan.com/" target="_blank" rel="external">NexT</a></li>
+<li><a href="http://theme-next.iissnan.com/" target="_blank" rel="external">Casper</a></li>
+<li><a href="https://github.com/daleanthony/uno" target="_blank" rel="external">Uno</a></li>
+<li><a href="https://github.com/orderedlist/modernist" target="_blank" rel="external">Modernist</a></li>
+<li><a href="https://github.com/litten/hexo-theme-yilia" target="_blank" rel="external">Yilia</a></li>
+<li><a href="https://github.com/A-limon/pacman" target="_blank" rel="external">Pacman</a></li>
+<li>…</li>
+</ul>
+<p>本篇以Star最多的（也是本人使用的）Next主题为例，简要的介绍Next主题在Hexo中的使用方法</p>
+<a id="more"></a>
+<h2 id="NexT_u7B80_u4ECB"><a href="#NexT_u7B80_u4ECB" class="headerlink" title="NexT简介"></a>NexT简介</h2><hr>
+<p>NexT是<a href="https://github.com/iissnan/hexo-theme-next" target="_blank" rel="external">iissnan</a>设计的一款简单又不失优雅的主题,正如NexT的开发宗旨：<br><strong> NexT is built for easily use with elegant appearance. First things first, always keep things simple.</strong></p>
+<h2 id="u5E94_u7528Next"><a href="#u5E94_u7528Next" class="headerlink" title="应用Next"></a>应用Next</h2><hr>
+<h3 id="u4E0B_u8F7DNexT_u4E3B_u9898"><a href="#u4E0B_u8F7DNexT_u4E3B_u9898" class="headerlink" title="下载NexT主题"></a>下载NexT主题</h3><p>在Hexo博客的目录打开Shell终端，输入下面命令即可：</p>
+<pre><code>$ cd your_hexo_dir
+$ git clone https://github.com/iissnan/hexo-theme-next themes/next
+</code></pre><h3 id="u542F_u7528NexT_u4E3B_u9898"><a href="#u542F_u7528NexT_u4E3B_u9898" class="headerlink" title="启用NexT主题"></a>启用NexT主题</h3><p>打开Hexo博客站点配置文件，把theme 字段的值改为next</p>
+<h3 id="u9A8C_u8BC1_u662F_u5426_u542F_u7528"><a href="#u9A8C_u8BC1_u662F_u5426_u542F_u7528" class="headerlink" title="验证是否启用"></a>验证是否启用</h3><p>打开Shell终端，输入：<br><code>$ hexo server --debug</code><br>并访问<a href="http://localhost:4000" target="_blank" rel="external">http://localhost:4000</a>即可查看主题是否启用</p>
+<h3 id="Next_u914D_u7F6E"><a href="#Next_u914D_u7F6E" class="headerlink" title="Next配置"></a>Next配置</h3><p>NexT的使用手册上有比较详细的配置使用教程，见<a href="http://theme-next.iissnan.com/" target="_blank" rel="external">NexT使用指南</a></p>
+]]></content>
     <summary type="html">
+    <![CDATA[<h2 id="u524D_u8A00"><a href="#u524D_u8A00" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>上一篇简单介绍了Hexo搭建的静态博客部署到GitHub服务器上，并关联了自己申请的域名，Hexo默认的主题是landscape,如果想选用其他的主题，可以在GitHub上搜索hexo themes,GitHub上Hexo主题Star比较多的有下面几个：</p>
+<ul>
+<li><a href="http://theme-next.iissnan.com/">NexT</a></li>
+<li><a href="http://theme-next.iissnan.com/">Casper</a></li>
+<li><a href="https://github.com/daleanthony/uno">Uno</a></li>
+<li><a href="https://github.com/orderedlist/modernist">Modernist</a></li>
+<li><a href="https://github.com/litten/hexo-theme-yilia">Yilia</a></li>
+<li><a href="https://github.com/A-limon/pacman">Pacman</a></li>
+<li>…</li>
+</ul>
+<p>本篇以Star最多的（也是本人使用的）Next主题为例，简要的介绍Next主题在Hexo中的使用方法</p>]]>
     
     </summary>
+    
+      <category term="Git" scheme="http://www.franktly.com/tags/Git/"/>
+    
+      <category term="GitHub" scheme="http://www.franktly.com/tags/GitHub/"/>
+    
+      <category term="Hexo" scheme="http://www.franktly.com/tags/Hexo/"/>
+    
+      <category term="Next" scheme="http://www.franktly.com/tags/Next/"/>
+    
+      <category term="Node.js" scheme="http://www.franktly.com/tags/Node-js/"/>
+    
+      <category term="博客" scheme="http://www.franktly.com/tags/%E5%8D%9A%E5%AE%A2/"/>
+    
+      <category term="博客搭建" scheme="http://www.franktly.com/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/"/>
     
   </entry>
   

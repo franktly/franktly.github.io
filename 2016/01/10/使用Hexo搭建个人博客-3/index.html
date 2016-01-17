@@ -35,7 +35,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Git,GitHub,Hexo,Next,Node.js,博客," />
 
 
 
@@ -53,16 +53,49 @@
 
 
 
-<meta name="description" content="Record Mind">
+<meta name="description" content="前言
+上一篇简单介绍了Hexo搭建的静态博客部署到GitHub服务器上，并关联了自己申请的域名，Hexo默认的主题是landscape,如果想选用其他的主题，可以在GitHub上搜索hexo themes,GitHub上Hexo主题Star比较多的有下面几个：
+
+NexT
+Casper
+Uno
+Modernist
+Yilia
+Pacman
+…
+
+本篇以Star最多的（也是本人使用的）Next主题为">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用Hexo搭建个人博客(3)">
 <meta property="og:url" content="http://www.franktly.com/2016/01/10/使用Hexo搭建个人博客-3/index.html">
 <meta property="og:site_name" content="Just Do It">
-<meta property="og:description" content="Record Mind">
-<meta property="og:updated_time" content="2016-01-10T13:34:04.941Z">
+<meta property="og:description" content="前言
+上一篇简单介绍了Hexo搭建的静态博客部署到GitHub服务器上，并关联了自己申请的域名，Hexo默认的主题是landscape,如果想选用其他的主题，可以在GitHub上搜索hexo themes,GitHub上Hexo主题Star比较多的有下面几个：
+
+NexT
+Casper
+Uno
+Modernist
+Yilia
+Pacman
+…
+
+本篇以Star最多的（也是本人使用的）Next主题为">
+<meta property="og:updated_time" content="2016-01-17T09:53:30.304Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Hexo搭建个人博客(3)">
-<meta name="twitter:description" content="Record Mind">
+<meta name="twitter:description" content="前言
+上一篇简单介绍了Hexo搭建的静态博客部署到GitHub服务器上，并关联了自己申请的域名，Hexo默认的主题是landscape,如果想选用其他的主题，可以在GitHub上搜索hexo themes,GitHub上Hexo主题Star比较多的有下面几个：
+
+NexT
+Casper
+Uno
+Modernist
+Yilia
+Pacman
+…
+
+本篇以Star最多的（也是本人使用的）Next主题为">
 
 
 
@@ -260,6 +293,21 @@
           </span>
 
           
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/博客搭建/" itemprop="url" rel="index">
+                    <span itemprop="name">博客搭建</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
 
           
             
@@ -285,11 +333,49 @@
       
 
       
-        <span itemprop="articleBody"></span>
+        <span itemprop="articleBody"><h2 id="u524D_u8A00"><a href="#u524D_u8A00" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>上一篇简单介绍了Hexo搭建的静态博客部署到GitHub服务器上，并关联了自己申请的域名，Hexo默认的主题是landscape,如果想选用其他的主题，可以在GitHub上搜索hexo themes,GitHub上Hexo主题Star比较多的有下面几个：</p>
+<ul>
+<li><a href="http://theme-next.iissnan.com/" target="_blank" rel="external">NexT</a></li>
+<li><a href="http://theme-next.iissnan.com/" target="_blank" rel="external">Casper</a></li>
+<li><a href="https://github.com/daleanthony/uno" target="_blank" rel="external">Uno</a></li>
+<li><a href="https://github.com/orderedlist/modernist" target="_blank" rel="external">Modernist</a></li>
+<li><a href="https://github.com/litten/hexo-theme-yilia" target="_blank" rel="external">Yilia</a></li>
+<li><a href="https://github.com/A-limon/pacman" target="_blank" rel="external">Pacman</a></li>
+<li>…</li>
+</ul>
+<p>本篇以Star最多的（也是本人使用的）Next主题为例，简要的介绍Next主题在Hexo中的使用方法</p>
+<a id="more"></a>
+<h2 id="NexT_u7B80_u4ECB"><a href="#NexT_u7B80_u4ECB" class="headerlink" title="NexT简介"></a>NexT简介</h2><hr>
+<p>NexT是<a href="https://github.com/iissnan/hexo-theme-next" target="_blank" rel="external">iissnan</a>设计的一款简单又不失优雅的主题,正如NexT的开发宗旨：<br><strong> NexT is built for easily use with elegant appearance. First things first, always keep things simple.</strong></p>
+<h2 id="u5E94_u7528Next"><a href="#u5E94_u7528Next" class="headerlink" title="应用Next"></a>应用Next</h2><hr>
+<h3 id="u4E0B_u8F7DNexT_u4E3B_u9898"><a href="#u4E0B_u8F7DNexT_u4E3B_u9898" class="headerlink" title="下载NexT主题"></a>下载NexT主题</h3><p>在Hexo博客的目录打开Shell终端，输入下面命令即可：</p>
+<pre><code>$ cd your_hexo_dir
+$ git clone https://github.com/iissnan/hexo-theme-next themes/next
+</code></pre><h3 id="u542F_u7528NexT_u4E3B_u9898"><a href="#u542F_u7528NexT_u4E3B_u9898" class="headerlink" title="启用NexT主题"></a>启用NexT主题</h3><p>打开Hexo博客站点配置文件，把theme 字段的值改为next</p>
+<h3 id="u9A8C_u8BC1_u662F_u5426_u542F_u7528"><a href="#u9A8C_u8BC1_u662F_u5426_u542F_u7528" class="headerlink" title="验证是否启用"></a>验证是否启用</h3><p>打开Shell终端，输入：<br><code>$ hexo server --debug</code><br>并访问<a href="http://localhost:4000" target="_blank" rel="external">http://localhost:4000</a>即可查看主题是否启用</p>
+<h3 id="Next_u914D_u7F6E"><a href="#Next_u914D_u7F6E" class="headerlink" title="Next配置"></a>Next配置</h3><p>NexT的使用手册上有比较详细的配置使用教程，见<a href="http://theme-next.iissnan.com/" target="_blank" rel="external">NexT使用指南</a></p>
+</span>
       
     </div>
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Git/" rel="tag">#Git</a>
+          
+            <a href="/tags/GitHub/" rel="tag">#GitHub</a>
+          
+            <a href="/tags/Hexo/" rel="tag">#Hexo</a>
+          
+            <a href="/tags/Next/" rel="tag">#Next</a>
+          
+            <a href="/tags/Node-js/" rel="tag">#Node.js</a>
+          
+            <a href="/tags/博客/" rel="tag">#博客</a>
+          
+        </div>
       
 
       
@@ -300,7 +386,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/01/10/使用Hexo搭建个人博客-2/" rel="prev" title="使用Hexo搭建个人博客(2)">
+              <a href="/2016/01/17/使用Hexo搭建个人博客-2/" rel="prev" title="使用Hexo搭建个人博客(2)">
                 使用Hexo搭建个人博客(2) <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -472,7 +558,7 @@
               
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#u524D_u8A00"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NexT_u7B80_u4ECB"><span class="nav-number">2.</span> <span class="nav-text">NexT简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u5E94_u7528Next"><span class="nav-number">3.</span> <span class="nav-text">应用Next</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#u4E0B_u8F7DNexT_u4E3B_u9898"><span class="nav-number">3.1.</span> <span class="nav-text">下载NexT主题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u542F_u7528NexT_u4E3B_u9898"><span class="nav-number">3.2.</span> <span class="nav-text">启用NexT主题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u9A8C_u8BC1_u662F_u5426_u542F_u7528"><span class="nav-number">3.3.</span> <span class="nav-text">验证是否启用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Next_u914D_u7F6E"><span class="nav-number">3.4.</span> <span class="nav-text">Next配置</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
