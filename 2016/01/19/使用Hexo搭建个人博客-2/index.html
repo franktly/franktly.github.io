@@ -63,7 +63,7 @@ Heroku
 本文选用使用比较多的GitHub作为目标服务器">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用Hexo搭建个人博客(2)">
-<meta property="og:url" content="http://www.franktly.com/2016/01/17/使用Hexo搭建个人博客-2/index.html">
+<meta property="og:url" content="http://www.franktly.com/2016/01/19/使用Hexo搭建个人博客-2/index.html">
 <meta property="og:site_name" content="Just Do It">
 <meta property="og:description" content="前言
 上一篇介绍了使用Hexo在本地搭建的过程，本篇将本地搭建的博客网站部署到服务器去，常见的服务器有:
@@ -73,12 +73,12 @@ Heroku
 …
 
 本文选用使用比较多的GitHub作为目标服务器">
-<meta property="og:image" content="http://i4.tietuku.com/90e5a1a0e801d22as.png">
-<meta property="og:image" content="http://i4.tietuku.com/fd409d6268e1685at.jpg">
-<meta property="og:image" content="http://i4.tietuku.com/82206ce303e96a36t.jpg">
-<meta property="og:image" content="http://i4.tietuku.com/82206ce303e96a36t.jpg">
-<meta property="og:image" content="http://i4.tietuku.com/1ef4d6ef67ddf690t.jpg">
-<meta property="og:updated_time" content="2016-01-17T09:47:25.123Z">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FSSH-Key.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FGoDaddy%20Products.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FDomain_Set1.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FDomain_Set2.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FDomain_Set3.PNG">
+<meta property="og:updated_time" content="2016-01-19T14:53:40.658Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Hexo搭建个人博客(2)">
 <meta name="twitter:description" content="前言
@@ -280,8 +280,8 @@ Heroku
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2016-01-17T17:47:25+08:00" content="2016-01-17">
-              2016-01-17
+            <time itemprop="dateCreated" datetime="2016-01-19T22:53:40+08:00" content="2016-01-19">
+              2016-01-19
             </time>
           </span>
 
@@ -306,8 +306,8 @@ Heroku
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/01/17/使用Hexo搭建个人博客-2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/17/使用Hexo搭建个人博客-2/" itemprop="commentsCount"></span>
+                <a href="/2016/01/19/使用Hexo搭建个人博客-2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/19/使用Hexo搭建个人博客-2/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -356,7 +356,7 @@ git config --global user.name  &quot;user_name&quot;
 <h4 id="u6DFB_u52A0_u751F_u6210_u7684SSH_Key_u5230GitHub_u8D26_u6237"><a href="#u6DFB_u52A0_u751F_u6210_u7684SSH_Key_u5230GitHub_u8D26_u6237" class="headerlink" title="添加生成的SSH Key到GitHub账户"></a>添加生成的SSH Key到GitHub账户</h4><p>打开在当前用户的根目录下生成的<code>.ssh</code>文件里面的ssh.pub（ssh 公钥）,拷贝其内容到[Account setting -&gt; SSH Keys -&gt; Add SSH Key]</p>
 <h4 id="u9A8C_u8BC1_u4E0BSSH_u662F_u5426_u8BBE_u7F6E_u6210_u529F"><a href="#u9A8C_u8BC1_u4E0BSSH_u662F_u5426_u8BBE_u7F6E_u6210_u529F" class="headerlink" title="验证下SSH是否设置成功"></a>验证下SSH是否设置成功</h4><p><code>ssh -T git@github.com</code></p>
 <p>第一次提示不能连接，直接输入yes即可</p>
-<p><a href="http://tietuku.com/90e5a1a0e801d22a1" target="_blank" rel="external"><img src="http://i4.tietuku.com/90e5a1a0e801d22as.png"></a></p>
+<p><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FSSH-Key.PNG" alt="SSH_SET"></p>
 <h2 id="GitHub_u90E8_u7F72"><a href="#GitHub_u90E8_u7F72" class="headerlink" title="GitHub部署"></a>GitHub部署</h2><hr>
 <p>建立GitHub Pages之后，即可以将本地搭建的Hexo网站部署到GitHub上去</p>
 <h3 id="u4FEE_u6539_u7AD9_u70B9_config-yml_u914D_u7F6E_u6587_u4EF6"><a href="#u4FEE_u6539_u7AD9_u70B9_config-yml_u914D_u7F6E_u6587_u4EF6" class="headerlink" title="修改站点_config.yml配置文件"></a>修改站点_config.yml配置文件</h3><p>如下面所示：类型配置为git，仓库地址为建立的GitHub Pages仓库地址，分支为master</p>
@@ -377,13 +377,14 @@ branch: master
 <li>Select Extensions: 选择域名的扩展名，有.com、.net等等可以选择</li>
 <li>Continue To Chart: 选择提供的相应的服务去付款，支持支付宝支付</li>
 </ol>
-<h3 id="Godaddy_u57DF_u540D_u8BBE_u7F6E"><a href="#Godaddy_u57DF_u540D_u8BBE_u7F6E" class="headerlink" title="Godaddy域名设置"></a>Godaddy域名设置</h3><p>申请成功后，需要设置Godaddy的域名，将申请到的域名关联到username.github.io网址上,具体步骤如下：</p>
-<ol>
-<li>打开个人Godday主页查看购买的Products:<br><a href="http://tietuku.com/fd409d6268e1685a" target="_blank" rel="external"><img src="http://i4.tietuku.com/fd409d6268e1685at.jpg"></a></li>
-<li>选择管理DNS，在DNS ZONE FILE中选择Add Record：<br><a href="http://tietuku.com/82206ce303e96a36" target="_blank" rel="external"><img src="http://i4.tietuku.com/82206ce303e96a36t.jpg"></a></li>
-<li>在ZONE RECORD中选择CNAME文件类型，HOST为www或www.yourdomain,POINTS TO为github地址：<br><a href="http://tietuku.com/82206ce303e96a36" target="_blank" rel="external"><img src="http://i4.tietuku.com/82206ce303e96a36t.jpg"></a></li>
-<li>设置成功后，会在CNAME记录上显示新加的记录：<br><a href="http://tietuku.com/1ef4d6ef67ddf690" target="_blank" rel="external"><img src="http://i4.tietuku.com/1ef4d6ef67ddf690t.jpg"></a></li>
-</ol>
+<h3 id="Godaddy_u57DF_u540D_u8BBE_u7F6E"><a href="#Godaddy_u57DF_u540D_u8BBE_u7F6E" class="headerlink" title="Godaddy域名设置"></a>Godaddy域名设置</h3><p>申请成功后，需要设置Godaddy的域名，将申请到的域名关联到username.github.io网址上,具体步骤如下：<br>1) 打开个人Godday主页查看购买的Products:   </p>
+<p><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FGoDaddy%20Products.PNG" alt="DomainSet1"></p>
+<p>2) 选择管理DNS，在DNS ZONE FILE中选择Add Record：</p>
+<p><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FDomain_Set1.PNG" alt="DomainSet2"></p>
+<p>3) 在ZONE RECORD中选择CNAME文件类型，HOST为www或www.yourdomain,POINTS TO为github地址：</p>
+<p><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FDomain_Set2.PNG" alt="DomainSet3"></p>
+<p>4) 设置成功后，会在CNAME记录上显示新加的记录：</p>
+<p><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FDomain_Set3.PNG" alt="DomainSet4"></p>
 <h3 id="GitHub_u57DF_u540D_u8BBE_u7F6E"><a href="#GitHub_u57DF_u540D_u8BBE_u7F6E" class="headerlink" title="GitHub域名设置"></a>GitHub域名设置</h3><p>在GitHub端也相应的设置下域名，只需在本地博客的根目录下source文件夹下增加一个CNAME文件，文件内容为你申请的域名地址，如本人的是：<code>www.franktly.com</code></p>
 <blockquote>
 <p>本地根目录下的source文件夹下的增加CNAME文件后，需要重新执行下<code>hexo deploy</code>命令将CNAME文件部署到GitHub服务器才能生效，成功后，一般需要等十几分钟左右才能通过新申请的域名访问你的博客<br>放到博客根目录的source文件夹下面比直接通过Git客户端将本地CNAME文件push到GitHub上好些，这样可以避免每次<code>hexo deploy</code>后，hexo自动将 CNAME文件删除掉</p>
@@ -417,16 +418,16 @@ branch: master
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/01/10/使用Hexo搭建个人博客-3/" rel="next" title="使用Hexo搭建个人博客(3)">
-                <i class="fa fa-chevron-left"></i> 使用Hexo搭建个人博客(3)
+              <a href="/2016/01/17/使用Hexo搭建个人博客-1/" rel="next" title="使用Hexo搭建个人博客(1)">
+                <i class="fa fa-chevron-left"></i> 使用Hexo搭建个人博客(1)
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/01/17/使用Hexo搭建个人博客-1/" rel="prev" title="使用Hexo搭建个人博客(1)">
-                使用Hexo搭建个人博客(1) <i class="fa fa-chevron-right"></i>
+              <a href="/2016/01/22/Markdown使用介绍/" rel="prev" title="Markdown使用介绍">
+                Markdown使用介绍 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -442,10 +443,10 @@ branch: master
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2016/01/17/使用Hexo搭建个人博客-2/"
+        <div class="ds-share flat" data-thread-key="2016/01/19/使用Hexo搭建个人博客-2/"
      data-title="使用Hexo搭建个人博客(2)"
      data-content=""
-     data-url="http://www.franktly.com/2016/01/17/使用Hexo搭建个人博客-2/">
+     data-url="http://www.franktly.com/2016/01/19/使用Hexo搭建个人博客-2/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -473,8 +474,8 @@ branch: master
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/01/17/使用Hexo搭建个人博客-2/"
-           data-title="使用Hexo搭建个人博客(2)" data-url="http://www.franktly.com/2016/01/17/使用Hexo搭建个人博客-2/">
+      <div class="ds-thread" data-thread-key="2016/01/19/使用Hexo搭建个人博客-2/"
+           data-title="使用Hexo搭建个人博客(2)" data-url="http://www.franktly.com/2016/01/19/使用Hexo搭建个人博客-2/">
       </div>
     
   </div>
@@ -518,21 +519,21 @@ branch: master
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-count">4</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-count">2</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-count">8</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
