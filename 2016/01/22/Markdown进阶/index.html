@@ -35,7 +35,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Git,GitHub,Hexo,Next,Node.js,博客," />
+  <meta name="keywords" content="markdown,标记语言," />
 
 
 
@@ -53,42 +53,17 @@
 
 
 
-<meta name="description" content="前言
-上一篇介绍了使用Hexo在本地搭建的过程，本篇将本地搭建的博客网站部署到服务器去，常见的服务器有:
-
-GitHub
-Heroku
-…
-
-本文选用使用比较多的GitHub作为目标服务器">
+<meta name="description" content="Markdown列表嵌套Markdown列表(包括有序和无序列表）嵌套，可以通过缩进4个空格或1个Tab来实现：">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用Hexo搭建个人博客(2)">
-<meta property="og:url" content="http://www.franktly.com/2016/01/19/使用Hexo搭建个人博客-2/index.html">
+<meta property="og:title" content="Markdown进阶">
+<meta property="og:url" content="http://www.franktly.com/2016/01/22/Markdown进阶/index.html">
 <meta property="og:site_name" content="Just Do It">
-<meta property="og:description" content="前言
-上一篇介绍了使用Hexo在本地搭建的过程，本篇将本地搭建的博客网站部署到服务器去，常见的服务器有:
-
-GitHub
-Heroku
-…
-
-本文选用使用比较多的GitHub作为目标服务器">
-<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FSSH-Key.PNG">
-<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FGoDaddy%20Products.PNG">
-<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FDomain_Set1.PNG">
-<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FDomain_Set2.PNG">
-<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FDomain_Set3.PNG">
-<meta property="og:updated_time" content="2016-01-19T14:53:40.658Z">
+<meta property="og:description" content="Markdown列表嵌套Markdown列表(包括有序和无序列表）嵌套，可以通过缩进4个空格或1个Tab来实现：">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Ffootn.PNG">
+<meta property="og:updated_time" content="2016-01-22T15:46:39.871Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用Hexo搭建个人博客(2)">
-<meta name="twitter:description" content="前言
-上一篇介绍了使用Hexo在本地搭建的过程，本篇将本地搭建的博客网站部署到服务器去，常见的服务器有:
-
-GitHub
-Heroku
-…
-
-本文选用使用比较多的GitHub作为目标服务器">
+<meta name="twitter:title" content="Markdown进阶">
+<meta name="twitter:description" content="Markdown列表嵌套Markdown列表(包括有序和无序列表）嵌套，可以通过缩进4个空格或1个Tab来实现：">
 
 
 
@@ -100,7 +75,7 @@ Heroku
   };
 </script>
 
-  <title> 使用Hexo搭建个人博客(2) | Just Do It </title>
+  <title> Markdown进阶 | Just Do It </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -271,7 +246,7 @@ Heroku
             
             
               
-                使用Hexo搭建个人博客(2)
+                Markdown进阶
               
             
           </h1>
@@ -280,8 +255,8 @@ Heroku
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2016-01-19T22:53:40+08:00" content="2016-01-19">
-              2016-01-19
+            <time itemprop="dateCreated" datetime="2016-01-22T00:00:00+08:00" content="2016-01-22">
+              2016-01-22
             </time>
           </span>
 
@@ -290,8 +265,8 @@ Heroku
               &nbsp; | &nbsp; 分类于
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/博客搭建/" itemprop="url" rel="index">
-                    <span itemprop="name">博客搭建</span>
+                  <a href="/categories/Markdown/" itemprop="url" rel="index">
+                    <span itemprop="name">Markdown</span>
                   </a>
                 </span>
 
@@ -306,8 +281,8 @@ Heroku
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/01/19/使用Hexo搭建个人博客-2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/19/使用Hexo搭建个人博客-2/" itemprop="commentsCount"></span>
+                <a href="/2016/01/22/Markdown进阶/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/22/Markdown进阶/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -326,71 +301,57 @@ Heroku
       
 
       
-        <span itemprop="articleBody"><h2 id="u524D_u8A00"><a href="#u524D_u8A00" class="headerlink" title="前言"></a>前言</h2><hr>
-<p>上一篇介绍了使用Hexo在本地搭建的过程，本篇将本地搭建的博客网站部署到服务器去，常见的服务器有:</p>
+        <span itemprop="articleBody"><h2 id="Markdown_u5217_u8868_u5D4C_u5957"><a href="#Markdown_u5217_u8868_u5D4C_u5957" class="headerlink" title="Markdown列表嵌套"></a>Markdown列表嵌套</h2><p>Markdown列表(包括有序和无序列表）嵌套，可以通过缩进4个空格或1个Tab来实现：<br><a id="more"></a></p>
+<pre><code>- China
+    + Beijing
+    + Shanghai
+- Japan
+    + Tokyo
+- America
+    + NewYork
+    + Washington
+</code></pre><p>效果：</p>
 <ul>
-<li><a href="https://github.com/" target="_blank" rel="external">GitHub</a></li>
-<li><a href="https://www.heroku.com/" target="_blank" rel="external">Heroku</a></li>
-<li>…</li>
+<li>China<ul>
+<li>Beijing</li>
+<li>Shanghai</li>
 </ul>
-<p>本文选用使用比较多的GitHub作为目标服务器</p>
-<a id="more"></a>
-<h2 id="GitHub_u7B80_u4ECB"><a href="#GitHub_u7B80_u4ECB" class="headerlink" title="GitHub简介"></a>GitHub简介</h2><hr>
-<p><a href="https://github.com/" target="_blank" rel="external">GitHub</a>是Git工具的远程库，托管各种Git库，并提供Web界面。GitHub为一个项目贡献代码非常简单：首先点击项目站点的“fork”的按钮，然后将代码检出并将修改加入到刚才分出的代码库中，最后通过内建的“pull request”机制向项目负责人申请代码合并，GitHub是软件开发人员的Facebook</p>
-<h2 id="GitHub_u6CE8_u518C"><a href="#GitHub_u6CE8_u518C" class="headerlink" title="GitHub注册"></a>GitHub注册</h2><hr>
-<blockquote>
-<p>已有账户的忽略此步</p>
-</blockquote>
-<h3 id="u6CE8_u518CGitHub_u8D26_u53F7"><a href="#u6CE8_u518CGitHub_u8D26_u53F7" class="headerlink" title="注册GitHub账号"></a>注册GitHub账号</h3><h3 id="u5EFA_u7ACBGitHub_Pages"><a href="#u5EFA_u7ACBGitHub_Pages" class="headerlink" title="建立GitHub Pages"></a>建立GitHub Pages</h3><p>对于<a href="https://pages.github.com/" target="_blank" rel="external">GitHub Pages</a>分两种：</p>
-<ul>
-<li>用户&amp;组织页：根据GitHub用户名建立的<code>username.github.io</code>的repository,如笔者的仓库名为<code>franktly.github.io</code>,此时网页使用的是该仓库的master分支</li>
-<li>项目页: 比前者稍微麻烦些，需要在新的或已有的repository上新建一个gh-pages分支，具体方法见<a href="https://pages.github.com/" target="_blank" rel="external">GitHub Pages 官网</a></li>
+</li>
+<li>Japan<ul>
+<li>Tokyo</li>
 </ul>
-<p>这次我们选择第一种<strong>用户&amp;组织页</strong>类型的GitHub Pages</p>
-<h3 id="u8BBE_u7F6EGitHub_SSH_Key"><a href="#u8BBE_u7F6EGitHub_SSH_Key" class="headerlink" title="设置GitHub SSH Key"></a>设置GitHub SSH Key</h3><h4 id="u672C_u5730_u8BBE_u7F6Egit_u90AE_u7BB1_u3001_u7528_u6237_u540D_u548C_u5BC6_u7801"><a href="#u672C_u5730_u8BBE_u7F6Egit_u90AE_u7BB1_u3001_u7528_u6237_u540D_u548C_u5BC6_u7801" class="headerlink" title="本地设置git邮箱、用户名和密码"></a>本地设置git邮箱、用户名和密码</h4><pre><code>git config --global user.email &quot;your_email_addr&quot;
-git config --global user.name  &quot;user_name&quot;
-</code></pre><h4 id="u672C_u5730_u521B_u5EFASSH_Key"><a href="#u672C_u5730_u521B_u5EFASSH_Key" class="headerlink" title="本地创建SSH Key"></a>本地创建SSH Key</h4><p><code>ssh-keygen -t rsa -C &quot;your_email@your_email.com&quot;</code></p>
+</li>
+<li>America<ul>
+<li>NewYork</li>
+<li>Washington</li>
+</ul>
+</li>
+</ul>
+<h2 id="Markdown_u4EE3_u7801_u5D4C_u5165_u8FDE_u7EED3_u4E2A_60_u5B57_u7B26"><a href="#Markdown_u4EE3_u7801_u5D4C_u5165_u8FDE_u7EED3_u4E2A_60_u5B57_u7B26" class="headerlink" title="Markdown代码嵌入连续3个`字符"></a>Markdown代码嵌入连续3个`字符</h2><p>Markdown要想在代码里面保留三个`字符它的原始样子而不被转换成代码块(标准MD中没有)，可以增加4个或更多的` 来包裹：<br><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="escape">``</span><span class="escape">``</span></span><br><span class="line"><span class="escape">``</span><span class="escape">`</span><br><span class="line"></span>void main()</span><br><span class="line">&#123;</span><br><span class="line">    printf(<span class="string">"Hello World!"</span>)<span class="comment">;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="escape">``</span><span class="escape">`</span><br><span class="line"></span><span class="escape">``</span><span class="escape">``</span></span><br></pre></td></tr></table></figure></p>
+<p>效果：<br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">`<span class="javascript"></span>``<span class="javascript"></span><br><span class="line"><span class="keyword">void</span> main()</span><br><span class="line">&#123;</span><br><span class="line">    printf(<span class="string">"Hello World!"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span>``<span class="javascript"></span>`</span><br></pre></td></tr></table></figure></p>
 <blockquote>
-<p>首先打开用户根目录（用户根目录一般为为C:\Users\username）查看是否已经有了SSH Key的文件夹<code>.ssh</code>,若有了先备份下，</p>
+<p>对于连续N个`，需要N + 1 个`来进行包裹</p>
 </blockquote>
-<h4 id="u6DFB_u52A0_u751F_u6210_u7684SSH_Key_u5230GitHub_u8D26_u6237"><a href="#u6DFB_u52A0_u751F_u6210_u7684SSH_Key_u5230GitHub_u8D26_u6237" class="headerlink" title="添加生成的SSH Key到GitHub账户"></a>添加生成的SSH Key到GitHub账户</h4><p>打开在当前用户的根目录下生成的<code>.ssh</code>文件里面的ssh.pub（ssh 公钥）,拷贝其内容到[Account setting -&gt; SSH Keys -&gt; Add SSH Key]</p>
-<h4 id="u9A8C_u8BC1_u4E0BSSH_u662F_u5426_u8BBE_u7F6E_u6210_u529F"><a href="#u9A8C_u8BC1_u4E0BSSH_u662F_u5426_u8BBE_u7F6E_u6210_u529F" class="headerlink" title="验证下SSH是否设置成功"></a>验证下SSH是否设置成功</h4><p><code>ssh -T git@github.com</code></p>
-<p>第一次提示不能连接，直接输入yes即可</p>
-<p><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FSSH-Key.PNG" alt="SSH_SET"></p>
-<h2 id="GitHub_u90E8_u7F72"><a href="#GitHub_u90E8_u7F72" class="headerlink" title="GitHub部署"></a>GitHub部署</h2><hr>
-<p>建立GitHub Pages之后，即可以将本地搭建的Hexo网站部署到GitHub上去</p>
-<h3 id="u4FEE_u6539_u7AD9_u70B9_config-yml_u914D_u7F6E_u6587_u4EF6"><a href="#u4FEE_u6539_u7AD9_u70B9_config-yml_u914D_u7F6E_u6587_u4EF6" class="headerlink" title="修改站点_config.yml配置文件"></a>修改站点_config.yml配置文件</h3><p>如下面所示：类型配置为git，仓库地址为建立的GitHub Pages仓库地址，分支为master</p>
-<pre><code>deploy:
-type: git
-repo: https://github.com/username/username.github.io.git
-branch: master
-</code></pre><h3 id="u6267_u884C_u90E8_u7F72_u547D_u4EE4"><a href="#u6267_u884C_u90E8_u7F72_u547D_u4EE4" class="headerlink" title="执行部署命令"></a>执行部署命令</h3><p><code>$ hexo deploy</code></p>
+<h2 id="Markdown_u9996_u884C_u7F29_u8FDB"><a href="#Markdown_u9996_u884C_u7F29_u8FDB" class="headerlink" title="Markdown首行缩进"></a>Markdown首行缩进</h2><p>写文章时，我们常常希望能够首行缩进，这时可以在段首加入<code>&amp;ensp;</code>来输入一个空格.加入<code>&amp;emsp;</code>来输入两个空格。<br>如：</p>
+<pre><code>&gt; No Space In Line
+&gt; &amp;emsp;Two Space In Line
+&gt; &amp;emsp;&amp;emsp; Four Space In Line
+&gt; &amp;ensp;One Space In Line
+&gt; &amp;ensp;&amp;ensp; Two Space In Line
+</code></pre><p>效果：</p>
 <blockquote>
-<p>可以使用<code>-g，--generate</code>可选参数部署之前预先生成静态文件</p>
+<p>No Space In Line<br>&emsp;Two Space In Line<br>&emsp;&emsp; Four Space In Line<br>&ensp;One Space In Line<br>&ensp;&ensp; Two Space In Line</p>
 </blockquote>
-<p>在GitHub上部署完成之后，以后别人也可以通过<a href="http://username.github.io网站访问你的个人博客网站了" target="_blank" rel="external">http://username.github.io网站访问你的个人博客网站了</a></p>
-<h2 id="u57DF_u540D_u7ED1_u5B9A"><a href="#u57DF_u540D_u7ED1_u5B9A" class="headerlink" title="域名绑定"></a>域名绑定</h2><hr>
-<h3 id="Godaddy_u57DF_u540D_u7533_u8BF7"><a href="#Godaddy_u57DF_u540D_u7533_u8BF7" class="headerlink" title="Godaddy域名申请"></a>Godaddy域名申请</h3><p>如果想使用自己申请的域名来访问GitHub上部署的个人博客，可以先到<a href="https://www.godaddy.com/" target="_blank" rel="external">Godaddy</a>上申请域名,笔者申请的域名为<a href="http://www.franktly.com">http://www.franktly.com</a></p>
-<p>Godaddy的域名申请一般分为：</p>
-<ol>
-<li>Search Domain： 查找自己想要申请的域名，若未被别人申请才行</li>
-<li>Select Extensions: 选择域名的扩展名，有.com、.net等等可以选择</li>
-<li>Continue To Chart: 选择提供的相应的服务去付款，支持支付宝支付</li>
-</ol>
-<h3 id="Godaddy_u57DF_u540D_u8BBE_u7F6E"><a href="#Godaddy_u57DF_u540D_u8BBE_u7F6E" class="headerlink" title="Godaddy域名设置"></a>Godaddy域名设置</h3><p>申请成功后，需要设置Godaddy的域名，将申请到的域名关联到username.github.io网址上,具体步骤如下：<br>1) 打开个人Godday主页查看购买的Products:   </p>
-<p><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FGoDaddy%20Products.PNG" alt="DomainSet1"></p>
-<p>2) 选择管理DNS，在DNS ZONE FILE中选择Add Record：</p>
-<p><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FDomain_Set1.PNG" alt="DomainSet2"></p>
-<p>3) 在ZONE RECORD中选择CNAME文件类型，HOST为www或www.yourdomain,POINTS TO为github地址：</p>
-<p><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FDomain_Set2.PNG" alt="DomainSet3"></p>
-<p>4) 设置成功后，会在CNAME记录上显示新加的记录：</p>
-<p><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FDomain_Set3.PNG" alt="DomainSet4"></p>
-<h3 id="GitHub_u57DF_u540D_u8BBE_u7F6E"><a href="#GitHub_u57DF_u540D_u8BBE_u7F6E" class="headerlink" title="GitHub域名设置"></a>GitHub域名设置</h3><p>在GitHub端也相应的设置下域名，只需在本地博客的根目录下source文件夹下增加一个CNAME文件，文件内容为你申请的域名地址，如本人的是：<code>www.franktly.com</code></p>
-<blockquote>
-<p>本地根目录下的source文件夹下的增加CNAME文件后，需要重新执行下<code>hexo deploy</code>命令将CNAME文件部署到GitHub服务器才能生效，成功后，一般需要等十几分钟左右才能通过新申请的域名访问你的博客<br>放到博客根目录的source文件夹下面比直接通过Git客户端将本地CNAME文件push到GitHub上好些，这样可以避免每次<code>hexo deploy</code>后，hexo自动将 CNAME文件删除掉</p>
-</blockquote>
-<h2 id="u5C0F_u7ED3"><a href="#u5C0F_u7ED3" class="headerlink" title="小结"></a>小结</h2><hr>
-<p>本篇主要介绍了将本地Hexo搭建的个人博客网站部署到GitHub服务器上的方法，并且简要的介绍了在Godaddy上域名的申请方法和设置，至此，就可以使用域名在网络上访问自己的博客了，如果觉得博客的主题不是自己喜欢的还可以更改Hexo的默认主题，下篇将会简介Hexo中的Next主题使用方法</p>
+<p>普通段落尽量不用空格或制表符来缩进，即使使用它们后得到的效果看似是对的</p>
+<h2 id="Markdown_u811A_u6CE8"><a href="#Markdown_u811A_u6CE8" class="headerlink" title="Markdown脚注"></a>Markdown脚注</h2><p>Markdown脚注(标准MD中没有)的语法看起来是这样的：</p>
+<pre><code>A[^A]
+[^A]: 注释
+</code></pre><p>如：</p>
+<pre><code>Markdown[^Markdown]
+[^Markdown]: Markdown 是一种轻量级的标记语言，以易读易写作为宗旨
+GFM[^GFM]
+[^GFM]: GFM全称为GitHub Flavored Markdown
+</code></pre><p>效果：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Ffootn.PNG" alt="footn"></p>
 </span>
       
     </div>
@@ -399,17 +360,9 @@ branch: master
       
         <div class="post-tags">
           
-            <a href="/tags/Git/" rel="tag">#Git</a>
+            <a href="/tags/markdown/" rel="tag">#markdown</a>
           
-            <a href="/tags/GitHub/" rel="tag">#GitHub</a>
-          
-            <a href="/tags/Hexo/" rel="tag">#Hexo</a>
-          
-            <a href="/tags/Next/" rel="tag">#Next</a>
-          
-            <a href="/tags/Node-js/" rel="tag">#Node.js</a>
-          
-            <a href="/tags/博客/" rel="tag">#博客</a>
+            <a href="/tags/标记语言/" rel="tag">#标记语言</a>
           
         </div>
       
@@ -418,17 +371,13 @@ branch: master
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/01/17/使用Hexo搭建个人博客-1/" rel="next" title="使用Hexo搭建个人博客(1)">
-                <i class="fa fa-chevron-left"></i> 使用Hexo搭建个人博客(1)
+              <a href="/2016/01/22/GFM格式Markdown简介/" rel="next" title="GFM格式Markdown简介">
+                <i class="fa fa-chevron-left"></i> GFM格式Markdown简介
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/01/22/Markdown使用介绍/" rel="prev" title="Markdown使用介绍">
-                Markdown使用介绍 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -443,10 +392,10 @@ branch: master
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2016/01/19/使用Hexo搭建个人博客-2/"
-     data-title="使用Hexo搭建个人博客(2)"
+        <div class="ds-share flat" data-thread-key="2016/01/22/Markdown进阶/"
+     data-title="Markdown进阶"
      data-content=""
-     data-url="http://www.franktly.com/2016/01/19/使用Hexo搭建个人博客-2/">
+     data-url="http://www.franktly.com/2016/01/22/Markdown进阶/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -474,8 +423,8 @@ branch: master
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/01/19/使用Hexo搭建个人博客-2/"
-           data-title="使用Hexo搭建个人博客(2)" data-url="http://www.franktly.com/2016/01/19/使用Hexo搭建个人博客-2/">
+      <div class="ds-thread" data-thread-key="2016/01/22/Markdown进阶/"
+           data-title="Markdown进阶" data-url="http://www.franktly.com/2016/01/22/Markdown进阶/">
       </div>
     
   </div>
@@ -515,11 +464,11 @@ branch: master
           <img class="site-author-image" src="/images/luckydog.jpg" alt="Frank Tao" itemprop="image"/>
           <p class="site-author-name" itemprop="name">Frank Tao</p>
         </div>
-        <p class="site-description motion-element" itemprop="description">Record Mind</p>
+        <p class="site-description motion-element" itemprop="description">Hello World</p>
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-count">6</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -533,7 +482,7 @@ branch: master
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-count">9</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -598,7 +547,7 @@ branch: master
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#u524D_u8A00"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GitHub_u7B80_u4ECB"><span class="nav-number">2.</span> <span class="nav-text">GitHub简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GitHub_u6CE8_u518C"><span class="nav-number">3.</span> <span class="nav-text">GitHub注册</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#u6CE8_u518CGitHub_u8D26_u53F7"><span class="nav-number">3.1.</span> <span class="nav-text">注册GitHub账号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u5EFA_u7ACBGitHub_Pages"><span class="nav-number">3.2.</span> <span class="nav-text">建立GitHub Pages</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u8BBE_u7F6EGitHub_SSH_Key"><span class="nav-number">3.3.</span> <span class="nav-text">设置GitHub SSH Key</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u672C_u5730_u8BBE_u7F6Egit_u90AE_u7BB1_u3001_u7528_u6237_u540D_u548C_u5BC6_u7801"><span class="nav-number">3.3.1.</span> <span class="nav-text">本地设置git邮箱、用户名和密码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u672C_u5730_u521B_u5EFASSH_Key"><span class="nav-number">3.3.2.</span> <span class="nav-text">本地创建SSH Key</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u6DFB_u52A0_u751F_u6210_u7684SSH_Key_u5230GitHub_u8D26_u6237"><span class="nav-number">3.3.3.</span> <span class="nav-text">添加生成的SSH Key到GitHub账户</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u9A8C_u8BC1_u4E0BSSH_u662F_u5426_u8BBE_u7F6E_u6210_u529F"><span class="nav-number">3.3.4.</span> <span class="nav-text">验证下SSH是否设置成功</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GitHub_u90E8_u7F72"><span class="nav-number">4.</span> <span class="nav-text">GitHub部署</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#u4FEE_u6539_u7AD9_u70B9_config-yml_u914D_u7F6E_u6587_u4EF6"><span class="nav-number">4.1.</span> <span class="nav-text">修改站点_config.yml配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6267_u884C_u90E8_u7F72_u547D_u4EE4"><span class="nav-number">4.2.</span> <span class="nav-text">执行部署命令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u57DF_u540D_u7ED1_u5B9A"><span class="nav-number">5.</span> <span class="nav-text">域名绑定</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Godaddy_u57DF_u540D_u7533_u8BF7"><span class="nav-number">5.1.</span> <span class="nav-text">Godaddy域名申请</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Godaddy_u57DF_u540D_u8BBE_u7F6E"><span class="nav-number">5.2.</span> <span class="nav-text">Godaddy域名设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GitHub_u57DF_u540D_u8BBE_u7F6E"><span class="nav-number">5.3.</span> <span class="nav-text">GitHub域名设置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u5C0F_u7ED3"><span class="nav-number">6.</span> <span class="nav-text">小结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Markdown_u5217_u8868_u5D4C_u5957"><span class="nav-number">1.</span> <span class="nav-text">Markdown列表嵌套</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Markdown_u4EE3_u7801_u5D4C_u5165_u8FDE_u7EED3_u4E2A_60_u5B57_u7B26"><span class="nav-number">2.</span> <span class="nav-text">Markdown代码嵌入连续3个`字符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Markdown_u9996_u884C_u7F29_u8FDB"><span class="nav-number">3.</span> <span class="nav-text">Markdown首行缩进</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Markdown_u811A_u6CE8"><span class="nav-number">4.</span> <span class="nav-text">Markdown脚注</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">

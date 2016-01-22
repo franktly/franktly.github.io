@@ -59,13 +59,13 @@
 Jekyll:Jekyll是一种基于Ruby开发的、适用于博客的静态网站生成引擎。使用一个模板目录作为网站布局的基础框架，提供了模板、变量、插件等功能，最终生成一个完整的静态Web站点。即只要安装Jek">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用Hexo搭建个人博客(1)">
-<meta property="og:url" content="http://www.franktly.com/2016/01/17/使用Hexo搭建个人博客-1/index.html">
+<meta property="og:url" content="http://www.franktly.com/2016/01/09/使用Hexo搭建个人博客-1/index.html">
 <meta property="og:site_name" content="Just Do It">
 <meta property="og:description" content="前言
 写个人Blog大部分情况下是在使用现有的网站提供的博客系统，使用比较多的有sina博客、网易博客、CSDN等，如果想DIY个人的博客，可以选择静态网站的方式，使用的比较多的静态博客框架有:
 
 Jekyll:Jekyll是一种基于Ruby开发的、适用于博客的静态网站生成引擎。使用一个模板目录作为网站布局的基础框架，提供了模板、变量、插件等功能，最终生成一个完整的静态Web站点。即只要安装Jek">
-<meta property="og:updated_time" content="2016-01-17T09:52:57.814Z">
+<meta property="og:updated_time" content="2016-01-22T13:49:10.731Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Hexo搭建个人博客(1)">
 <meta name="twitter:description" content="前言
@@ -263,8 +263,8 @@ Jekyll:Jekyll是一种基于Ruby开发的、适用于博客的静态网站生成
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2016-01-17T17:52:57+08:00" content="2016-01-17">
-              2016-01-17
+            <time itemprop="dateCreated" datetime="2016-01-09T00:00:00+08:00" content="2016-01-09">
+              2016-01-09
             </time>
           </span>
 
@@ -289,8 +289,8 @@ Jekyll:Jekyll是一种基于Ruby开发的、适用于博客的静态网站生成
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/01/17/使用Hexo搭建个人博客-1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/17/使用Hexo搭建个人博客-1/" itemprop="commentsCount"></span>
+                <a href="/2016/01/09/使用Hexo搭建个人博客-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/09/使用Hexo搭建个人博客-1/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -325,8 +325,8 @@ Jekyll:Jekyll是一种基于Ruby开发的、适用于博客的静态网站生成
 <li>Git：<br>[git下载地址]（<a href="http://git-scm.com/download/）" target="_blank" rel="external">http://git-scm.com/download/）</a><br>笔者安装的是Windows版本的git version 1.9.5.msysgit.0,安装完成后，<code>git --version</code>可以查看安装的版本和是否正确</li>
 </ul>
 <h3 id="u5B89_u88C5Hexo"><a href="#u5B89_u88C5Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h3><p>使用npm（npm是node.js的模块管理和发布工具,安装node的时候会自动安装此工具）安装Hexo，shell中输入下面命令：</p>
-<p><code>$ npm install -g hexo-cli</code></p>
-<p>安装完成后，shell中输入<code>hexo -v</code>或<code>hexo version</code>查看安装的版本</p>
+<pre><code>$ npm install -g hexo-cli
+</code></pre><p>安装完成后，shell中输入<code>hexo -v</code>或<code>hexo version</code>查看安装的版本</p>
 <blockquote>
 <p><code>-g</code>: 表示全局安装，未带此参数表示本地安装</p>
 <ul>
@@ -359,8 +359,8 @@ $ npm install
 </ul>
 </blockquote>
 <h3 id="u5199Blog_u6587_u7AE0"><a href="#u5199Blog_u6587_u7AE0" class="headerlink" title="写Blog文章"></a>写Blog文章</h3><p>执行下面的命令创建一篇新的文章:</p>
-<p><code>$ hexo new [layout] &lt;title&gt;</code></p>
-<p>建立的文章后，在/source/_post里会出现该title的文章，之后的文章均保持在此目录</p>
+<pre><code>$ hexo new [layout] &lt;title&gt;
+</code></pre><p>建立的文章后，在/source/_post里会出现该title的文章，之后的文章均保持在此目录</p>
 <blockquote>
 <p>可选参数：文章布局layout，默认是post,可以修改_config.yml中的default_layout来修改默认布局<br>文章的默认布局有3种： post、page、draft，分别对应不同的路径：</p>
 </blockquote>
@@ -390,21 +390,21 @@ $ npm install
 <p>将草稿发布,执行下面publish命令， 将草稿移动到source/_post文件夹下：<br><code>$ hexo publish [layout] &lt;title&gt;</code><br>草稿默认不会显示在页面中，执行时候加上–draft参数或render_drafts参数设置为true来预览草稿</p>
 </blockquote>
 <h3 id="u751F_u6210_u7F51_u7AD9"><a href="#u751F_u6210_u7F51_u7AD9" class="headerlink" title="生成网站"></a>生成网站</h3><p>写完文章后，在cmd中执行下面命令生成静态文件，生成网站：</p>
-<p><code>$ hexo generate</code></p>
-<p>生成网站后，会在Blog的根目录下生成一个pulic临时文件，存放生成的网站结果，可以通过<code>hexo clean</code>命令清除生成结果，然后再执行<code>hexo generate</code>重新生成</p>
+<pre><code>$ hexo generate
+</code></pre><p>生成网站后，会在Blog的根目录下生成一个pulic临时文件，存放生成的网站结果，可以通过<code>hexo clean</code>命令清除生成结果，然后再执行<code>hexo generate</code>重新生成</p>
 <h3 id="u542F_u52A8Hexo_u670D_u52A1_u5668"><a href="#u542F_u52A8Hexo_u670D_u52A1_u5668" class="headerlink" title="启动Hexo服务器"></a>启动Hexo服务器</h3><p><strong>Hexo3.0之后的版本把服务器独立成了单独的模块，必须先安装hexo-sever才能使用</strong>:</p>
-<p><code>$ npm install hexo-server --save</code></p>
-<blockquote>
+<pre><code>$ npm install hexo-server --save
+</code></pre><blockquote>
 <p><code>--save</code>:安装的同时将信息写入package.json中项目路径中如果有package.json文件时，使用<code>npm install</code>方法就可以根据dependencies配置安装所有的依赖包，这样代码提交到github时，就不用提交node_modules这个文件夹了</p>
 </blockquote>
 <p>安装hexo-server后，执行下面命令启动服务器,启动服务器之后，Hexo会自动监视文件变动并自动更新，无需重启服务器：</p>
-<p><code>$ hexo server</code></p>
-<blockquote>
+<pre><code>$ hexo server
+</code></pre><blockquote>
 <p>如果想更改服务器的端口(默认是4000)，或启动时遇到EADDRINUSE 错误可以加-p选项指定其他端口:<br><code>$ hexo server -p 3000</code><br>服务器默认运行在0.0.0.0，可以覆盖默认的IP:<br><code>$ hexo server -i 192.168.0.1</code></p>
 </blockquote>
 <p>启动服务之后，本地的Blog网站系统搭建完成，可以在输入以下网址查看Blog的搭建效果：<a href="http://localhost:4000" target="_blank" rel="external">http://localhost:4000</a> 或 <a href="http://127.0.0.1:4000" target="_blank" rel="external">http://127.0.0.1:4000</a></p>
 <h3 id="u5C0F_u7ED3"><a href="#u5C0F_u7ED3" class="headerlink" title="小结"></a>小结</h3><hr>
-<p>这样一个本地的Blog网站建立完成，每次需要写Blog时候，就<code>hexo new</code> (hexo n for short)一篇文章，再使用markdown编辑文章，然后<code>hexo generarte</code>(hexo g for short)即可，但是这样Blog只能在本地的机器上访问，要想让别人也可以通过网址访问，需要将Blog deploy部署到服务器上，具体方法见下篇</p>
+<p>这样一个本地的Blog网站建立完成，每次需要写Blog时候，只需要<code>hexo new</code> (hexo n for short)一篇文章，再使用markdown编辑文章，然后<code>hexo generarte</code>(hexo g for short)即可，但是这样Blog只能在本地的机器上访问，要想让别人也可以通过网址访问，需要将Blog deploy部署到服务器上，具体方法见下篇</p>
 </span>
       
     </div>
@@ -432,15 +432,11 @@ $ npm install
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/01/10/使用Hexo搭建个人博客-3/" rel="next" title="使用Hexo搭建个人博客(3)">
-                <i class="fa fa-chevron-left"></i> 使用Hexo搭建个人博客(3)
-              </a>
-            
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/01/19/使用Hexo搭建个人博客-2/" rel="prev" title="使用Hexo搭建个人博客(2)">
+              <a href="/2016/01/09/使用Hexo搭建个人博客-2/" rel="prev" title="使用Hexo搭建个人博客(2)">
                 使用Hexo搭建个人博客(2) <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -457,10 +453,10 @@ $ npm install
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2016/01/17/使用Hexo搭建个人博客-1/"
+        <div class="ds-share flat" data-thread-key="2016/01/09/使用Hexo搭建个人博客-1/"
      data-title="使用Hexo搭建个人博客(1)"
      data-content=""
-     data-url="http://www.franktly.com/2016/01/17/使用Hexo搭建个人博客-1/">
+     data-url="http://www.franktly.com/2016/01/09/使用Hexo搭建个人博客-1/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -488,8 +484,8 @@ $ npm install
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/01/17/使用Hexo搭建个人博客-1/"
-           data-title="使用Hexo搭建个人博客(1)" data-url="http://www.franktly.com/2016/01/17/使用Hexo搭建个人博客-1/">
+      <div class="ds-thread" data-thread-key="2016/01/09/使用Hexo搭建个人博客-1/"
+           data-title="使用Hexo搭建个人博客(1)" data-url="http://www.franktly.com/2016/01/09/使用Hexo搭建个人博客-1/">
       </div>
     
   </div>
@@ -529,11 +525,11 @@ $ npm install
           <img class="site-author-image" src="/images/luckydog.jpg" alt="Frank Tao" itemprop="image"/>
           <p class="site-author-name" itemprop="name">Frank Tao</p>
         </div>
-        <p class="site-description motion-element" itemprop="description">Record Mind</p>
+        <p class="site-description motion-element" itemprop="description">Hello World</p>
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-count">6</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -547,7 +543,7 @@ $ npm install
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-count">9</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

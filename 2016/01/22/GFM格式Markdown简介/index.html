@@ -1,0 +1,905 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="GitHub,Markdown,标记语言," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Just Do It" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="Markdown各种扩展Markdown除了标准的语法格式外，还有各种格式的扩展">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GFM格式Markdown简介">
+<meta property="og:url" content="http://www.franktly.com/2016/01/22/GFM格式Markdown简介/index.html">
+<meta property="og:site_name" content="Just Do It">
+<meta property="og:description" content="Markdown各种扩展Markdown除了标准的语法格式外，还有各种格式的扩展">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Ftable-1.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Ftable-2.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Ftable-3.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Ftable-4.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fgfm-tasklist.gif">
+<meta property="og:updated_time" content="2016-01-22T14:55:26.579Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="GFM格式Markdown简介">
+<meta name="twitter:description" content="Markdown各种扩展Markdown除了标准的语法格式外，还有各种格式的扩展">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'post',
+    motion: true
+  };
+</script>
+
+  <title> GFM格式Markdown简介 | Just Do It </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Just Do It</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Love Read | Film | Song | Snooker</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-heartbeat fa-fw"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <form class="site-search-form">
+    <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+  </form>
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'XPdxkgT49SMVFsPQM2pf','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                GFM格式Markdown简介
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-01-22T00:00:00+08:00" content="2016-01-22">
+              2016-01-22
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Markdown/" itemprop="url" rel="index">
+                    <span itemprop="name">Markdown</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/01/22/GFM格式Markdown简介/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/22/GFM格式Markdown简介/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h2 id="Markdown_u5404_u79CD_u6269_u5C55"><a href="#Markdown_u5404_u79CD_u6269_u5C55" class="headerlink" title="Markdown各种扩展"></a>Markdown各种扩展</h2><p>Markdown除了标准的语法格式外，还有各种格式的扩展<br><a id="more"></a></p>
+<ul>
+<li><a href="https://michelf.ca/projects/php-markdown/extra/" target="_blank" rel="external">PHP Markdown Extra</a><ul>
+<li>支持在html块元素中插入markdown语法</li>
+<li>支持为一些元素添加id或class</li>
+<li>支持将代码块用`或者<code>~</code>包起来，这样可以避免一些二义，还可以为代码块添加id或class</li>
+<li>支持手写的表格</li>
+<li>支持脚注引用</li>
+</ul>
+</li>
+<li><a href="https://github.com/bhollis/maruku/blob/master/docs/markdown_syntax.md" target="_blank" rel="external">Maruku</a><br>是基于<strong>Ruby</strong>开发的解释器，具有以下特点：<ul>
+<li>支持原生Markdown</li>
+<li>支持所有PHP Markdown Extra的特性</li>
+<li>支持新的元数据语法，实际上就是给元素添加属性的能力</li>
+<li>支持公式格式输出<br>不过，该项目已经停止维护了</li>
+</ul>
+</li>
+<li><a href="http://kramdown.gettalong.org/" target="_blank" rel="external">kramdown</a><br>同样是<strong>Ruby</strong>开发的解释器，kramdown吸取了Maruku几乎所有的特点，功能更为强大。其中有特点的功能有:<ul>
+<li>引入EOB标记^作为块元素的分隔符</li>
+<li>手写table的语法更加强大一些，支持table中的header和footer</li>
+<li>还支持注释，以及在转化时配置一些转化选项</li>
+<li>同样支持ALD(Attribute List Definitions属性列表定义)<br><a href="https://help.github.com/articles/migrating-your-pages-site-from-maruku/" target="_blank" rel="external">GitHub Page 推荐使用kramdown解释器</a></li>
+</ul>
+</li>
+<li><a href="http://www.pell.portland.or.us/~orc/Code/discount/" target="_blank" rel="external">RDiscount</a><br>同样是<strong>Ruby</strong>开发的解释器，不过它是基于<a href="http://www.pell.portland.or.us/~orc/Code/discount/" target="_blank" rel="external">Discount</a>的语法移植的,以语法规则需要参考Discount。其语法支持几种上面没有提到过的特性:<ul>
+<li>文本居中，即输出<code>&lt;center&gt;</code></li>
+<li>图片大小定义<code>![dust mite](http://dust.mite =150x150)</code></li>
+<li>输出alpha列表：<code>&lt;ol type=&#39;a&#39;&gt;&lt;/ol&gt;</code></li>
+</ul>
+</li>
+<li><a href="https://github.com/vmg/redcarpet" target="_blank" rel="external">Redcarpet</a><br>Redcarpet是一个转化库，可以在标准Markdown的基础上，配置一些额外的功能:<ul>
+<li>单词中间的_不处理</li>
+<li>转化PHP-Markdown风格的手写表格</li>
+<li>转化PHP-Markdown风格的带包含的代码块，也可禁用标准markdown的代码块语法自动link生成</li>
+<li>删除线支持：<code>~~good~~</code></li>
+<li>高亮标签<code>&lt;mark&gt;&lt;/mark&gt;</code>通过<code>==highlighted==</code>输出</li>
+<li>引用标签<code>&lt;q&gt;&lt;/q&gt;</code>通过<code>&quot;quote&quot;</code>输出</li>
+<li>转化PHP-Markdown风格脚注</li>
+<li>一些二义性的约束支持</li>
+</ul>
+</li>
+<li><a href="https://help.github.com/articles/writing-on-github/" target="_blank" rel="external">GitHub</a><br><strong>Github Page对于上述的基于<em>Ruby</em>的markdown都是支持的</strong>，从<a href="https://pages.github.com/versions/" target="_blank" rel="external">这里</a>可以看到。另外，Github对于Issue、comments等，还定义了GFM(<a href="https://help.github.com/articles/github-flavored-markdown/" target="_blank" rel="external">GitHub Flavored Markdown</a>)，其中的语法一般基本来源于上面的提到的东西。除此之外，github还支持一些额外的特性：<ul>
+<li>支持把列表变成带勾选框的任务列表</li>
+<li>站内对分支、问题、用户等对象的直接引用</li>
+<li><a href="http://www.emoji-cheat-sheet.com/" target="_blank" rel="external">表情</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="GFM_Markdown"><a href="#GFM_Markdown" class="headerlink" title="GFM Markdown"></a>GFM Markdown</h2><hr>
+<p>GitHub 使用的是“GitHub Flavored Markdown”，简称GFM，有site-in issues,comments,pull requests等功能，它与标准的Markdown有一些区别，并增加了些新的扩展功能，区别如下：</p>
+<h3 id="u5355_u8BCD_u5185_u591A_u4E0B_u5212_u7EBF"><a href="#u5355_u8BCD_u5185_u591A_u4E0B_u5212_u7EBF" class="headerlink" title="单词内多下划线"></a>单词内多下划线</h3><p>标准的Markdown转换<code>_</code>成斜体，GFM忽略了单词内部的<code>_</code>，如：</p>
+<pre><code>hi_great_world
+do_this_and_do_other
+</code></pre><p>效果：<br>hi_great_world<br>do_this_and_do_other</p>
+<blockquote>
+<p>这个特性允许代码里和名字里含有多个<code>_</code>的单词能够正确的解释，如果强调一个单词可以使用<code>*</code></p>
+</blockquote>
+<h3 id="URL_u81EA_u52A8_u94FE_u63A5"><a href="#URL_u81EA_u52A8_u94FE_u63A5" class="headerlink" title="URL自动链接"></a>URL自动链接</h3><p>标准Markdown使用<code>&lt;</code>URL<code>&gt;</code>来支持自动链接；GFM会自动链接标准的URLs，如果你想链接到一个URL(而不是设置链接文本)，你可以简单的输入一个URL地址，GFM会自动转换成一个URL链接，如:</p>
+<pre><code>http://www.franktly.com
+</code></pre><p>效果：<br><a href="http://www.franktly.com">http://www.franktly.com</a></p>
+<h3 id="u5220_u9664_u7EBF"><a href="#u5220_u9664_u7EBF" class="headerlink" title="删除线"></a>删除线</h3><p>GFM增加了标准Markdown中没有的删除线的语法，使用两个<code>~</code>表示，如：</p>
+<pre><code>~~wrong text.~~
+</code></pre><p>效果：<br><del>wrong text.</del></p>
+<h3 id="u6805_u680F_u5F0F_u7684_u4EE3_u7801_u5757"><a href="#u6805_u680F_u5F0F_u7684_u4EE3_u7801_u5757" class="headerlink" title="栅栏式的代码块"></a>栅栏式的代码块</h3><p>标准的Markdown把每行的开始带有4个空格或一个Tab的文本转换为代码块；GFM除了此，还支持<br>栅栏式代码块，仅仅需要把你的代码你用三个`包裹起来即可，不需要通过4个空格来区分了，如：<br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">`<span class="javascript"></span>``<span class="javascript"></span><br><span class="line"><span class="keyword">void</span> hello()</span><br><span class="line">&#123;</span><br><span class="line">    print(<span class="string">"hello"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span>``<span class="javascript"></span>`</span><br></pre></td></tr></table></figure></p>
+<p>效果(栅栏式代码块自动加了默认的高亮)：<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">hello</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    print(<span class="string">"hello"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>尽管栅栏式代码块并不需要在前面增加一个空行（不像缩进式代码块），GFM建议最好加上一个空行，这样方便原始的Markdown更容易阅读<br>在列表里面，你必须使用8个空格来表示一个非栅栏式的代码块</p>
+</blockquote>
+<h3 id="u8BED_u6CD5_u9AD8_u4EAE"><a href="#u8BED_u6CD5_u9AD8_u4EAE" class="headerlink" title="语法高亮"></a>语法高亮</h3><p>代码块通过加语法高亮更容易阅读，在栅栏式代码块基础之上，增加一个可选的语言标字符(如 ruby,C,C++,pyhon等等)，GFM通过此种方式来进行代码语法高亮，如以下Ruby代码：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">```ruby</span><br><span class="line">require <span class="string">'redcarpet'</span></span><br><span class="line">markdown = Redcarpet.<span class="function"><span class="title">new</span><span class="params">(<span class="string">"Hello World!"</span>)</span></span></span><br><span class="line">puts markdown<span class="class">.to_html</span></span><br><span class="line">```</span><br></pre></td></tr></table></figure></p>
+<p>效果：<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">require</span> <span class="string">'redcarpet'</span></span><br><span class="line">markdown = <span class="constant">Redcarpet</span>.new(<span class="string">"Hello World!"</span>)</span><br><span class="line">puts markdown.to_html</span><br></pre></td></tr></table></figure></p>
+<p>而没加高亮是这样的(标准Markdown换行加空四格)：</p>
+<pre><code>require &apos;redcarpet&apos;
+markdown = Redcarpet.new(&quot;Hello World!&quot;)
+puts markdown.to_html
+</code></pre><blockquote>
+<p>GFM使用<a href="https://github.com/github/linguist" target="_blank" rel="external">Linguist</a>来检测语言进行语法高亮，可以参阅<a href="https://github.com/github/linguist/blob/master/lib/linguist/languages.yml" target="_blank" rel="external">YAML file</a>来确定哪些关键字的语言被支持</p>
+</blockquote>
+<h3 id="u8868_u683C"><a href="#u8868_u683C" class="headerlink" title="表格"></a>表格</h3><p>1) GFM在标准的Markdown语法基础上增加了表格，可以通过组合一系列单词通过连字符<code>-</code>（仅在第一行上使用）分隔第一行，通过<code>|</code>来分隔表格的每一列即可，如：</p>
+<pre><code>First Header | Second Header
+-------------| -------------
+Content Cell | Content Cell 
+Content Cell | Content Cell  
+</code></pre><p>效果：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Ftable-1.PNG" alt="table-1"></p>
+<p>2) 为了好看，可以在最后一列增加<code>|</code>:</p>
+<pre><code>First Header | Second Header |
+-------------| ------------- |
+Content Cell | Content Cell  |
+Content Cell | Content Cell  | 
+</code></pre><p>效果：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Ftable-2.PNG" alt="table-2"><br>3) 表头开始的破折号并不需要一定要匹配Header文本的长度(匹配的目的也是为了格式美观):</p>
+<pre><code>Name | Description           |
+-------------| ------------- |
+Open   | Open Door |
+Close  | Close Door | 
+</code></pre><p>效果：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Ftable-3.PNG" alt="table-3"></p>
+<p>4) 通过在第一个行的<code>-</code>序列中增加<code>:</code>可以格式化文本的对齐方式，如<code>:</code>位于<code>-</code>序列左边表示文本左对齐，两边都有表示文本中间对齐，位于右边则表示右对齐，如：</p>
+<pre><code>| Left Aligned | Center Aligned | Right Aligned |
+|:------------ |:--------------:| -------------:|
+| c11          | c12            | c13           |
+| c21          | c22            | c23           | 
+</code></pre><p>效果：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Ftable-4.PNG" alt="table-4"></p>
+<h3 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h3><p>可以在GitHub的READMEs，issues和requests中使用HTML的子集，支持的标签和属性可以参考<a href="https://github.com/github/markup" target="_blank" rel="external">github/markup repository</a></p>
+<h3 id="GFM_u6362_u884C"><a href="#GFM_u6362_u884C" class="headerlink" title="GFM换行"></a>GFM换行</h3><p>标准Markdown要在一行的最后加两个空格符才表示换行，否则是不换行的；但是GFM则没有此要求</p>
+<pre><code>第一行(最后无两个空格)
+第二行
+</code></pre><h3 id="u4EFB_u52A1_u5217_u8868"><a href="#u4EFB_u52A1_u5217_u8868" class="headerlink" title="任务列表"></a>任务列表</h3><p>GFM支持将列表变为<a href="https://github.com/blog/1375%0A-task-lists-in-gfm-issues-pulls-comments" target="_blank" rel="external">任务列表</a>，通过在列表的前面增加 <code>[ ]</code>或<code>[x]</code>(分别代码未完成和完成)，如：</p>
+<pre><code>+ [ ] a task list item
++ [ ] list syntax required
++ [ ] normal **formatting**,@emontions, #1232 refs
++ [ ] incomplete
++ [x] completed
+</code></pre><p>看到的结果是checkboxes 列表，可以修改Markdown文本，可以Check或者Uncheck Boxes,文本会自动更新，像是这样的：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fgfm-tasklist.gif" alt="GFM Task List"><br>任务列表可以嵌套任务的深度,GFM建议最多嵌套1到2层，如：</p>
+<pre><code>+ [ ] a bigger project
+  + [ ] first subtask #1
+  + [ ] second subtask #2
++ [x] a small project
+  + [x] first substask #3
+</code></pre><h3 id="u5F15_u7528"><a href="#u5F15_u7528" class="headerlink" title="引用"></a>引用</h3><p>特定的引用会自动被链接，如：</p>
+<pre><code>- SHA: a5c3785ed8d6a35868bc169f07e40e889087fd2e
+- User@SHA: jlord@a5c3785ed8d6a35868bc169f07e40e889087fd2e
+- User/Repository@SHA: jlord/sheetsee.js@a5c3785ed8d6a35868bc169f07e40e889087fd2e
+- #Num: #26
+- GH-Num: GH-26
+- User#Num: jlord#26
+- User/Repository#Num: jlord/sheetsee.js#26
+</code></pre><h3 id="u7279_u6027"><a href="#u7279_u6027" class="headerlink" title="特性"></a>特性</h3><ul>
+<li>快速引用(<code>r</code>)</li>
+<li>@mentions自动生成名字和组(<code>@</code>)</li>
+<li>Emoji自动生成表情(<code>:</code>)</li>
+<li>Issue自动生成(<code>#</code>)</li>
+</ul>
+<h2 id="u53C2_u8003"><a href="#u53C2_u8003" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.pchou.info/open-source/2014/07/07/something-about-markdown.html" target="_blank" rel="external">Markdown的各种扩展</a><br><a href="https://help.github.com/articles/github-flavored-markdown/" target="_blank" rel="external">GitHub Flavored Markdown</a><br><a href="https://help.github.com/articles/markdown-basics/" target="_blank" rel="external">Markdown Basics</a><br><a href="https://help.github.com/articles/writing-on-github/" target="_blank" rel="external">Writing on GitHub</a></p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/GitHub/" rel="tag">#GitHub</a>
+          
+            <a href="/tags/Markdown/" rel="tag">#Markdown</a>
+          
+            <a href="/tags/标记语言/" rel="tag">#标记语言</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/01/21/Markdown使用介绍/" rel="next" title="Markdown使用介绍">
+                <i class="fa fa-chevron-left"></i> Markdown使用介绍
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/01/22/Markdown进阶/" rel="prev" title="Markdown进阶">
+                Markdown进阶 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/01/22/GFM格式Markdown简介/"
+     data-title="GFM格式Markdown简介"
+     data-content=""
+     data-url="http://www.franktly.com/2016/01/22/GFM格式Markdown简介/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/01/22/GFM格式Markdown简介/"
+           data-title="GFM格式Markdown简介" data-url="http://www.franktly.com/2016/01/22/GFM格式Markdown简介/">
+      </div>
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/luckydog.jpg" alt="Frank Tao" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Frank Tao</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">Hello World</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/franktly" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/tao-ling-yang" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> ZhiHu
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/2273442920/profile?topnav=1&wvr=6&is_all=1" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> WeiBo
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Markdown_u5404_u79CD_u6269_u5C55"><span class="nav-number">1.</span> <span class="nav-text">Markdown各种扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GFM_Markdown"><span class="nav-number">2.</span> <span class="nav-text">GFM Markdown</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#u5355_u8BCD_u5185_u591A_u4E0B_u5212_u7EBF"><span class="nav-number">2.1.</span> <span class="nav-text">单词内多下划线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#URL_u81EA_u52A8_u94FE_u63A5"><span class="nav-number">2.2.</span> <span class="nav-text">URL自动链接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u5220_u9664_u7EBF"><span class="nav-number">2.3.</span> <span class="nav-text">删除线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6805_u680F_u5F0F_u7684_u4EE3_u7801_u5757"><span class="nav-number">2.4.</span> <span class="nav-text">栅栏式的代码块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u8BED_u6CD5_u9AD8_u4EAE"><span class="nav-number">2.5.</span> <span class="nav-text">语法高亮</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u8868_u683C"><span class="nav-number">2.6.</span> <span class="nav-text">表格</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTML"><span class="nav-number">2.7.</span> <span class="nav-text">HTML</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GFM_u6362_u884C"><span class="nav-number">2.8.</span> <span class="nav-text">GFM换行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u4EFB_u52A1_u5217_u8868"><span class="nav-number">2.9.</span> <span class="nav-text">任务列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u5F15_u7528"><span class="nav-number">2.10.</span> <span class="nav-text">引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u7279_u6027"><span class="nav-number">2.11.</span> <span class="nav-text">特性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u53C2_u8003"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank Tao</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"franktly"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+
+    
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+
+  
+  
+
+</body>
+</html>
