@@ -90,7 +90,7 @@ GFM[^GFM]
     <link href="http://www.franktly.com/2016/01/22/GFM%E6%A0%BC%E5%BC%8FMarkdown%E7%AE%80%E4%BB%8B/"/>
     <id>http://www.franktly.com/2016/01/22/GFM格式Markdown简介/</id>
     <published>2016-01-21T16:00:00.000Z</published>
-    <updated>2016-01-22T14:55:26.579Z</updated>
+    <updated>2016-01-22T15:53:13.080Z</updated>
     <content type="html"><![CDATA[<h2 id="Markdown_u5404_u79CD_u6269_u5C55"><a href="#Markdown_u5404_u79CD_u6269_u5C55" class="headerlink" title="Markdown各种扩展"></a>Markdown各种扩展</h2><p>Markdown除了标准的语法格式外，还有各种格式的扩展<br><a id="more"></a></p>
 <ul>
 <li><a href="https://michelf.ca/projects/php-markdown/extra/" target="_blank" rel="external">PHP Markdown Extra</a><ul>
@@ -168,24 +168,22 @@ puts markdown.to_html
 </code></pre><blockquote>
 <p>GFM使用<a href="https://github.com/github/linguist" target="_blank" rel="external">Linguist</a>来检测语言进行语法高亮，可以参阅<a href="https://github.com/github/linguist/blob/master/lib/linguist/languages.yml" target="_blank" rel="external">YAML file</a>来确定哪些关键字的语言被支持</p>
 </blockquote>
-<h3 id="u8868_u683C"><a href="#u8868_u683C" class="headerlink" title="表格"></a>表格</h3><p>1) GFM在标准的Markdown语法基础上增加了表格，可以通过组合一系列单词通过连字符<code>-</code>（仅在第一行上使用）分隔第一行，通过<code>|</code>来分隔表格的每一列即可，如：</p>
+<h3 id="u8868_u683C"><a href="#u8868_u683C" class="headerlink" title="表格"></a>表格</h3><p>1)GFM在标准的Markdown语法基础上增加了表格，可以通过组合一系列单词通过连字符<code>-</code>（仅在第一行上使用）分隔第一行，通过<code>|</code>来分隔表格的每一列即可，如：</p>
 <pre><code>First Header | Second Header
 -------------| -------------
 Content Cell | Content Cell 
 Content Cell | Content Cell  
-</code></pre><p>效果：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Ftable-1.PNG" alt="table-1"></p>
-<p>2) 为了好看，可以在最后一列增加<code>|</code>:</p>
+</code></pre><p>效果：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Ftable-1.PNG" alt="table-1"><br>2)为了好看，可以在最后一列增加<code>|</code>:</p>
 <pre><code>First Header | Second Header |
 -------------| ------------- |
 Content Cell | Content Cell  |
 Content Cell | Content Cell  | 
-</code></pre><p>效果：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Ftable-2.PNG" alt="table-2"><br>3) 表头开始的破折号并不需要一定要匹配Header文本的长度(匹配的目的也是为了格式美观):</p>
+</code></pre><p>效果：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Ftable-2.PNG" alt="table-2"><br>3)表头开始的破折号并不需要一定要匹配Header文本的长度(匹配的目的也是为了格式美观):</p>
 <pre><code>Name | Description           |
 -------------| ------------- |
 Open   | Open Door |
 Close  | Close Door | 
-</code></pre><p>效果：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Ftable-3.PNG" alt="table-3"></p>
-<p>4) 通过在第一个行的<code>-</code>序列中增加<code>:</code>可以格式化文本的对齐方式，如<code>:</code>位于<code>-</code>序列左边表示文本左对齐，两边都有表示文本中间对齐，位于右边则表示右对齐，如：</p>
+</code></pre><p>效果：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Ftable-3.PNG" alt="table-3"><br>4)通过在第一个行的<code>-</code>序列中增加<code>:</code>可以格式化文本的对齐方式，如<code>:</code>位于<code>-</code>序列左边表示文本左对齐，两边都有表示文本中间对齐，位于右边则表示右对齐，如：</p>
 <pre><code>| Left Aligned | Center Aligned | Right Aligned |
 |:------------ |:--------------:| -------------:|
 | c11          | c12            | c13           |
