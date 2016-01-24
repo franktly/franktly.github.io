@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Love Read | Film | Song | Snooker]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.franktly.com/"/>
-  <updated>2016-01-24T07:15:25.223Z</updated>
+  <updated>2016-01-24T10:01:12.237Z</updated>
   <id>http://www.franktly.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://www.franktly.com/2016/01/23/Git%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/"/>
     <id>http://www.franktly.com/2016/01/23/Git使用总结/</id>
     <published>2016-01-22T16:00:00.000Z</published>
-    <updated>2016-01-24T07:15:25.223Z</updated>
+    <updated>2016-01-24T10:01:12.237Z</updated>
     <content type="html"><![CDATA[<h2 id="Git_u7B80_u4ECB"><a href="#Git_u7B80_u4ECB" class="headerlink" title="Git简介"></a>Git简介</h2><hr>
 <p>Git 是一个免费的、分布式版本控制工具，或是一个强调了速度快的源代码管理工具<br><a id="more"></a></p>
 <h3 id="u96C6_u4E2D_u5F0FVS_u5206_u5E03_u5F0F"><a href="#u96C6_u4E2D_u5F0FVS_u5206_u5E03_u5F0F" class="headerlink" title="集中式VS分布式"></a>集中式VS分布式</h3><h4 id="u96C6_u4E2D_u5F0F"><a href="#u96C6_u4E2D_u5F0F" class="headerlink" title="集中式"></a>集中式</h4><ol>
@@ -299,7 +299,7 @@ git merge
 <li>如果合并有冲突，则解决冲突，并在本地提交</li>
 <li>没有冲突或者解决掉冲突后，再用<code>git push origin &lt;branchname&gt;</code>推送就能成功</li>
 </ol>
-<h2 id="u53C2_u8003"><a href="#u53C2_u8003" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.liaoxuefeng.com/" target="_blank" rel="external">liaoxuefeng</a><br><a href="http://selfcontroller.iteye.com/blog/1786644" target="_blank" rel="external">git 缓存区的理解</a><br><a href="http://gitref.org/index.html" target="_blank" rel="external">git reference</a><br><a href="https://git-scm.com/book/zh/v2" target="_blank" rel="external">Pro Git book</a><br><a href="http://git.oschina.net/wzw/git-quick-start" target="_blank" rel="external">git-quick-start</a></p>
+<h2 id="u53C2_u8003"><a href="#u53C2_u8003" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.liaoxuefeng.com/" target="_blank" rel="external">liaoxuefeng</a><br><a href="http://selfcontroller.iteye.com/blog/1786644" target="_blank" rel="external">git 缓存区的理解</a><br><a href="http://gitref.org/index.html" target="_blank" rel="external">git reference</a><br><a href="https://git-scm.com/book/zh/v2" target="_blank" rel="external">Pro Git book</a><br><a href="http://git.oschina.net/wzw/git-quick-start" target="_blank" rel="external">git-quick-start</a><br><a href="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fgit-cheatsheet.pdf" target="_blank" rel="external">git-cheatsheet</a></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<h2 id="Git_u7B80_u4ECB"><a href="#Git_u7B80_u4ECB" class="headerlink" title="Git简介"></a>Git简介</h2><hr>
