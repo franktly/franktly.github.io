@@ -10,7 +10,13 @@ tags:
 # 前言
 ---
 
-微软已经在VS2015中深度集成了GitHub，方便开发者对项目进行版本控制。
+微软已经在VS2015中深度集成了GitHub，方便开发者对项目进行版本控制。VisualStudio(GitHub Extension for Visual Studio)是GitHub的Visual Studio插件。
+主要功能：
+connect GitHub
+clone respos
+create new respos
+publish local respos
+
 <!--more-->
 
 # 下载和安装方法
@@ -53,7 +59,7 @@ tags:
 1.编辑本地代码增加一行`std::cout << "hello vs github extention" << std::endl;`打印：
 ![vs_git_5](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_5.PNG)
 2.提交本地修改到本地git:
-![vs_git_6](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_6.PNG)
+![vs_git_6](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_6.png)
 3.增加提交附加信息：
 ![vs_git_7](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_7.PNG)
 4.修改只是提交到本地，因此会提示同步到远程服务器：
@@ -101,7 +107,7 @@ tags:
 ![vs_git_36](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_36.PNG)
 
 2.打开文件->添加源代码管理，将已有工程添加到本地Git管理
-![vs_git_33](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_33.PNG)
+![vs_git_33](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_33.png)
 
 3.在已有的工程文件下会增加一个本地git版本控制相关文件夹.git：
 ![vs_git_34](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_34.PNG)
