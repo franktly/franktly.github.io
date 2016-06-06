@@ -37,37 +37,37 @@ tags:
 
 ### 创建工程
 1.创建新的VS工程，在右下角**选中Git版本控制单选框**：
-！[vs_git_1](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_1.PNG)
+![vs_git_1](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_1.PNG)
 
 2.创建完成后，会在相应的工程路径下面生成本地git控制相关的文件夹.git：
-！[vs_git_2](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_2.PNG)
+![vs_git_2](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_2.PNG)
 
 ### 连接登陆Github
 1.打开视图->团队资源管理器(Ctrl+\ and Ctrl+M),在GitHub扩展中选择connect或点击绿色的连接按钮，弹出了github的登陆界面：
-！[vs_git_3](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_3.PNG)
+![vs_git_3](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_3.PNG)
 
 2.登陆连接成功后，会显示这样：
-！[vs_git_4](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_4.PNG)
+![vs_git_4](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_4.PNG)
 
 ### 编辑代码提交变更到本地git变更
 1.编辑本地代码增加一行`std::cout << "hello vs github extention" << std::endl;`打印：
-！[vs_git_5](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_5.PNG)
+![vs_git_5](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_5.PNG)
 2.提交本地修改到本地git:
-！[vs_git_6](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_6.PNG)
+![vs_git_6](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_6.PNG)
 3.增加提交附加信息：
-！[vs_git_7](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_7.PNG)
+![vs_git_7](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_7.PNG)
 4.修改只是提交到本地，因此会提示同步到远程服务器：
-！[vs_git_8](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_8.PNG)
+![vs_git_8](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_8.PNG)
 
 ### 同步本地git变更到GitHub远程服务器
 1.同步到GitHub服务器，输入仓库的名字为"test"，因为是第一次同步，所以需要添加仓库的描述信息：
-！[vs_git_10](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_10.PNG)
+![vs_git_10](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_10.PNG)
 
 2.同步成功后，在GitHub远程服务器上就能看了：
-！[vs_git_11](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_11.PNG)
+![vs_git_11](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_11.PNG)
 
 3.VS2015 GitHub插件主页的git版本控制所有操作如下：
-！[vs_git_16](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_16.PNG)
+![vs_git_16](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_16.PNG)
 
 至此，就完成了从创建到同步本地的代码到GitHub远程服务器上，过程基本上为：
 创建->编辑->提交->同步
@@ -75,24 +75,51 @@ tags:
 
 ### 再次编辑代码并提交和推送
 1.再增加一行`std::cout << "hello world" << std::endl`并提交:
-！[vs_git_12](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_12.PNG)
+![vs_git_12](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_12.PNG)
 
 2.提交成功后，显示的本地操作记录，同时还需要进一步的同步推送操作：
-！[vs_git_13](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_13.PNG)
+![vs_git_13](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_13.PNG)
 
 3.还可以查看本次提交和上次的区别：
-！[vs_git_14](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_14.PNG)
+![vs_git_14](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_14.PNG)
 
 4.推送到GitHub远程服务器，推送成功后本地显示结果：
-！[vs_git_15](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_15.PNG)
+![vs_git_15](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_15.PNG)
 
 5.推送成功后，在GitHub远程服务器上就能看了：
-！[vs_git_17](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_17.PNG)
+![vs_git_17](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_17.PNG)
 
 ## 把已经存在的VS solution添加到GitHub版本
 ---
 
-### 在GitHub上先创建
+### GitHub创建新的仓库
+1.在GitHub上先创建一个名为"test"新的仓库，复制下远程仓库地址后续会用到：
+![vs_git_30](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_30.PNG)
+
+### 已有工程添加到本地Git管理
+1.打开已有的工程：
+![vs_git_36](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_36.PNG)
+
+2.打开文件->添加源代码管理，将已有工程添加到本地Git管理
+![vs_git_33](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_33.PNG)
+
+3.在已有的工程文件下会增加一个本地git版本控制相关文件夹.git：
+![vs_git_34](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_34.PNG)
+
+### 同步代码到GitHub远程服务器
+1.编辑代码执行提交，提交之后跟之前新建步骤类似会提示同步，此时同步方法选择**远程仓库**，输入第一步创建的仓库地址：
+![vs_git_32](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_32.PNG)
+
+2.GitHub远程服务器上代码与本地的已有工程也得到了关联和同步了：
+![vs_git_35](http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fvs_git_35.PNG)
+
+对于已有的工程添加到GitHub上的操作流程大概如下： 
+GitHub创建新的仓库->本地添加代码管理->提交->同步到新创建的远程仓库
+
+
+
+
+
 
 
 
