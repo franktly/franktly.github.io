@@ -1,6 +1,6 @@
 ---
 title: 使用Hexo搭建个人博客(1)
-date: 2016-1-9
+date: 2016-1-5
 categories: 博客搭建
 tags: 
 - Hexo 
