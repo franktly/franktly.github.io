@@ -71,3 +71,4 @@ deploy:
   type: git
   repo: https://github.com/franktly/franktly.github.io.git
   branch: master
+plugins: hexo-generator-sitemap
