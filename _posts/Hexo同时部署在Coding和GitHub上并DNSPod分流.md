@@ -1,6 +1,6 @@
 ---
-title: Hexo增加Google网页搜索
-date: 2016-7-5
+title: Hexo同时部署在Coding和GitHub上并DNSPod分流
+date: 2016-7-6
 categories: 博客搭建
 tags:
 - 博客
@@ -9,13 +9,28 @@ tags:
 # 前言
 ---
 
-搭建自己的博客，然后写了几十篇文章，悲催的是发现用搜索引擎无法搜索到自己的博客网站。按照网上的方法和自己的摸索，下面以Google搜索为例简单介绍了下怎么让搜索引擎搜到自己博客网站的方法（由于hexo博客是部署在Github上的，百度搜索对外网Github有屏蔽，故以Google为例）
+在使用Github服务器部署的Hexo博客之后，由于国内访问GitHub的速度比较慢，且百度搜索屏蔽了Github网页的搜索，为了使和博客网站同时高质量的支持国内和国外的访问及搜索体验，即对于国内的访问可以使用国内版的代码托管Coding（GitCafe是其前身）来提供服务，对于国外的访问仍然使用Github来提供服务。对于访问同一个Godday注册的域名，可以使用第三方的域名解析服务器DNSPod来做解析分流，对于不同的路线（国内或国外）访问不同的网站服务（Coding或GitHub）
 
 <!--more-->
 
 
-# 验证网站 
+# Coding服务使用
 ---
+
+## 注册Coding账户
+---
+
+此步忽略
+
+## 新建Coding项目
+---
+和使用GitHub做部署一样，需要新建一个与用户名同名的项目，如下所示：
+
+
+
+# DNSPod服务使用
+---
+
 
 1.未验证之前的Google搜索结果：
 ![g1](http://7xq8f9.com1.z0.glb.clouddn.com/pic/google1.PNG)

@@ -69,6 +69,7 @@ theme: next
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/franktly/franktly.github.io.git
-  branch: master
+  repo:
+    github:  https://github.com/franktly/franktly.github.io.git,master
+    gitcafe: https://git.coding.net/franktly/franktly.git,gitcafe-pages
 plugins: hexo-generator-sitemap
