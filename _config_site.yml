@@ -72,4 +72,14 @@ deploy:
   repo:
     github:  https://github.com/franktly/franktly.github.io.git,master
     gitcafe: https://git.coding.net/franktly/franktly.git,gitcafe-pages
-plugins: hexo-generator-sitemap
+# Extensions
+Plugins: 
+- hexo-generator-sitemap
+
+# 自动生成sitemap
+sitemap:
+  path: sitemap.xml
+baidusitemap:
+  path: baidusitemap.xml
+  
+
