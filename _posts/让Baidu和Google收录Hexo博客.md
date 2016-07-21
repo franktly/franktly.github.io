@@ -159,7 +159,7 @@ Google可以搜索到自己的站点内容:
 ![g11](http://7xq8f9.com1.z0.glb.clouddn.com/pic/google_site_new.PNG)
 
 Baidu也可以搜索到自己的站点内容:
-![g11](http://7xq8f9.com1.z0.glb.clouddn.com/pic/google_site_new.PNG)
+![g11](http://7xq8f9.com1.z0.glb.clouddn.com/pic/bd_site_12.PNG)
 
 
 
