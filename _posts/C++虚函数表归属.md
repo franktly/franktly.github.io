@@ -13,18 +13,22 @@ tags:
 
 <!--more-->
 
-## 单个类不同实例化对象
+## 单个类实例化不同对象
 ---
 
-如下面带有虚函数得类，
+如下面带有虚函数得`Base`类:
 ```
 class Base
 {
 public:
     virtual void fun() 
     {
-        std::cout << "i am base " << std::endl;
+        std::cout << "i am base func1" << std::endl;
     };
+    virtual void func2()
+    {
+        std::cout << "i am base func2" << std::endl;
+    }
 };
 ```
 
@@ -33,32 +37,141 @@ public:
 void vtableOwnerTest1(void)
 {
     Base b0, b1;
-    std::cout << "b0 vptr addrs:" << (int*)*(int*)&b0 << std::endl;
-    std::cout << "b1 vptr addrs:" << (int*)*(int*)&b1 << std::endl;
-    if (*(int*)&b0 == *(int*)&b1)
+    int *p1, *p2, *p3, *p4, *p5, *p6;
+    p1 = (int*)*(int*)&b0;
+    p2 = (int*)*(int*)&b1;
+    p3 = (int*)*(int*)*(int*)&b0;
+    p4 = (int*)*(int*)*(int*)&b1;
+    p5 = (int*)*((int*)*(int*)&b0 + 1);
+    p6 = (int*)*((int*)*(int*)&b1 + 1);
+    std::cout << "b0 vptr addrs:" << p1 << std::endl;
+    std::cout << "b1 vptr addrs:" << p2 << std::endl;
+    std::cout << "b0 func1 addrs:" << p3 << std::endl;
+    std::cout << "b1 func1 addrs:" << p4 << std::endl;
+    std::cout << "b0 func2 addrs:" << p5 << std::endl;
+    std::cout << "b1 func2 addrs:" << p6 << std::endl;
+    if (p1 == p2)
     {
-        std::cout << "Vtable belong to Class" << std::endl;
+        std::cout << "vtable belong to Class" << std::endl;
     }
     else
     {
-        std::cout << "Vtable belong to Object" << std::endl;
+        std::cout << "vtable belong to Object" << std::endl;
+    }
+    if (p3 == p4)
+    {
+        std::cout << "b0 & b1 use the same func1 " << std::endl;
+    }
+    else
+    {
+        std::cout << "b0 & b1 use different func1" << std::endl;
+    }
+    if (p5 == p6)
+    {
+        std::cout << "b0 & b1 use the same func2 " << std::endl;
+    }
+    else
+    {
+        std::cout << "b0 & b1 use different func2" << std::endl;
     }
 }
 ```
 
 运行结果：
 
-    b0 vptr addrs:0015BF3C
-    b1 vptr addrs:0015BF3C
-    Vtable belong to Class
+    b0 vptr addrs:012DBF3C
+    b1 vptr addrs:012DBF3C
+    b0 func1 addrs:012D106E
+    b1 func1 addrs:012D106E
+    b0 func2 addrs:012D1451
+    b1 func2 addrs:012D1451
+    vtable belong to Class
+    b0 & b1 use the same func1
+    b0 & b1 use the same func2
 
->可以看到对于同一类的对同实例化对象而言，虚函数表指针的值是一致的，即虚函数表是属于类的，但是每个对象都包含一个虚函数指针，类似于这样的：
+>可以看到对于同一类的对同实例化对象而言，虚函数表指针的值是一致的，即虚函数表是属于类的(每个对象均使用相同的虚函数`func1`及`func2`地址这个是必须保证的)但是每个对象都包含一个自己的虚函数表指针，关系类似于这样的：
 
+## 继承类与基类分别实例化对象
+---
+如下面的子类继承自上面的`Base`类:
+```
+class Derive : public Base 
+{
+public:
+    // derive only override func2
+    void func2()
+    {
+        std::cout << "i am derive func2" << std::endl;
+    }
+};
+```
+
+继承类与基类实例化分别实例化对象的测试：
+```
+void vtableOwnerTest2(void)
+{
+    Base b;
+    Derive d;
+    
+    int *p1, *p2, *p3, *p4, *p5, *p6;
+    p1 = (int*)*(int*)&b;
+    p2 = (int*)*(int*)&d;
+    p3 = (int*)*(int*)*(int*)&b;
+    p4 = (int*)*(int*)*(int*)&d;
+    p5 = (int*)*((int*)*(int*)&b + 1);
+    p6 = (int*)*((int*)*(int*)&d + 1);
+    std::cout << "b vptr addrs:" << p1 << std::endl;
+    std::cout << "d vptr addrs:" << p2 << std::endl;
+    std::cout << "b func1 addrs:" << p3 << std::endl;
+    std::cout << "d func1 addrs:" << p4 << std::endl;
+    std::cout << "b func2 addrs:" << p5 << std::endl;
+    std::cout << "d func2 addrs:" << p6 << std::endl;
+    if (p1 == p2)
+    {
+        std::cout << "Derive & Base use the same vtable " << std::endl;
+    }
+    else
+    {
+        std::cout << "Derive & Base use different vtable " << std::endl;
+    }
+    if (p3 == p4)
+    {
+        std::cout << "b & d use the same func1 " << std::endl;
+    }
+    else
+    {
+        std::cout << "b & d use different func1" << std::endl;
+    }
+    if (p5 == p6)
+    {
+        std::cout << "b & d use the same func2 " << std::endl;
+    }
+    else
+    {
+        std::cout << "b & d use different func2" << std::endl;
+    }
+}
+```
+
+运行结果：
+
+    b vptr addrs:012DBF3C
+    d vptr addrs:012DBF74
+    b func1 addrs:012D106E
+    d func1 addrs:012D106E
+    b func2 addrs:012D1451
+    d func2 addrs:012D1104
+    Derive & Base use different vtable
+    b & d use the same func1
+    b & d use different func2
+
+> 从运行结果可以看出子类虽然只是重写了父类的其中一个虚函数,但仍然使用自己的虚函数表,虚函数表里面的未重写的虚函数`func1`是从基类继承而来的,虚函数地址也保持一致;
+重写之后的虚函数`func2`地址就变化了生成了新的函数，关系类似于这样的：
 
 ## 总结
 ---
 
-本篇主要介绍了C++类对象大小的计算，并引出了对象模型内部的基本内存布局和三种对象模型，下一篇将继续介绍在各种继承情况下，继承类的内存布局变化情况
+从验证结果可以看出虚函数表是属于类的，每个对象会维护自己的指向虚函数表的虚函数表指针；继承情况下，父类会有自己的虚函数表，且父类会从基类继承虚函数，重写虚函数的话，虚函数地址会变化（生成新的函数）
 
 
 
