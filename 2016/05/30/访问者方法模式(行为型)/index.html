@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Design Pattern,Behavior Pattern,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言 在大型体育馆中有各种体育项目，如羽毛球室，乒乓球室，篮球室等等，每种运动项目场地里面会有各种职业背景的体育爱好者，如学生，职工，老师；同时对于同一种职业背景的体育爱好者，可以访问多种运动项目。在软件开发中，有时候我们也需要处理像体育馆这样的不同的运动场所集合对象结构，在该对象结构中存储了多个不同类型的对象信息，而且对同一对象结构中的元素的操作方式并不唯一，可能需要提供多种不同的处理方式，还有">
+<meta name="keywords" content="Design Pattern,Behavior Pattern">
+<meta property="og:type" content="article">
+<meta property="og:title" content="访问者模式(行为型)">
+<meta property="og:url" content="http://www.franktly.com/2016/05/30/访问者方法模式(行为型)/index.html">
+<meta property="og:site_name" content="Share Your Mind">
+<meta property="og:description" content="前言 在大型体育馆中有各种体育项目，如羽毛球室，乒乓球室，篮球室等等，每种运动项目场地里面会有各种职业背景的体育爱好者，如学生，职工，老师；同时对于同一种职业背景的体育爱好者，可以访问多种运动项目。在软件开发中，有时候我们也需要处理像体育馆这样的不同的运动场所集合对象结构，在该对象结构中存储了多个不同类型的对象信息，而且对同一对象结构中的元素的操作方式并不唯一，可能需要提供多种不同的处理方式，还有">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FVisitor_Abstract.PNG">
+<meta property="og:updated_time" content="2019-06-11T10:59:03.930Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="访问者模式(行为型)">
+<meta name="twitter:description" content="前言 在大型体育馆中有各种体育项目，如羽毛球室，乒乓球室，篮球室等等，每种运动项目场地里面会有各种职业背景的体育爱好者，如学生，职工，老师；同时对于同一种职业背景的体育爱好者，可以访问多种运动项目。在软件开发中，有时候我们也需要处理像体育馆这样的不同的运动场所集合对象结构，在该对象结构中存储了多个不同类型的对象信息，而且对同一对象结构中的元素的操作方式并不唯一，可能需要提供多种不同的处理方式，还有">
+<meta name="twitter:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FVisitor_Abstract.PNG">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: "",
+      labels: ""
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.franktly.com/2016/05/30/访问者方法模式(行为型)/">
+
+
+
+
+
+  <title>访问者模式(行为型) | Share Your Mind</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Share Your Mind</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Love Reading | Film | Climbing | Snooker</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.franktly.com/2016/05/30/访问者方法模式(行为型)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank Tao">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/book.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Share Your Mind">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">访问者模式(行为型)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-30T00:00:00+08:00">
+                2016-05-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Design-Pattern/" itemprop="url" rel="index">
+                    <span itemprop="name">Design Pattern</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>在大型体育馆中有各种体育项目，如羽毛球室，乒乓球室，篮球室等等，每种运动项目场地里面会有各种职业背景的体育爱好者，如学生，职工，老师；同时对于同一种职业背景的体育爱好者，可以访问多种运动项目。在软件开发中，有时候我们也需要处理像体育馆这样的不同的运动场所集合对象结构，在该对象结构中存储了多个不同类型的对象信息，而且对同一对象结构中的元素的操作方式并不唯一，可能需要提供多种不同的处理方式，还有可能增加新的处理方式等等。对于此类问题可以通过访问者模式来解决，因为其模式动机就是以不同的方式操作复杂对象结构。</p>
+<a id="more"></a>
+
+<h2 id="访问者模式"><a href="#访问者模式" class="headerlink" title="访问者模式"></a>访问者模式</h2><hr>
+<p>访问者模式包含<strong>访问者</strong>和<strong>被访问元素</strong>两个主要组成部分，这些被访问的元素通常具有不同的类型，且不同的访问者可以对它们进行不同的访问操作，访问者模式使得用户可以在不修改现有系统的情况下扩展系统的功能，为这些不同类型的元素增加新的操作</p>
+<blockquote>
+<p>在使用访问者模式时，被访问元素通常不是单独存在的，它们存储在一个集合中，这个集合被称为<strong>对象结构</strong>，访问者通过遍历对象结构实现对其中存储的元素的逐个操作</p>
+</blockquote>
+<h3 id="意图"><a href="#意图" class="headerlink" title="意图"></a>意图</h3><p>提供一个作用于某对象结构中的各元素的操作表示，它使我们可以在不改变个元素的类的前提下定义作用于这些元素的新的操作。访问者模式是一种对象行为型模式</p>
+<h3 id="参与者"><a href="#参与者" class="headerlink" title="参与者"></a>参与者</h3><ul>
+<li><p>Visitor<br>抽象访问者，为该对象结构中ConcreteElement的每一个类声明一个visit操作。该操作的名字和特<br>征标识了发送visit请求给该访问者的那个类。这使得访问者可以确定被访问元素的具体的类。这样访问者就可以通过该元素的特定接口直接访问它、</p>
+</li>
+<li><p>ConcreteVisitor<br>具体访问者，实现每个由Visitor声明的操作。每个操作实现本算法的一部分，而该算法片断乃是<br>对应于结构中对象的类。ConcreteVisitor为该算法提供了上下文并存储它的局部状态。这一状态常常在遍历该结构的过程中累积结果</p>
+</li>
+<li><p>Element<br>定义一个accept操作，它以一个访问者为参数</p>
+</li>
+<li><p>ConcreteElement<br>实现accept操作，该操作以一个访问者为参数</p>
+</li>
+<li><p>ObjectStructure<br>能枚举它的元素<br>可以提供一个高层的接口以允许该访问者访问它的元素<br>可以是一个复合或是一个集合，如一个列表或一个无序集合</p>
+</li>
+</ul>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FVisitor_Abstract.PNG" alt="visitor_pattern"></p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>1.首先定义抽象元素类<code>Element</code>,并声明<code>Accept()</code>方法:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">class Element</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual void Accept(Visitor *pv) = 0; // 该方法传入一个抽象的访问者对象指针</span><br><span class="line">//  virtual void Operation()  = 0; 每个元素各种有自己的操作</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>2.再定义两个具体的元素类<code>ConcreteElementA</code>、<code>ConcreteElementB</code>,并实现<code>Accept()</code>方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">// 具体数据元素类A</span><br><span class="line">class ConcreteElementA : public Element</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual void Accept(Visitor *pv)</span><br><span class="line">    &#123;</span><br><span class="line">        pv-&gt;VisitConcreteElementA(this); // 传入this给访问者的访问接口</span><br><span class="line">    &#125;</span><br><span class="line">    void OperationA()  </span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Concrete Element A OperatorA!!!&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 具体数据元素类B</span><br><span class="line">class ConcreteElementB : public Element</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual void Accept(Visitor *pv)</span><br><span class="line">    &#123;</span><br><span class="line">        pv-&gt;VisitConcreteElementB(this);</span><br><span class="line">    &#125;</span><br><span class="line">    virtual void OperationB()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Concrete Element B OperatorB!!!&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>3.定义抽象访问者类<code>Visitor</code>,并定义两个访问两个具体元素的接口<code>VisitConcreteElementA()</code>和<code>VisitConcreteElementB()</code>,每个接口都是以具体的元素为参数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">class Visitor</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual void VisitConcreteElementA(ConcreteElementA *pea) = 0;  </span><br><span class="line">    //以具体的被访问元素为参数</span><br><span class="line">    virtual void VisitConcreteElementB(ConcreteElementB *peb) = 0;</span><br><span class="line">    //以具体的被访问元素为参数</span><br><span class="line">    </span><br><span class="line">    // 若各有自己的操作，VisitConcreteElementA和VisitConcreteElementB</span><br><span class="line">    // 可以合并一个函数，但是参数必须是具体的Element,即重载</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>4.再定义两个具体的访问者类<code>ConcreteVisitorA</code>和<code>ConcreteVisitorB</code>，并实现<code>VisitConcreteElementA()</code>和<code>VisitConcreteElementB()</code>方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">// 具体访问者A</span><br><span class="line">class ConcreteVisitorA : public Visitor</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual void VisitConcreteElementA(ConcreteElementA *pea)  </span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Concrete Visitor A:&quot; &lt;&lt; endl;</span><br><span class="line">        pea-&gt;OperationA();</span><br><span class="line">    &#125;</span><br><span class="line">    virtual void VisitConcreteElementB(ConcreteElementB *peb)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Concrete Visitor A:&quot; &lt;&lt; endl;</span><br><span class="line">        peb-&gt;OperationB();</span><br><span class="line">    &#125;</span><br><span class="line">    // VisitConcreteElementA 和VisitConcreteElementB可以合并一个函数，</span><br><span class="line">    //但是参数必须是具体的Element,即重载</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 具体访问者B</span><br><span class="line">class ConcreteVisitorB : public Visitor</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual void VisitConcreteElementA(ConcreteElementA *pea)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Concrete Visitor B:&quot; &lt;&lt; endl;</span><br><span class="line">        pea-&gt;OperationA();</span><br><span class="line">    &#125;</span><br><span class="line">    virtual void VisitConcreteElementB(ConcreteElementB *peb)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Concrete Visitor B:&quot; &lt;&lt; endl;</span><br><span class="line">        peb-&gt;OperationB();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>5.最后定义对象结构<code>ObjectStructure</code>作为元素的集合，并提供元素增删接口和统一的高层<code>Accept()</code>接口：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">class ObjectStructure</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    list&lt;Element*&gt; m_ListElement;</span><br><span class="line">public:</span><br><span class="line">    void Attach(Element *pe)</span><br><span class="line">    &#123;</span><br><span class="line">        m_ListElement.push_back(pe);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    void Detach(Element *pe)</span><br><span class="line">    &#123;</span><br><span class="line">        list&lt;Element*&gt; ::iterator it = find(m_ListElement.begin(), m_ListElement.end(), pe);</span><br><span class="line">        if (it != m_ListElement.end())</span><br><span class="line">        &#123;</span><br><span class="line">            m_ListElement.erase(it);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    void Accept(Visitor *pv) // 高层各个元素统一的Accept接口</span><br><span class="line">    &#123;</span><br><span class="line">        for (list&lt;Element*&gt; ::iterator it = m_ListElement.begin();</span><br><span class="line">             it != m_ListElement.end();</span><br><span class="line">             ++it)</span><br><span class="line">        &#123;</span><br><span class="line">            (*it)-&gt;Accept(pv);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>6.测试访问者模式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">void VisitorTest_General()</span><br><span class="line">&#123;</span><br><span class="line">    ObjectStructure *pOS = new ObjectStructure();</span><br><span class="line"></span><br><span class="line">    Element *pEA = new ConcreteElementA();</span><br><span class="line">    Element *pEB = new ConcreteElementB();</span><br><span class="line"></span><br><span class="line">    pOS-&gt;Attach(pEA);</span><br><span class="line">    pOS-&gt;Attach(pEB);</span><br><span class="line"></span><br><span class="line">    Visitor *pVA = new ConcreteVisitorA();</span><br><span class="line">    Visitor *pVB = new ConcreteVisitorB();</span><br><span class="line"></span><br><span class="line">    pOS-&gt;Accept(pVA);</span><br><span class="line">    pOS-&gt;Accept(pVB);</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; &quot;After Detach ConcretElement A:&quot; &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    pOS-&gt;Detach(pEA);</span><br><span class="line">    pOS-&gt;Accept(pVA);</span><br><span class="line">    pOS-&gt;Accept(pVB);</span><br><span class="line"></span><br><span class="line">    pOS-&gt;Detach(pEB);</span><br><span class="line"></span><br><span class="line">    SAFE_RELASE_POINTER(pOS);</span><br><span class="line">    SAFE_RELASE_POINTER(pEA);</span><br><span class="line">    SAFE_RELASE_POINTER(pEB);</span><br><span class="line">    SAFE_RELASE_POINTER(pVA);</span><br><span class="line">    SAFE_RELASE_POINTER(pVB);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>7.运行结果：</p>
+<pre><code>Concrete Visitor A:
+Concrete Element A OperatorA!!!
+Concrete Visitor A:
+Concrete Element B OperatorB!!!
+Concrete Visitor B:
+Concrete Element A OperatorA!!!
+Concrete Visitor B:
+Concrete Element B OperatorB!!!
+After Detach ConcretElement A:
+Concrete Visitor A:
+Concrete Element B OperatorB!!!
+Concrete Visitor B:
+Concrete Element B OperatorB!!!</code></pre><h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>一个对象结构包含很多类对象，它们有不同的接口，而你想对这些对象实施一些依赖于其具体类的操作</li>
+<li>需要对一个对象结构中的对象进行很多不同的并且不相关的操作，而你想避免让这些操作“污染”这些对象的类。Visitor模式使得你可以将相关的操作集中起来 定义在一个类中</li>
+<li>当该对象结构被很多应用共享时，用Visitor模式让每个应用仅包含需要用到的操作</li>
+<li>定义对象结构的类很少改变，但经常需要在此结构上定义新的操作。改变对象结构类需要重定义对所有访问者的接口，这可能需要很大的代价。如果对象结构类经常改变，那么可能还是在这些类中定义这些操作较好</li>
+</ul>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><ul>
+<li>优点<ul>
+<li>符合单一职责原则：凡是适用访问者模式的场景中，元素类中需要封装在访问者中的操作必定是与元素类本身关系不大且是易变的操作，使用访问者模式一方面符合单一职责原则，另一方面，因为被封装的操作通常来说都是易变的，所以当发生变化时，就可以在不改变元素类本身的前提下，实现对变化部分的扩展</li>
+<li>扩展性良好：元素类可以通过接受不同的访问者来实现对不同操作的扩展</li>
+<li>将有关元素对象的访问行为集中到一个访问者对象中，而不是分散在一个个的元素类中。类的职责更加清晰，有利于对象结构中元素对象的复用，相同的对象结构可以供多个不同的访问者访问</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>增加新的元素类很困难。在访问者模式中，每增加一个新的元素类都意味着要在抽象访问者角色中增加一个新的抽象操作，并在每一个具体访问者类中增加相应的具体操作，这违背了“开闭原则”的要求</li>
+<li>破坏封装。访问者模式要求访问者对象访问并调用每一个元素对象的操作，这意味着元素对象有时候必须暴露一些自己的内部操作和内部状态，否则无法供访问者访问</li>
+</ul>
+</li>
+</ul>
+<h2 id="访问者方法模式具体实例"><a href="#访问者方法模式具体实例" class="headerlink" title="访问者方法模式具体实例"></a>访问者方法模式具体实例</h2><hr>
+<h3 id="体育馆访问问题"><a href="#体育馆访问问题" class="headerlink" title="体育馆访问问题"></a>体育馆访问问题</h3><p><strong>使用访问者方法模式简单实现前言所述的体育馆访问问题</strong></p>
+<p><strong>代码实现</strong><br>1.定义抽象元素类<code>Stadium</code>，并声明接受访问方法<code>Accept()</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">class Stadium</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual void Accept(SportsLover *pSL) = 0;</span><br><span class="line">    virtual void DoSports() = 0;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>2.定义三个种具体的元素类<code>BadmintonStadium</code>和<code>PingpongStadium</code>及<code>BascketballStadium</code>，并实现接受访问方法<code>Accept()</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">// BadmintonStadium</span><br><span class="line">class BadmintonStadium : public Stadium</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual void Accept(SportsLover *pSL)</span><br><span class="line">    &#123;</span><br><span class="line">        pSL-&gt;VisitBadmintonStadium(this);</span><br><span class="line">        //// 重载版</span><br><span class="line">        //pSL-&gt;Visit(this);</span><br><span class="line">    &#125;</span><br><span class="line">    virtual void DoSports()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Doing Badminton Sport&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// PingpongStadium</span><br><span class="line">class PingpongStadium : public Stadium</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual void Accept(SportsLover *pSL)</span><br><span class="line">    &#123;</span><br><span class="line">        pSL-&gt;VisitPingpongStadium(this);</span><br><span class="line">        //// 重载版</span><br><span class="line">        //pSL-&gt;Visit(this);</span><br><span class="line">    &#125;</span><br><span class="line">    virtual void DoSports()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Doing Ping Pong Sport&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">class BascketballStadium : public Stadium</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual void Accept(SportsLover *pSL)</span><br><span class="line">    &#123;</span><br><span class="line">        pSL-&gt;VisitBasketballStadium(this);</span><br><span class="line">        //// 重载版</span><br><span class="line">        //pSL-&gt;Visit(this);</span><br><span class="line">    &#125;</span><br><span class="line">    virtual void DoSports()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Doing Bascket ball Sport&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>3.定义抽象的访问者类<code>SportsLover</code>，并声明访问具体元素的方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// Abstract Visitor</span><br><span class="line">class SportsLover</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line"> </span><br><span class="line">    virtual void VisitBadmintonStadium(BadmintonStadium *pS) = 0;</span><br><span class="line">    virtual void VisitPingpongStadium(PingpongStadium *pS) = 0;</span><br><span class="line">    virtual void VisitBasketballStadium(BascketballStadium *pS) = 0;</span><br><span class="line">    //// 重载版</span><br><span class="line">    //virtual void Visit(BadmintonStadium *pS) = 0;</span><br><span class="line">    //virtual void Visit(PingpongStadium *pS) = 0;</span><br><span class="line">    //virtual void Visit(BascketballStadium *pS) = 0;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>4.定义两个具体的访问者类<code>Students</code>和<code>Teachers</code>，并实现相应的访问方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">// Stduent Visitor</span><br><span class="line">class Students : public SportsLover</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line"></span><br><span class="line">    virtual void VisitBadmintonStadium(BadmintonStadium *pS)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;students visit: &quot;;</span><br><span class="line">        pS-&gt;DoSports();</span><br><span class="line">    &#125;</span><br><span class="line">    virtual void VisitPingpongStadium(PingpongStadium *pS)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;students visit: &quot;;</span><br><span class="line">        pS-&gt;DoSports();</span><br><span class="line">    &#125;</span><br><span class="line">    virtual void VisitBasketballStadium(BascketballStadium *pS)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;students visit: &quot;;</span><br><span class="line">        pS-&gt;DoSports();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //// 重载版</span><br><span class="line">    //virtual void Visit(BadmintonStadium *pS)</span><br><span class="line">    //&#123;</span><br><span class="line">    //  cout &lt;&lt; &quot;students visit: &quot;;</span><br><span class="line">    //  pS-&gt;DoSports();</span><br><span class="line">    //&#125;</span><br><span class="line">    //virtual void Visit(PingpongStadium *pS)</span><br><span class="line">    //&#123;</span><br><span class="line">    //  cout &lt;&lt; &quot;students visit: &quot;;</span><br><span class="line">    //  pS-&gt;DoSports();</span><br><span class="line">    //&#125;</span><br><span class="line">    //virtual void Visit(BascketballStadium *pS)</span><br><span class="line">    //&#123;</span><br><span class="line">    //  cout &lt;&lt; &quot;students visit: &quot;;</span><br><span class="line">    //  pS-&gt;DoSports();</span><br><span class="line">    //&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// Teachers Visitor</span><br><span class="line">class Teachers : public SportsLover</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line"></span><br><span class="line">    virtual void VisitBadmintonStadium(BadmintonStadium *pS)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;teachers visit: &quot;;</span><br><span class="line">        pS-&gt;DoSports();</span><br><span class="line">    &#125;</span><br><span class="line">    virtual void VisitPingpongStadium(PingpongStadium *pS)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;teachers visit: &quot;;</span><br><span class="line">        pS-&gt;DoSports();</span><br><span class="line">    &#125;</span><br><span class="line">    virtual void VisitBasketballStadium(BascketballStadium *pS)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;teachers visit: &quot;;</span><br><span class="line">        pS-&gt;DoSports();</span><br><span class="line">    &#125;</span><br><span class="line">    //// 重载版</span><br><span class="line">    //virtual void Visit(BadmintonStadium *pS)</span><br><span class="line">    //&#123;</span><br><span class="line">    //  cout &lt;&lt; &quot;teachers visit: &quot;;</span><br><span class="line">    //  pS-&gt;DoSports();</span><br><span class="line">    //&#125;</span><br><span class="line">    //virtual void Visit(PingpongStadium *pS)</span><br><span class="line">    //&#123;</span><br><span class="line">    //  cout &lt;&lt; &quot;teachers visit: &quot;;</span><br><span class="line">    //  pS-&gt;DoSports();</span><br><span class="line">    //&#125;</span><br><span class="line">    //virtual void Visit(BascketballStadium *pS)</span><br><span class="line">    //&#123;</span><br><span class="line">    //  cout &lt;&lt; &quot;teachers visit: &quot;;</span><br><span class="line">    //  pS-&gt;DoSports();</span><br><span class="line">    //&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>5.定义对象结构<code>StadiumContainer</code>,并声明和实现增删元素的接口及统一的高层<code>Accept()</code>接口：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">class StadiumContainer</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    vector&lt;Stadium*&gt; m_VectorStadium;</span><br><span class="line">public:</span><br><span class="line">    void Attach(Stadium *ps)</span><br><span class="line">    &#123;</span><br><span class="line">        m_VectorStadium.push_back(ps);</span><br><span class="line">    &#125;</span><br><span class="line">    void Detach(Stadium *ps)</span><br><span class="line">    &#123;</span><br><span class="line">        vector&lt;Stadium*&gt; :: iterator it  = find(m_VectorStadium.begin(), m_VectorStadium.end(), ps);</span><br><span class="line">        if (it != m_VectorStadium.end())</span><br><span class="line">        &#123;</span><br><span class="line">            m_VectorStadium.erase(it);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    void Accept(SportsLover *pSL)</span><br><span class="line">    &#123;</span><br><span class="line">        for (vector&lt;Stadium*&gt; :: iterator it  = m_VectorStadium.begin();</span><br><span class="line">             it != m_VectorStadium.end();</span><br><span class="line">             ++it)</span><br><span class="line">        &#123;</span><br><span class="line">            (*it)-&gt;Accept(pSL);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>6.测试访问者模式:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">void VisitorTest_Sports()</span><br><span class="line">&#123;</span><br><span class="line">    StadiumContainer *pSC = new StadiumContainer();</span><br><span class="line"></span><br><span class="line">    BadmintonStadium   *pBS = new BadmintonStadium();</span><br><span class="line">    PingpongStadium    *pPS = new PingpongStadium();</span><br><span class="line">    BascketballStadium *pBkS = new BascketballStadium();</span><br><span class="line"></span><br><span class="line">    pSC-&gt;Attach(pBS);</span><br><span class="line">    pSC-&gt;Attach(pPS);</span><br><span class="line">    pSC-&gt;Attach(pBkS);</span><br><span class="line"></span><br><span class="line">    SportsLover  *pSS = new Students();</span><br><span class="line">    SportsLover  *pST = new Teachers();</span><br><span class="line"></span><br><span class="line">    pSC-&gt;Accept(pSS);</span><br><span class="line">    pSC-&gt;Accept(pST);</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; &quot;Detach Ping Pong Stadium !!!&quot; &lt;&lt; endl;</span><br><span class="line">    pSC-&gt;Detach(pPS);</span><br><span class="line"></span><br><span class="line">    pSC-&gt;Accept(pSS);</span><br><span class="line">    pSC-&gt;Accept(pST);</span><br><span class="line"></span><br><span class="line">    SAFE_RELASE_POINTER(pSC);</span><br><span class="line">    SAFE_RELASE_POINTER(pBS);</span><br><span class="line">    SAFE_RELASE_POINTER(pBkS);</span><br><span class="line">    SAFE_RELASE_POINTER(pPS);</span><br><span class="line">    SAFE_RELASE_POINTER(pSS);</span><br><span class="line">    SAFE_RELASE_POINTER(pST);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>7.运行结果:</p>
+<pre><code>students visit: Doing Badminton Sport
+students visit: Doing Ping Pong Sport
+students visit: Doing Bascket ball Sport
+teachers visit: Doing Badminton Sport
+teachers visit: Doing Ping Pong Sport
+teachers visit: Doing Bascket ball Sport
+Detach Ping Pong Stadium !!!
+students visit: Doing Badminton Sport
+students visit: Doing Bascket ball Sport
+teachers visit: Doing Badminton Sport
+teachers visit: Doing Bascket ball Sport</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Design-Pattern/" rel="tag"># Design Pattern</a>
+          
+            <a href="/tags/Behavior-Pattern/" rel="tag"># Behavior Pattern</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/26/策略模式(行为型)/" rel="next" title="策略模式(行为型)">
+                <i class="fa fa-chevron-left"></i> 策略模式(行为型)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/30/模板方法模式(行为型)/" rel="prev" title="模板方法模式(行为型)">
+                模板方法模式(行为型) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="uyan_frame"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/book.jpg" alt="Frank Tao">
+            
+              <p class="site-author-name" itemprop="name">Frank Tao</p>
+              <p class="site-description motion-element" itemprop="description">welcome to franktly’s blog -~-</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/franktly" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.zhihu.com/people/tao-ling-yang/activities" target="_blank" title="ZhiHu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>ZhiHu</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/2273442920/profile?topnav=1&wvr=6&is_all=1" target="_blank" title="WeiBo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>WeiBo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#访问者模式"><span class="nav-number">2.</span> <span class="nav-text">访问者模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#意图"><span class="nav-number">2.1.</span> <span class="nav-text">意图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参与者"><span class="nav-number">2.2.</span> <span class="nav-text">参与者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模式结构"><span class="nav-number">2.3.</span> <span class="nav-text">模式结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码实现"><span class="nav-number">2.4.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用场景"><span class="nav-number">2.5.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优缺点"><span class="nav-number">2.6.</span> <span class="nav-text">优缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#访问者方法模式具体实例"><span class="nav-number">3.</span> <span class="nav-text">访问者方法模式具体实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#体育馆访问问题"><span class="nav-number">3.1.</span> <span class="nav-text">体育馆访问问题</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank Tao</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2136191"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

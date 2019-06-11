@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Design Pattern,Structural Pattern,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言 有些小伙伴喜欢去像美国、加拿大，包括中国台湾等国家或地区旅游时候，准备不充分的时候出现这样尴尬的情况:当手机没电的时候，想用自己从国内带的充电器充电时候发现充电器罢工不能用了，这是因为上述这些国家的插座使用的不是国内50Hz的220V电压，而是60Hz的110V电压供电的，电压低了1倍，自然是不能用了。有经验的童鞋会准备一个电源插座转换器，将110V电压转为国内标准的220V电压。这里所说的">
+<meta name="keywords" content="Design Pattern,Structural Pattern">
+<meta property="og:type" content="article">
+<meta property="og:title" content="适配器模式(结构型)">
+<meta property="og:url" content="http://www.franktly.com/2016/03/15/适配器模式(结构型) /index.html">
+<meta property="og:site_name" content="Share Your Mind">
+<meta property="og:description" content="前言 有些小伙伴喜欢去像美国、加拿大，包括中国台湾等国家或地区旅游时候，准备不充分的时候出现这样尴尬的情况:当手机没电的时候，想用自己从国内带的充电器充电时候发现充电器罢工不能用了，这是因为上述这些国家的插座使用的不是国内50Hz的220V电压，而是60Hz的110V电压供电的，电压低了1倍，自然是不能用了。有经验的童鞋会准备一个电源插座转换器，将110V电压转为国内标准的220V电压。这里所说的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FAdapter.jpg">
+<meta property="og:updated_time" content="2019-06-11T10:59:03.930Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="适配器模式(结构型)">
+<meta name="twitter:description" content="前言 有些小伙伴喜欢去像美国、加拿大，包括中国台湾等国家或地区旅游时候，准备不充分的时候出现这样尴尬的情况:当手机没电的时候，想用自己从国内带的充电器充电时候发现充电器罢工不能用了，这是因为上述这些国家的插座使用的不是国内50Hz的220V电压，而是60Hz的110V电压供电的，电压低了1倍，自然是不能用了。有经验的童鞋会准备一个电源插座转换器，将110V电压转为国内标准的220V电压。这里所说的">
+<meta name="twitter:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FAdapter.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: "",
+      labels: ""
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.franktly.com/2016/03/15/适配器模式(结构型) /">
+
+
+
+
+
+  <title>适配器模式(结构型) | Share Your Mind</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Share Your Mind</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Love Reading | Film | Climbing | Snooker</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.franktly.com/2016/03/15/适配器模式(结构型) /">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank Tao">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/book.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Share Your Mind">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">适配器模式(结构型)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-15T00:00:00+08:00">
+                2016-03-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Design-Pattern/" itemprop="url" rel="index">
+                    <span itemprop="name">Design Pattern</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>有些小伙伴喜欢去像美国、加拿大，包括中国台湾等国家或地区旅游时候，准备不充分的时候出现这样尴尬的情况:当手机没电的时候，想用自己从国内带的充电器充电时候发现充电器罢工不能用了，这是因为上述这些国家的插座使用的不是国内50Hz的220V电压，而是60Hz的110V电压供电的，电压低了1倍，自然是不能用了。有经验的童鞋会准备一个电源插座转换器，将110V电压转为国内标准的220V电压。这里所说的转换器，其实就是起到一个适配电压的目的，也就是本篇要讨论的适配器模式。</p>
+<a id="more"></a>
+
+<h2 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h2><hr>
+<p>适配器模式，就是将原本接口不兼容的两个类之间通过一个适配器来使被适配的类能被目标类所使用，适配器模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。适配器就是在不兼容的东西之间搭建一座桥梁，让二者能很好的兼容在一起工作,分为两种形式：</p>
+<ul>
+<li>类适配器</li>
+</ul>
+<blockquote>
+<p>类适配器使用<strong>多重继承</strong>对一个接口与另一个接口进行匹配</p>
+</blockquote>
+<ul>
+<li>对象适配器</li>
+</ul>
+<blockquote>
+<p>对象适配器使用<strong>对象组合</strong>对一个接口与另一个接口进行匹配</p>
+</blockquote>
+<h3 id="意图"><a href="#意图" class="headerlink" title="意图"></a>意图</h3><p>将一个类的接口转换成客户希望的另外一个接口。适配器模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作</p>
+<h3 id="参与者"><a href="#参与者" class="headerlink" title="参与者"></a>参与者</h3><ul>
+<li><p>Target<br>定义Client使用的与特定领域相关的接口</p>
+</li>
+<li><p>Adaptee<br>定义一个已经存在的接口，这个接口需要适配</p>
+</li>
+<li><p>Adapter<br>对Adaptee的接口与Target的接口进行适配</p>
+</li>
+<li><p>Client<br>与符合Target接口的对象协同</p>
+</li>
+</ul>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FAdapter.jpg" alt="adapter"></p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><h4 id="类适配器"><a href="#类适配器" class="headerlink" title="类适配器"></a>类适配器</h4><ol>
+<li><p>首先定义一个要适配的目标类<code>Target</code>,及接口<code>Request()</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">class Target</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual void Request()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Target Request&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义一个要被适配的类<code>Adaptee</code>,及其接口<code>SpecialRequest()</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">class Adaptee</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    void SpecialRequest()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Adaptee Special Request&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义适配器类<code>Adapter</code>,通过多重继承来适配两者,通过调用<code>adaptee</code>类的<code>Request()</code> 接口Override <code>Request()</code>接口的方式来进行适配：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">class Adapter: public Target, public Adaptee</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    void Request()          // Override Target&apos;s Request()</span><br><span class="line">    &#123;</span><br><span class="line">        SpecialRequest();</span><br><span class="line">        cout &lt;&lt; &quot;Adapter Request&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试类适配器模式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">void PrototypeTest()</span><br><span class="line">&#123;</span><br><span class="line">   // Class Adapter Test</span><br><span class="line">   Target *pT = new Adapter();</span><br><span class="line">   pT-&gt;Request();</span><br><span class="line"></span><br><span class="line">   delete pT; pT = NULL;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>运行结果：</p>
+<pre><code>Adaptee Special Request
+Adapter Request</code></pre><h4 id="对象适配器"><a href="#对象适配器" class="headerlink" title="对象适配器"></a>对象适配器</h4><ol>
+<li><p>首先定义一个目标类<code>Target_Obj</code>,同样实现其<code>Request()</code>接口：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">class Target_Obj</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    Target_Obj() &#123;&#125;;</span><br><span class="line">    virtual ~Target_Obj() &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    virtual void Request()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Target_Obj Request&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然后定义一个被适配的类<code>Adaptee_Obj</code>,同样提供一个<code>SpecialRequest()</code>接口:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">class Adaptee_Obj</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    void SpecialRequest()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Adaptee_Obj Special Request&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>最后定义一个适配器类，此类仅继承目标类，被适配器类是通过对象组合的方式来进行适配的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">class Adapter_Obj: public Target_Obj</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    Adaptee_Obj *m_pAdaptee;  // 对象组合方式来适配</span><br><span class="line">public:</span><br><span class="line">    Adapter_Obj() </span><br><span class="line">    &#123;</span><br><span class="line">        m_pAdaptee = new Adaptee_Obj();</span><br><span class="line">    &#125;</span><br><span class="line">    virtual ~Adapter_Obj()</span><br><span class="line">    &#123;</span><br><span class="line">        if (NULL != m_pAdaptee)</span><br><span class="line">        &#123;</span><br><span class="line">            delete m_pAdaptee;</span><br><span class="line">            m_pAdaptee = NULL;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">public:</span><br><span class="line">    void Request()</span><br><span class="line">    &#123;</span><br><span class="line">        if(NULL == m_pAdaptee)</span><br><span class="line">        &#123;</span><br><span class="line">            cout &lt;&lt; &quot;new Adaptee Failed!&quot; &lt;&lt; endl;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        m_pAdaptee-&gt;SpecialRequest();//调用被适配的对象方法</span><br><span class="line">        cout &lt;&lt; &quot;Adapter_Obj Request&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试对象适配器模式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">void AdapterTest_General()</span><br><span class="line">&#123;</span><br><span class="line">    // Object Adapter Test</span><br><span class="line">    Target_Obj *pTO = new Adapter_Obj();</span><br><span class="line">    pTO-&gt;Request();</span><br><span class="line"></span><br><span class="line">    delete pTO; pTO = NULL; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>运行结果：</p>
+<pre><code>Adaptee_Obj Special Request
+Adapter_Obj Request</code></pre><h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>使用一个已经存在的类，如果它的接口和你实际要求的不一致时，可以考虑使用适配器模式</li>
+<li>要在调用者和功能提供者双方都不太容易修改的时候再使用适配器模式，而不是一有不同时就使用它</li>
+</ul>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><ul>
+<li>优点<ul>
+<li>降低了去实现一个功能点的难度，可以对现有的类进行包装，就可以进行使用了</li>
+<li>目标类和适配者类解耦，通过引入一个适配器类来重用现有的适配者类，无须修改原有结构</li>
+<li>增加了类的透明性和复用性，将具体的业务实现过程封装在适配者类中，对于客户端类而言是透明的，而且提高了适配者的复用性，同一个适配者类可以在多个不同的系统中复用</li>
+<li>提高了项目质量，现有的类一般都是经过测试的，使用了适配器模式之后，不需要对旧的类进行全面的覆盖测试</li>
+<li>对象适配器还有如下优点：<ul>
+<li>一个对象适配器可以把多个不同的适配者适配到同一个目标</li>
+<li>可以适配一个适配者的子类，由于适配器和适配者之间是关联关系，根据“里氏代换原则”，适配者的子类也可通过该适配器进行适配</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>类适配器使用多重继承，对于被继承的多个父类如果有共同的基类，会出现歧义(虽然可以通过虚拟继承来解决，但是使系统的类继承体系膨胀)</li>
+<li>对象适配器模式与类适配器模式相比，要在适配器中置换适配者类的某些方法比较麻烦。如果一定要置换掉适配者类的一个或多个方法，可以先做一个适配者类的子类，其将适配者类的方法置换掉，然后再把适配者类的子类当做真正的适配者进行适配，实现过程较为复杂</li>
+</ul>
+</li>
+</ul>
+<h2 id="适配器模式具体实例"><a href="#适配器模式具体实例" class="headerlink" title="适配器模式具体实例"></a>适配器模式具体实例</h2><hr>
+<h3 id="实例1-—-STL标准库"><a href="#实例1-—-STL标准库" class="headerlink" title="实例1 — STL标准库"></a>实例1 — STL标准库</h3><p><strong>使用STL的双端队列deque类中的方法实现STL的队列queue &amp; 栈stack类，并实现其中的push和pop方法</strong></p>
+<ol>
+<li><p>被适配的类<code>Deque</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//双端队列</span><br><span class="line">class Deque</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    void push_back(int x) &#123; cout&lt;&lt;&quot;Deque push_back&quot;&lt;&lt;endl; &#125;</span><br><span class="line">    void push_front(int x) &#123; cout&lt;&lt;&quot;Deque push_front&quot;&lt;&lt;endl; &#125;</span><br><span class="line">    void pop_back() &#123; cout&lt;&lt;&quot;Deque pop_back&quot;&lt;&lt;endl; &#125;</span><br><span class="line">    void pop_front() &#123; cout&lt;&lt;&quot;Deque pop_front&quot;&lt;&lt;endl; &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Queue</code>和<code>Stack</code>均属于<code>Sequence</code>类型（适配器的目标类型）:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//顺序容器</span><br><span class="line">class Sequence</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual void push(int x) = 0;</span><br><span class="line">    virtual void pop() = 0;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将<code>Deque</code>分别适配为<code>Queue</code>和<code>Stack</code>类,并实现<code>push()</code>和<code>pop()</code>方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">//栈:先进后出FILO</span><br><span class="line">class Stack: public Sequence</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    void push(int x) </span><br><span class="line">    &#123; </span><br><span class="line">        deque.push_back(x); </span><br><span class="line">        cout &lt;&lt; &quot;Stack push&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    void pop() </span><br><span class="line">    &#123;</span><br><span class="line">        deque.pop_back(); </span><br><span class="line">        cout &lt;&lt; &quot;Stack pop&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    Deque deque; //双端队列</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">//队列：先进先出FIFO</span><br><span class="line">class Queue: public Sequence</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    void push(int x)</span><br><span class="line">    &#123; </span><br><span class="line">        deque.push_back(x);</span><br><span class="line">        cout &lt;&lt; &quot;Queue push&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    void pop() </span><br><span class="line">    &#123;</span><br><span class="line">        deque.pop_front(); </span><br><span class="line">        cout &lt;&lt; &quot;Queue pop&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    Deque deque; //双端队列</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试STL适配器模式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">void AdapterTest_STL()</span><br><span class="line">&#123;</span><br><span class="line">    // STL Sequence Obj Test</span><br><span class="line">    Sequence *s1 = new Stack();</span><br><span class="line">    Sequence *s2 = new Queue();</span><br><span class="line">    s1-&gt;push(1); s1-&gt;pop();</span><br><span class="line">    s2-&gt;push(1); s2-&gt;pop();</span><br><span class="line">    delete s1; delete s2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试结果:</p>
+<p> Deque push_back<br> Stack push<br> Deque pop_back<br> Stack pop<br> Deque push_back<br> Queue push<br> Deque pop_front<br> Queue pop</p>
+</li>
+</ol>
+<h3 id="实例2-—-电源适配器"><a href="#实例2-—-电源适配器" class="headerlink" title="实例2 — 电源适配器"></a>实例2 — 电源适配器</h3><p><strong>实现前言所描述的电源适配器</strong></p>
+<h3 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h3><ol>
+<li><p>被适配的美国类型插座类<code>USASocket</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// Adaptee socket</span><br><span class="line">class USASocket</span><br><span class="line">&#123;</span><br><span class="line">    // USA socket;</span><br><span class="line">public:</span><br><span class="line">    int provideUSAVolt(void)</span><br><span class="line">    &#123;</span><br><span class="line">        return 110;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>目标类中国类型插座类<code>CHNSocket</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// Target socket</span><br><span class="line">class CHNSocket</span><br><span class="line">&#123;</span><br><span class="line">    // China socket;</span><br><span class="line">public:</span><br><span class="line">    virtual int provideChinaVolt(void) = 0;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>美国–&gt;中国插座转换器类<code>SocketAdapter</code>(采用对象适配器模式)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//  socket Adapter</span><br><span class="line">class SocketAdapter : public CHNSocket</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    USASocket* _usaSocket;</span><br><span class="line">public:</span><br><span class="line">    SocketAdapter(USASocket *socket):_usaSocket(socket) &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    int provideChinaVolt(void)</span><br><span class="line">    &#123;</span><br><span class="line">        if (NULL != _usaSocket)</span><br><span class="line">        &#123;</span><br><span class="line">            return _usaSocket-&gt;provideUSAVolt() * 2; </span><br><span class="line">            // invoke USASocket method to convert usa volt ---&gt; chn volt</span><br><span class="line">        &#125;</span><br><span class="line">        return 0;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试实例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> void AdapterTest_Socket()</span><br><span class="line">&#123;</span><br><span class="line">    // Socket Adapter Test:</span><br><span class="line">    USASocket *s1 = new USASocket();</span><br><span class="line">    SocketAdapter *s2 = new SocketAdapter(s1);</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; &quot;before convert volt is: &quot; &lt;&lt; s1-&gt;provideUSAVolt()   &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; &quot;after convert volt is: &quot;  &lt;&lt; s2-&gt;provideChinaVolt() &lt;&lt; endl;</span><br><span class="line">    delete s1; delete s2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>运行结果：</p>
+<pre><code>before convert volt is: 110
+after convert volt is: 220</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Design-Pattern/" rel="tag"># Design Pattern</a>
+          
+            <a href="/tags/Structural-Pattern/" rel="tag"># Structural Pattern</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/10/原型模式(创建型)/" rel="next" title="原型模式(创建型)">
+                <i class="fa fa-chevron-left"></i> 原型模式(创建型)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/20/桥接模式(结构型)/" rel="prev" title="桥接模式(结构型)">
+                桥接模式(结构型) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="uyan_frame"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/book.jpg" alt="Frank Tao">
+            
+              <p class="site-author-name" itemprop="name">Frank Tao</p>
+              <p class="site-description motion-element" itemprop="description">welcome to franktly’s blog -~-</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/franktly" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.zhihu.com/people/tao-ling-yang/activities" target="_blank" title="ZhiHu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>ZhiHu</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/2273442920/profile?topnav=1&wvr=6&is_all=1" target="_blank" title="WeiBo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>WeiBo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#适配器模式"><span class="nav-number">2.</span> <span class="nav-text">适配器模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#意图"><span class="nav-number">2.1.</span> <span class="nav-text">意图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参与者"><span class="nav-number">2.2.</span> <span class="nav-text">参与者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模式结构"><span class="nav-number">2.3.</span> <span class="nav-text">模式结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码实现"><span class="nav-number">2.4.</span> <span class="nav-text">代码实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#类适配器"><span class="nav-number">2.4.1.</span> <span class="nav-text">类适配器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对象适配器"><span class="nav-number">2.4.2.</span> <span class="nav-text">对象适配器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用场景"><span class="nav-number">2.5.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优缺点"><span class="nav-number">2.6.</span> <span class="nav-text">优缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#适配器模式具体实例"><span class="nav-number">3.</span> <span class="nav-text">适配器模式具体实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#实例1-—-STL标准库"><span class="nav-number">3.1.</span> <span class="nav-text">实例1 — STL标准库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例2-—-电源适配器"><span class="nav-number">3.2.</span> <span class="nav-text">实例2 — 电源适配器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码实现-1"><span class="nav-number">3.3.</span> <span class="nav-text">代码实现</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank Tao</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2136191"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

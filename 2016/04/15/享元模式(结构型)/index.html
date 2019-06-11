@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Design Pattern,Structural Pattern,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言 最近的Google AlphaGo大战李世石的围棋人机大战很火，虽然人类最终败北，但是正如Google执行董事施密特所说：“不管输赢，都是人类的巨大的胜利”。如果想自己设计一个围棋软件程序，你会发现,围棋中存在着大量的黑子和白子，它们的形状、大小都一模一样，只是出现的位置不同而已。如果将每一个棋子都作为一个独立的对象存储在内存中，将导致该围棋软件在运行时所需内存空间较大，为了解决这个问题，可">
+<meta name="keywords" content="Design Pattern,Structural Pattern">
+<meta property="og:type" content="article">
+<meta property="og:title" content="享元模式(结构型)">
+<meta property="og:url" content="http://www.franktly.com/2016/04/15/享元模式(结构型)/index.html">
+<meta property="og:site_name" content="Share Your Mind">
+<meta property="og:description" content="前言 最近的Google AlphaGo大战李世石的围棋人机大战很火，虽然人类最终败北，但是正如Google执行董事施密特所说：“不管输赢，都是人类的巨大的胜利”。如果想自己设计一个围棋软件程序，你会发现,围棋中存在着大量的黑子和白子，它们的形状、大小都一模一样，只是出现的位置不同而已。如果将每一个棋子都作为一个独立的对象存储在内存中，将导致该围棋软件在运行时所需内存空间较大，为了解决这个问题，可">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FFlyweight_Abstract.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FSimple_Flyweight.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FComposite_Flyweight.PNG">
+<meta property="og:updated_time" content="2019-06-11T10:59:03.926Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="享元模式(结构型)">
+<meta name="twitter:description" content="前言 最近的Google AlphaGo大战李世石的围棋人机大战很火，虽然人类最终败北，但是正如Google执行董事施密特所说：“不管输赢，都是人类的巨大的胜利”。如果想自己设计一个围棋软件程序，你会发现,围棋中存在着大量的黑子和白子，它们的形状、大小都一模一样，只是出现的位置不同而已。如果将每一个棋子都作为一个独立的对象存储在内存中，将导致该围棋软件在运行时所需内存空间较大，为了解决这个问题，可">
+<meta name="twitter:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FFlyweight_Abstract.PNG">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: "",
+      labels: ""
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.franktly.com/2016/04/15/享元模式(结构型)/">
+
+
+
+
+
+  <title>享元模式(结构型) | Share Your Mind</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Share Your Mind</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Love Reading | Film | Climbing | Snooker</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.franktly.com/2016/04/15/享元模式(结构型)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank Tao">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/book.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Share Your Mind">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">享元模式(结构型)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-15T00:00:00+08:00">
+                2016-04-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Design-Pattern/" itemprop="url" rel="index">
+                    <span itemprop="name">Design Pattern</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>最近的Google AlphaGo大战李世石的围棋人机大战很火，虽然人类最终败北，但是正如Google执行董事施密特所说：“不管输赢，都是人类的巨大的胜利”。如果想自己设计一个围棋软件程序，你会发现,围棋中存在着大量的黑子和白子，它们的形状、大小都一模一样，只是出现的位置不同而已。如果将每一个棋子都作为一个独立的对象存储在内存中，将导致该围棋软件在运行时所需内存空间较大，为了解决这个问题，可以考虑使用对象共享复用模式—享元模式来设计该围棋软件的棋子对象。</p>
+<a id="more"></a>
+
+<h2 id="享元模式"><a href="#享元模式" class="headerlink" title="享元模式"></a>享元模式</h2><hr>
+<p>享元模式,该模式通过共享技术实现相同或相似对象的重用。如在一个文本字符串中存在很多重复的字符，如果每一个字符都用一个单独的对象来表示，将会占用较多的内存空间，那么我们如何去避免系统中出现大量相同或相似的对象呢？享元模式正为解决这一类问题而诞生。<strong>在逻辑上每一个出现的字符都有一个对象与之对应，然而在物理上它们却共享同一个享元对象，这个对象可以出现在一个字符串的不同地方，相同的字符对象都指向同一个实例</strong>。在享元模式中，存储这些共享实例对象的地方称为<strong>享元池</strong>。我们可以针对每一个不同的字符创建一个享元对象，将其放在享元池中，需要时再从享元池取出</p>
+<blockquote>
+<p>享元模式以共享的方式支持大量细粒度对象的重用，享元对象使用的关键是区分对象内部状态和外部状态<br><strong>内部状态</strong>是存储在享元对象内部并且不会随环境改变而改变的状态，内部状态可以共享<br><strong>外部状态</strong>是随环境改变而改变的、不可以共享的状态。享元对象的外部状态通常由客户端保存，并在享元对象被创建之后，需要使用的时候再传入到享元对象内部<br>区分了内部状态和外部状态，我们可以将具有相同内部状态的对象存储在享元池中，享元池中的对象是可以实现共享的，需要的时候就将对象从享元池中取出，实现对象的复用。通过向取出的对象注入不同的外部状态，可以得到一系列相似的对象，而这些对象在内存中实际上只存储一份</p>
+</blockquote>
+<h3 id="意图"><a href="#意图" class="headerlink" title="意图"></a>意图</h3><p>运用共享技术有效地支持大量细粒度对象的复用。系统只使用少量的对象，而这些对象都很相似，状态变化很小，可以实现对象的多次复用。</p>
+<blockquote>
+<p>由于享元模式要求能够共享的对象必须是细粒度对象，因此它又称为轻量级模式，它是一种对象结构型模式</p>
+</blockquote>
+<h3 id="参与者"><a href="#参与者" class="headerlink" title="参与者"></a>参与者</h3><ul>
+<li><p>Flyweight<br>描述一个接口，通过这个接口flyweight可以接受并作用于外部状态</p>
+</li>
+<li><p>ConcreteFlyweight<br>实现Flyweight接口，并为内部状态(如果有的话)增加存储空间<br>ConcreteFlyweight对象必须是可共享的。它所存储的状态必须是内部的，即必须独立于ConcreteFlyweight对象的场景</p>
+</li>
+<li><p>UnsharedConcreteFlyweight<br>并非所有的Flyweight子类都需要被共享。Flyweight接口使共享成为可能，但它并不强制共享<br>在Flyweight对象结构的某些层次，UnsharedConcreteFlyweight对象通常将ConcreteFlyweight对象作为子节点</p>
+</li>
+<li><p>FlyweightFactory<br>创建并管理flyweight对象<br>确保合理地共享flyweight。当用户请求一个flyweight时，FlyweightFactory对象提供一个已创建的实例或者创建一个(如果不存在的话)</p>
+</li>
+<li><p>Client<br>维持一个对flyweight的引用<br>计算或存储一个或多个Flyweight的外部状态</p>
+</li>
+</ul>
+<blockquote>
+<p>flyweight执行时所需的状态必定是内部的或外部的。内部状态存储于<code>ConcreteFlyweight</code>对象之中;而外部对象则由client对象存储或计算。当用户调用<code>Flyweight</code>对象的操作时，将该状态传递给它<br>用户不应直接对<code>ConcreteFlyweight</code>类进行实例化，而只能从<code>FlyweightFactory</code>对象得到<br><code>ConcreteFlyweight</code>对象，这可以保证对它们适当地进行共享</p>
+</blockquote>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FFlyweight_Abstract.PNG" alt="flyweight_pattern"></p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><ol>
+<li><p>首先定义抽象的<code>Flyweight</code>,并提供<code>Operate()</code>接口，接受外部状态：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">// Flyweight抽象类</span><br><span class="line">class Flyweight</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    // 内部状态，也可以放在ConcreteFlyweight中</span><br><span class="line">    string _intraState;</span><br><span class="line">protected:</span><br><span class="line">    Flyweight(string intraState) : _intraState(intraState) &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    //操作外部状态extraState</span><br><span class="line">    virtual void Operate(const string&amp; extraState) = 0;</span><br><span class="line">    virtual ~Flyweight() &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    // 内部状态回读接口，也可以放在ConcreteFlyweight中</span><br><span class="line">    string getIntraState(void)</span><br><span class="line">    &#123;</span><br><span class="line">        return _intraState;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>再分别定义<code>Flyweight</code>类的两个子类，共享的<code>ConcreteFlyweight</code>类和非共享的 <code>UnsharedConcreteFlyweight</code>类，并分别实现其<code>Operate()</code>接口：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">// 共享Flyweight的具体子类</span><br><span class="line">class ConcreteFlyweight : public Flyweight</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    ConcreteFlyweight(string intraState) : Flyweight(intraState) &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    virtual void Operate(const string&amp; extraState)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;concrete flyweight intraState: &quot; &lt;&lt;  getIntraState() &lt;&lt; endl; // intra state &amp; extra state</span><br><span class="line">        cout &lt;&lt; &quot;concrete flyweight extraState: &quot; &lt;&lt;  extraState &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    virtual ~ConcreteFlyweight() &#123;&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 非共享Flyweight的具体子类</span><br><span class="line">class UnsharedConcreteFlyweight : public Flyweight</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    UnsharedConcreteFlyweight(string intraState) : Flyweight(intraState) &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    virtual void Operate(const string&amp; extraState)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;UnsharedConcrete flyweight extraState: &quot; &lt;&lt; extraState &lt;&lt; endl; // only extra state</span><br><span class="line">    &#125;</span><br><span class="line">    virtual ~UnsharedConcreteFlyweight() &#123;&#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义<code>Flyweight</code>的工厂类，对于共享和非共享分别提供一个获取对象实例的接口：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">// flyweight工厂类，若该对象已存在，直接返回该对象，否则新建一个对象，存入容器中，再返回</span><br><span class="line">class FlyweightFactory</span><br><span class="line">&#123;</span><br><span class="line">    //保存内部状态的flyweight对象容器</span><br><span class="line">private:</span><br><span class="line">    vector&lt;Flyweight*&gt; _vecFlyweight;</span><br><span class="line">public:</span><br><span class="line">    FlyweightFactory() &#123;&#125;;</span><br><span class="line">    // 获取可共享的flyweight，从共享pool中获取</span><br><span class="line">    Flyweight* getConcreteFlyweight(const string&amp; key)</span><br><span class="line">    &#123;</span><br><span class="line">        vector&lt;Flyweight*&gt;::iterator it = _vecFlyweight.begin();</span><br><span class="line">        for (; it != _vecFlyweight.end(); ++it)</span><br><span class="line">        &#123;</span><br><span class="line">            if ((*it)-&gt;getIntraState() == key) //根据内部状态索引,若存在，直接返回该对象</span><br><span class="line">            &#123;</span><br><span class="line">                return *it; </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Flyweight* newFlyweight = new ConcreteFlyweight(key);</span><br><span class="line">        _vecFlyweight.push_back(newFlyweight);</span><br><span class="line">        return newFlyweight;           //若不存在，则创建之并存入flyweight容器，返回该对象</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    int getConcreteFlyweightCount(void)</span><br><span class="line">    &#123;</span><br><span class="line">        return _vecFlyweight.size();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 获取不可共享的flyweight，直接创建并返回</span><br><span class="line">    Flyweight* getUnsharedConcreteFlyweight(const string&amp; key)</span><br><span class="line">    &#123;</span><br><span class="line">        return new UnsharedConcreteFlyweight(key);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试享元模式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">void FlyweightAbstractTest()</span><br><span class="line">&#123;</span><br><span class="line">    // factory</span><br><span class="line">    FlyweightFactory *factory = new FlyweightFactory();</span><br><span class="line"></span><br><span class="line">    //shared flyweight</span><br><span class="line">    Flyweight *concreteFlyweight = factory-&gt;getConcreteFlyweight(&quot;shared intra state&quot;);</span><br><span class="line">    Flyweight *concreteFlyweight2 = factory-&gt;getConcreteFlyweight(&quot;shared intra state&quot;); // the same, return obj directly                                                                                        // extra state</span><br><span class="line">    const string extraState1 = &quot;extra1&quot;;</span><br><span class="line">    const string extraState2 = &quot;extra2&quot;;</span><br><span class="line">    concreteFlyweight-&gt;Operate(extraState1);</span><br><span class="line">    concreteFlyweight2-&gt;Operate(extraState2);</span><br><span class="line">    cout &lt;&lt; &quot;flyweight container size :&quot; &lt;&lt; factory-&gt;getConcreteFlyweightCount() &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    //unshared flyweight</span><br><span class="line">    const string extraState3 = &quot;extra3&quot;;</span><br><span class="line">    Flyweight *unsharedConcreteFlyweight = factory-&gt;getUnsharedConcreteFlyweight(&quot;no shared intra state&quot;);</span><br><span class="line">    unsharedConcreteFlyweight-&gt;Operate(extraState3);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>运行结果：</p>
+<pre><code>concrete flyweight intraState: shared intra state
+concrete flyweight extraState: extra1
+concrete flyweight intraState: shared intra state
+concrete flyweight extraState: extra2
+flyweight container size :1
+UnsharedConcrete flyweight extraState: extra3</code></pre><h3 id="享元模式的分类"><a href="#享元模式的分类" class="headerlink" title="享元模式的分类"></a>享元模式的分类</h3><p>标准的享元模式结构图中既包含可以共享的具体享元类，也包含不可以共享的非共享具体享元类。但是在实际使用过程中，我们有时候会用到两种特殊的享元模式：单纯享元模式和复合享元模式。</p>
+<h4 id="单纯享元模式"><a href="#单纯享元模式" class="headerlink" title="单纯享元模式"></a>单纯享元模式</h4><p>在单纯享元模式中，所有的具体享元类都是可以共享的，不存在非共享具体享元类。模式图如：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FSimple_Flyweight.PNG" alt="simple_flyweight"></p>
+<h4 id="复合享元模式"><a href="#复合享元模式" class="headerlink" title="复合享元模式"></a>复合享元模式</h4><p>将一些单纯享元对象使用组合模式加以组合，还可以形成复合享元对象，这样的复合享元对象本身不能共享，但是它们可以分解成单纯享元对象，而后者则可以共享。模式图如：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FComposite_Flyweight.PNG" alt="composite_flyweight"></p>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>一个系统有大量相同或者相似的对象，造成内存的大量耗费</li>
+<li>对象的大部分状态都可以外部化，可以将这些外部状态传入对象中</li>
+<li>在使用享元模式时需要维护一个存储享元对象的享元池，而这需要耗费一定的系统资源，因此，应当在需要多次重复使用享元对象时才值得使用享元模式</li>
+<li>如果删除对象的外部状态，那么可以用相对较少的共享对象取代很多组对象</li>
+</ul>
+<blockquote>
+<p>在享元模式的享元工厂类中通常提供一个静态的工厂方法用于返回享元对象，使用简单工厂模式来生成享元对象<br>在一个系统中，通常只有唯一一个享元工厂，因此可以使用单例模式进行享元工厂类的设计<br>享元模式可以结合组合模式形成复合享元模式，统一对多个享元对象设置外部状态</p>
+</blockquote>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><ul>
+<li>优点<ul>
+<li>可以极大减少内存中对象的数量，使得相同或相似对象在内存中只保存一份，从而可以节约系统资源，提高系统性能</li>
+<li>享元模式的外部状态相对独立，而且不会影响其内部状态，从而使得享元对象可以在不同的环境中被共享</li>
+<li>如果能发现这些实例数据除了几个参数外基本都是相同的，使用享元模式就可以大幅度地减少对象的数量</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>为了使对象可以共享，享元模式需要将享元对象的部分状态外部化，而读取外部状态将使得运行时间变长</li>
+</ul>
+</li>
+</ul>
+<h2 id="享元模式具体实例"><a href="#享元模式具体实例" class="headerlink" title="享元模式具体实例"></a>享元模式具体实例</h2><hr>
+<h3 id="围棋程序"><a href="#围棋程序" class="headerlink" title="围棋程序"></a>围棋程序</h3><p><strong>使用享元模式简单的实现前言说描述的围棋棋子</strong></p>
+<h4 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h4><ol>
+<li><p>首先分别定义棋子的外部属性(Position)和内部属性(Color):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">// 棋子位置 (extra state)</span><br><span class="line">class Position </span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    int x;</span><br><span class="line">    int y;</span><br><span class="line">public:</span><br><span class="line">    Position(int a, int b): x(a), y(b) &#123;&#125;;</span><br><span class="line">    virtual ~Position() &#123;&#125;;</span><br><span class="line">    int getX(void)</span><br><span class="line">    &#123;</span><br><span class="line">        return x;</span><br><span class="line">    &#125;</span><br><span class="line">    int getY(void)</span><br><span class="line">    &#123;</span><br><span class="line">        return y;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">//棋子的颜色(intra state) Key</span><br><span class="line">typedef enum tag_Color</span><br><span class="line">&#123;</span><br><span class="line">    BLACK,</span><br><span class="line">    WHITE</span><br><span class="line">&#125;COLOR;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义抽象棋子类,包含内部属性(Color),和操作<code>DrawPiece(Position &amp;pos)</code>,传入外部状态对象引用:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// 抽象棋子类(Abstract Flyweight)</span><br><span class="line">class Piece</span><br><span class="line">&#123;</span><br><span class="line">protected:</span><br><span class="line">    COLOR    m_Color;  // intra state</span><br><span class="line">public:</span><br><span class="line">    Piece(COLOR color): m_Color(color) &#123;&#125;; // only color </span><br><span class="line">    virtual ~Piece() &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    virtual COLOR GetColor()  // intra state</span><br><span class="line">    &#123;</span><br><span class="line">        return m_Color;</span><br><span class="line">    &#125;</span><br><span class="line">    virtual void DrawPiece(Position &amp;pos) = 0; // operate(extra state)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>分别定义具体的黑棋子和白棋子类，分别实现其操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">// 具体黑棋子类(Concrete Flyweight)</span><br><span class="line">class BlackPiece : public Piece</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    BlackPiece() : Piece(BLACK) &#123;&#125;;</span><br><span class="line">    virtual ~BlackPiece() &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    void DrawPiece(Position &amp;pos)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Draw A Black Piece, Position is:&quot; &lt;&lt; &quot;X:&quot; &lt;&lt; pos.getX() &lt;&lt; &quot; Y:&quot; &lt;&lt; pos.getY() &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 具体白棋子类(Concrete Flyweight)</span><br><span class="line">class WhitePiece : public Piece</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    WhitePiece() : Piece(WHITE) &#123;&#125;;</span><br><span class="line">    virtual ~WhitePiece() &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    void DrawPiece(Position &amp;pos)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Draw A White Piece, Position is:&quot; &lt;&lt; &quot;X:&quot; &lt;&lt; pos.getX() &lt;&lt; &quot; Y:&quot; &lt;&lt; pos.getY() &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义棋子工厂类，来提供黑和白棋子</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">// 棋子工厂类，提供生产白色、黑色棋子 (Flyweight Factory)</span><br><span class="line">class PieceFactory</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    // 棋子容器（享元池）</span><br><span class="line">    vector&lt;Piece*&gt; m_vecPiece;</span><br><span class="line">public:</span><br><span class="line">    PieceFactory() &#123;&#125;;</span><br><span class="line">    virtual ~PieceFactory()</span><br><span class="line">    &#123;</span><br><span class="line">        for (vector&lt;Piece*&gt;::iterator it = m_vecPiece.begin();</span><br><span class="line">             it != m_vecPiece.end();</span><br><span class="line">             ++it)</span><br><span class="line">        &#123;</span><br><span class="line">            if (NULL != (*it))</span><br><span class="line">            &#123;</span><br><span class="line">                delete *it;</span><br><span class="line">                *it = NULL;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    Piece* CreateAndAddPiece(COLOR color)</span><br><span class="line">    &#123;</span><br><span class="line">        Piece *pRes;</span><br><span class="line"></span><br><span class="line">        if (WHITE ==  color)</span><br><span class="line">        &#123;</span><br><span class="line">            pRes = new WhitePiece();</span><br><span class="line">        &#125;</span><br><span class="line">        else if (BLACK == color)</span><br><span class="line">        &#123;</span><br><span class="line">            pRes = new BlackPiece();</span><br><span class="line">        &#125;</span><br><span class="line">        m_vecPiece.push_back(pRes);</span><br><span class="line"></span><br><span class="line">        return pRes;</span><br><span class="line">    &#125;</span><br><span class="line">public:</span><br><span class="line">    Piece* GetPiece(COLOR color)</span><br><span class="line">    &#123;</span><br><span class="line">         // 若不为空，则判断vector容器里面是否有给定颜色的Piece</span><br><span class="line">        for (vector&lt;Piece*&gt;::iterator it = m_vecPiece.begin(); </span><br><span class="line">             it != m_vecPiece.end();</span><br><span class="line">             ++it)</span><br><span class="line">        &#123;</span><br><span class="line">            if (color == (*it)-&gt;GetColor()) // 找到了给定颜色的Piece</span><br><span class="line">            &#123;</span><br><span class="line">                return (*it);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        //  若未空，则new一个Piece， 并添加Piece</span><br><span class="line">        return CreateAndAddPiece(color);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试棋子享元模式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">void FlyweightPieceTest()</span><br><span class="line">&#123;</span><br><span class="line">    PieceFactory *pPF = new PieceFactory();</span><br><span class="line"></span><br><span class="line">    // Player 1 get a white piece from the pieces bowl</span><br><span class="line">    Piece       *pWP_1 = pPF-&gt;GetPiece(WHITE);</span><br><span class="line">    pWP_1-&gt;DrawPiece(Position(1,10)); // new a white piece, set pos = 1,10</span><br><span class="line"></span><br><span class="line">    // Player 2 get a black piece from the pieces bowl</span><br><span class="line">    Piece       *pBP_1 = pPF-&gt;GetPiece(BLACK); // new a black piece , set pos = 1,20</span><br><span class="line">    pBP_1-&gt;DrawPiece(Position(1,20)); </span><br><span class="line"></span><br><span class="line">    // Player 1 get a white piece from the pieces bowl</span><br><span class="line">    Piece       *pWP_2 = pPF-&gt;GetPiece(WHITE); // get the existing white piece, but set pos = 2,10</span><br><span class="line">    pWP_2-&gt;DrawPiece(Position(2,10));</span><br><span class="line"></span><br><span class="line">    // Player 2 get a black piece from the pieces bowl</span><br><span class="line">    Piece       *pBP_2 = pPF-&gt;GetPiece(BLACK); // get the existing a black piece , but set pos = 2,20</span><br><span class="line">    pBP_2-&gt;DrawPiece(Position(2,20));</span><br><span class="line"></span><br><span class="line">    if (NULL != pPF)</span><br><span class="line">    &#123;</span><br><span class="line">        delete pPF; pPF = NULL;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行结果：</p>
+<p> Draw A White Piece, Position is:X:1 Y:10<br> Draw A Black Piece, Position is:X:1 Y:20<br> Draw A White Piece, Position is:X:2 Y:10<br> Draw A Black Piece, Position is:X:2 Y:20</p>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Design-Pattern/" rel="tag"># Design Pattern</a>
+          
+            <a href="/tags/Structural-Pattern/" rel="tag"># Structural Pattern</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/10/代理模式(结构型)/" rel="next" title="代理模式(结构型)">
+                <i class="fa fa-chevron-left"></i> 代理模式(结构型)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/20/责任链模式(行为型) /" rel="prev" title="责任链模式(行为型)">
+                责任链模式(行为型) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="uyan_frame"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/book.jpg" alt="Frank Tao">
+            
+              <p class="site-author-name" itemprop="name">Frank Tao</p>
+              <p class="site-description motion-element" itemprop="description">welcome to franktly’s blog -~-</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/franktly" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.zhihu.com/people/tao-ling-yang/activities" target="_blank" title="ZhiHu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>ZhiHu</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/2273442920/profile?topnav=1&wvr=6&is_all=1" target="_blank" title="WeiBo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>WeiBo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#享元模式"><span class="nav-number">2.</span> <span class="nav-text">享元模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#意图"><span class="nav-number">2.1.</span> <span class="nav-text">意图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参与者"><span class="nav-number">2.2.</span> <span class="nav-text">参与者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模式结构"><span class="nav-number">2.3.</span> <span class="nav-text">模式结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码实现"><span class="nav-number">2.4.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#享元模式的分类"><span class="nav-number">2.5.</span> <span class="nav-text">享元模式的分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单纯享元模式"><span class="nav-number">2.5.1.</span> <span class="nav-text">单纯享元模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#复合享元模式"><span class="nav-number">2.5.2.</span> <span class="nav-text">复合享元模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用场景"><span class="nav-number">2.6.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优缺点"><span class="nav-number">2.7.</span> <span class="nav-text">优缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#享元模式具体实例"><span class="nav-number">3.</span> <span class="nav-text">享元模式具体实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#围棋程序"><span class="nav-number">3.1.</span> <span class="nav-text">围棋程序</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代码实现-1"><span class="nav-number">3.1.1.</span> <span class="nav-text">代码实现</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank Tao</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2136191"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

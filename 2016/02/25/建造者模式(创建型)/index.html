@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Design Pattern,Construction Pattern,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="建造者模式 建造者模式又称为生成器模式，是一种对象创建型模式，它将客户端与包含多个组成部分或部件的复杂对象的创建过程解耦，客户端无需知道复杂对象的内部组成部分与装配方式，只需要知道所需建造者的类型即可。具体的建造者关注如何一步一步创建一个复杂对象，不同的具体创建者定义不同的创建过程，且它们之间相互独立，增加新的建造者非常方便，无需修改已有代码，系统扩展性好。">
+<meta name="keywords" content="Design Pattern,Construction Pattern">
+<meta property="og:type" content="article">
+<meta property="og:title" content="建造者模式(创建型)">
+<meta property="og:url" content="http://www.franktly.com/2016/02/25/建造者模式(创建型)/index.html">
+<meta property="og:site_name" content="Share Your Mind">
+<meta property="og:description" content="建造者模式 建造者模式又称为生成器模式，是一种对象创建型模式，它将客户端与包含多个组成部分或部件的复杂对象的创建过程解耦，客户端无需知道复杂对象的内部组成部分与装配方式，只需要知道所需建造者的类型即可。具体的建造者关注如何一步一步创建一个复杂对象，不同的具体创建者定义不同的创建过程，且它们之间相互独立，增加新的建造者非常方便，无需修改已有代码，系统扩展性好。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FBuilder.jpg">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FBuilder_Corp.PNG">
+<meta property="og:updated_time" content="2019-06-11T10:59:03.930Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="建造者模式(创建型)">
+<meta name="twitter:description" content="建造者模式 建造者模式又称为生成器模式，是一种对象创建型模式，它将客户端与包含多个组成部分或部件的复杂对象的创建过程解耦，客户端无需知道复杂对象的内部组成部分与装配方式，只需要知道所需建造者的类型即可。具体的建造者关注如何一步一步创建一个复杂对象，不同的具体创建者定义不同的创建过程，且它们之间相互独立，增加新的建造者非常方便，无需修改已有代码，系统扩展性好。">
+<meta name="twitter:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FBuilder.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: "",
+      labels: ""
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.franktly.com/2016/02/25/建造者模式(创建型)/">
+
+
+
+
+
+  <title>建造者模式(创建型) | Share Your Mind</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Share Your Mind</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Love Reading | Film | Climbing | Snooker</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.franktly.com/2016/02/25/建造者模式(创建型)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank Tao">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/book.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Share Your Mind">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">建造者模式(创建型)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-02-25T00:00:00+08:00">
+                2016-02-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Design-Pattern/" itemprop="url" rel="index">
+                    <span itemprop="name">Design Pattern</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="建造者模式"><a href="#建造者模式" class="headerlink" title="建造者模式"></a>建造者模式</h2><hr>
+<p>建造者模式又称为生成器模式，是一种对象创建型模式，它将客户端与包含多个组成部分或部件的复杂对象的创建过程解耦，客户端无需知道复杂对象的内部组成部分与装配方式，只需要知道所需建造者的类型即可。具体的建造者关注如何一步一步创建一个复杂对象，不同的具体创建者定义不同的创建过程，且它们之间相互独立，增加新的建造者非常方便，无需修改已有代码，系统扩展性好。</p>
+<a id="more"></a>
+
+<h3 id="意图"><a href="#意图" class="headerlink" title="意图"></a>意图</h3><p>将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示</p>
+<h3 id="参与者"><a href="#参与者" class="headerlink" title="参与者"></a>参与者</h3><ul>
+<li><p>Builder<br>为创建一个Product对象的各个部件指定抽象接口</p>
+</li>
+<li><p>Concrete Builer<br>实现Builder的接口以构造和装配该产品的各个部件；<br>定义并明确它所创建的表示；<br>提供一个检索产品的接口</p>
+</li>
+<li><p>Director<br>构造一个使用Builder接口的对象</p>
+</li>
+<li><p>Product<br>表示被构造的复杂对象，Concrete Builder 创建该产品的内部表示并定义它的装配过程；<br>包含定义组成部件的类，包括将这些部件装配成最终产品的接口</p>
+</li>
+</ul>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><ul>
+<li><p>基本的模式结构图<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FBuilder.jpg" alt="builder"></p>
+</li>
+<li><p>各个参与者的协作图<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FBuilder_Corp.PNG" alt="builer_corp"></p>
+</li>
+</ul>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><ol>
+<li><p>首先定义抽象产品类，包括<code>AddPart()</code>和<code>ShowProduct()</code>分别定义组成Product的各个部分<br>及显示产品：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">class AbstractProduct</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual void AddPart(const char* part) = 0; //产品的部件操作接口</span><br><span class="line">    virtual void ShowProduct() = 0; // 打印显示产品</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>再定义两个具体的产品ProductA、ProductB,并实现各自的方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">// Product A</span><br><span class="line">class ProductA: public AbstractProduct</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    vector&lt;const char*&gt; m_VecPart;</span><br><span class="line">public:</span><br><span class="line">    void AddPart(const char *part)</span><br><span class="line">    &#123;</span><br><span class="line">        m_VecPart.push_back(part);</span><br><span class="line">    &#125;</span><br><span class="line">    void ShowProduct()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;I am Product A!&quot; &lt;&lt; endl;</span><br><span class="line">        for (vector&lt;const char*&gt;::iterator it = m_VecPart.begin(); it != m_VecPart.end(); ++it)</span><br><span class="line">        &#123;</span><br><span class="line">            cout &lt;&lt; *it &lt;&lt; endl;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// Product B</span><br><span class="line">class ProductB: public AbstractProduct</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    vector&lt;const char*&gt; m_VecPart;</span><br><span class="line">public:</span><br><span class="line">    void AddPart(const char *part)</span><br><span class="line">    &#123;</span><br><span class="line">        m_VecPart.push_back(part);</span><br><span class="line">    &#125;</span><br><span class="line">    void ShowProduct()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;I am Product B!&quot; &lt;&lt; endl;</span><br><span class="line">        for (vector&lt;const char*&gt;::iterator it = m_VecPart.begin(); it != m_VecPart.end(); ++it)</span><br><span class="line">        &#123;</span><br><span class="line">            cout &lt;&lt; *it &lt;&lt; endl;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义抽象的Builder类：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">class AbstractBuilder</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual void BuilderPart1() = 0; // 构建产品部件1</span><br><span class="line">    virtual void BuilderPart2() = 0; // 构建产品部件2</span><br><span class="line">    virtual AbstractProduct* GetProduct() = 0; // 获取构建的产品</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义具体两个Builder，BuilderA及BuilderB 分别构建和组装产品A和B：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">// Builder A</span><br><span class="line">class BuilderA: public AbstractBuilder //构建产品A内部部分</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    AbstractProduct *m_pProduct; // 被构建的抽象产品指针</span><br><span class="line">public:</span><br><span class="line">    BuilderA()</span><br><span class="line">    &#123;</span><br><span class="line">        m_pProduct = new ProductA(); //构建产品A</span><br><span class="line">    &#125;</span><br><span class="line">    void BuilderPart1()</span><br><span class="line">    &#123;</span><br><span class="line">        m_pProduct-&gt;AddPart(&quot;A Part 1 is Completed!&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    void BuilderPart2()</span><br><span class="line">    &#123;</span><br><span class="line">        m_pProduct-&gt;AddPart(&quot;A Part 2 is Completed!&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    AbstractProduct* GetProduct() // 返回构建的产品A</span><br><span class="line">    &#123;</span><br><span class="line">        return m_pProduct;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// Builder B</span><br><span class="line">class BuilderB: public AbstractBuilder //构建产品B内部部分</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    AbstractProduct *m_pProduct; // 被构建的抽象产品指针</span><br><span class="line">public:</span><br><span class="line">    BuilderB()</span><br><span class="line">    &#123;</span><br><span class="line">        m_pProduct = new ProductB(); //构建产品B</span><br><span class="line">    &#125;</span><br><span class="line">    void BuilderPart1()</span><br><span class="line">    &#123;</span><br><span class="line">        m_pProduct-&gt;AddPart(&quot;B Part 1 is Completed!&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    void BuilderPart2()</span><br><span class="line">    &#123;</span><br><span class="line">        m_pProduct-&gt;AddPart(&quot;B Part 2 is Completed!&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    AbstractProduct* GetProduct() // 返回构建的产品B</span><br><span class="line">    &#123;</span><br><span class="line">        return m_pProduct;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义引导者Director类，提供一个创建最终产品的接口，该接口使用Builder的方法来组装创建产品：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">class Director</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    AbstractBuilder *m_pBuilder;</span><br><span class="line">public:</span><br><span class="line">    Director(AbstractBuilder *pbuilder): m_pBuilder(pbuilder) &#123;&#125;;</span><br><span class="line">    void CreateProduct()      // 组装整个产品</span><br><span class="line">    &#123;</span><br><span class="line">        m_pBuilder-&gt;BuilderPart1();</span><br><span class="line">        m_pBuilder-&gt;BuilderPart2();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试建造者模式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">void BuilderTest()</span><br><span class="line">&#123;</span><br><span class="line">    AbstractBuilder *pAB = new BuilderA();  // 构建产品A</span><br><span class="line">    Director *pD = new Director(pAB);</span><br><span class="line">    pD-&gt;CreateProduct();       // 引导者负责通过 Builder 组装产品</span><br><span class="line">    AbstractProduct *pAP = pAB-&gt;GetProduct();  // 建造者负责 具体的Builder 组装产品，并提供获取产品接口</span><br><span class="line">    pAP-&gt;ShowProduct();</span><br><span class="line"></span><br><span class="line">    AbstractBuilder *pAB2 = new BuilderB();   // 构建产品B</span><br><span class="line">    Director *pD2 = new Director(pAB2);</span><br><span class="line">    pD2-&gt;CreateProduct();       // 引导者负责通过 Builder 组装产品</span><br><span class="line">    AbstractProduct *pAP2 = pAB2-&gt;GetProduct();  // 建造者负责 具体的Builder 组装产品，并提供获取产品接口</span><br><span class="line">    pAP2-&gt;ShowProduct();</span><br><span class="line"></span><br><span class="line">    delete pAB; pAB = NULL;</span><br><span class="line">    delete pD; pD = NULL;</span><br><span class="line">    delete pAP; pAP = NULL;</span><br><span class="line"></span><br><span class="line">    delete pAB2; pAB2 = NULL;</span><br><span class="line">    delete pD2; pD2 = NULL;</span><br><span class="line">    delete pAP2; pAP2 = NULL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>运行结果：</p>
+<pre><code>I am Product A!
+A Part 1 is Completed!
+A Part 2 is Completed!
+I am Product B!
+B Part 1 is Completed!
+B Part 2 is Completed!</code></pre><h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>需要生成的产品对象有复杂的内部结构，这些产品对象通常包含多个成员属性</li>
+<li>需要生成的产品对象的属性相互依赖，需要指定其生成顺序</li>
+<li>对象的创建过程独立于创建该对象的类，在Builder模式中通过引入Director类，将创建的过程封装在Director类中而非Builder或Client类中</li>
+<li>隔离复杂对象的创建和使用，并使得相同的创建过程可以创建不同的产品</li>
+</ul>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><ul>
+<li>优点：<ul>
+<li>客户端不必知道产品内部组成的细节，将产品本身与产品的创建过程解耦，使得相同的创建过程可以创建不同的产品对象</li>
+<li>当需要创建复杂对象的过程中，复杂对象没有多少共同的特点，很难抽象出来时，<br>而复杂对象的组装又有一定的相似点时，建造者模式就可以发挥出作用</li>
+<li>由于指挥者类针对抽象建造者编程，增加新的具体建造者无须修改原有类库的代码，系统扩展方便，符合“开闭原则”</li>
+<li>可以更加精细地控制产品的创建过程。将复杂产品的创建步骤分解在不同的方法中，使得创建过程更加清晰，也更方便使用程序来控制创建过程</li>
+</ul>
+</li>
+<li>缺点：<ul>
+<li>建造者模式所创建的产品一般具有较多的共同点，其组成部分相似，如果产品之间的差异性很大，例如很多组成部分都不相同，不适合使用建造者模式，因此其使用范围受到一定的限制</li>
+<li>如果产品的内部变化复杂，可能会导致需要定义很多具体建造者类来实现这种变化，导致系统变得很庞大，增加系统的理解难度和运行成本</li>
+</ul>
+</li>
+</ul>
+<h2 id="与工厂模式的区别"><a href="#与工厂模式的区别" class="headerlink" title="与工厂模式的区别"></a>与工厂模式的区别</h2><hr>
+<p>都属于创建型的设计模式，所以二者之间是有公共点，但是建造者模式注重于对象组合，即不同的小对象组成一个整体的复杂大对象；而抽象工厂模式针对于接口编程，只是对外提供创建对象的工厂接口，不负责对象之后的处理</p>
+<h2 id="建造者模式具体实例"><a href="#建造者模式具体实例" class="headerlink" title="建造者模式具体实例"></a>建造者模式具体实例</h2><hr>
+<p><strong>构建一个人对象，包括胖和瘦两种类型，每个人都包含头、身体、手和脚四部分</strong></p>
+<h3 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h3><ol>
+<li><p>抽象的ManBuilder类：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// 抽象的人建造者类</span><br><span class="line">class ManBuilder</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    // 建造人的不同部位</span><br><span class="line">    virtual void BuilderHead() = 0;</span><br><span class="line">    virtual void BuilderBody() = 0;</span><br><span class="line">    virtual void BuilderHand() = 0;</span><br><span class="line">    virtual void BuilderLeg() = 0;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>具体的两个建造者ThinBuilder和FatBuilder分别构建胖子和瘦子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">// 具体的瘦人建造者</span><br><span class="line">class ThinBuilder: public ManBuilder</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    void BuilderHead()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Thin Builder Head&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    void BuilderBody()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Thin Builder Body&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    void BuilderHand()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Thin Builder Hand&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    void BuilderLeg()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Thin Builder Leg&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 具体的胖人建造者</span><br><span class="line">class FatBuilder: public ManBuilder</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    void BuilderHead()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Fat Builder Head&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    void BuilderBody()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Fat Builder Body&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    void BuilderHand()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Fat Builder Hand&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    void BuilderLeg()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Fat Builder Leg&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>最终创建人对象的ManDirector引导者类调用ManDirector的方法来组装和创建具体类型的人：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">class ManDirector</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    ManBuilder *m_pBuilder; // 抽象的ManBuilder</span><br><span class="line">public:</span><br><span class="line">    ManDirector(ManBuilder *pBuilder): m_pBuilder(pBuilder) &#123;&#125;; </span><br><span class="line">    void CreateMan() // 使用ManBuilder的方法构建最终的Man</span><br><span class="line">    &#123;</span><br><span class="line">        m_pBuilder-&gt;BuilderHead();</span><br><span class="line">        m_pBuilder-&gt;BuilderBody();</span><br><span class="line">        m_pBuilder-&gt;BuilderHand();</span><br><span class="line">        m_pBuilder-&gt;BuilderLeg();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>客户端测试：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">void ManBuilderTest()</span><br><span class="line">&#123;</span><br><span class="line">    ManBuilder *pMB = new ThinBuilder();</span><br><span class="line">    ManDirector MD(pMB);</span><br><span class="line">    MD.CreateMan();</span><br><span class="line"></span><br><span class="line">    ManBuilder *pMB2 = new FatBuilder();</span><br><span class="line">    ManDirector MD2(pMB2);</span><br><span class="line">    MD2.CreateMan();</span><br><span class="line"></span><br><span class="line">    delete pMB; pMB = NULL;</span><br><span class="line">    delete pMB2; pMB2 = NULL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>运行结果：</p>
+<pre><code>Thin Builder Head
+Thin Builder Body
+Thin Builder Hand
+Thin Builder Leg
+Fat Builder Head
+Fat Builder Body
+Fat Builder Hand
+Fat Builder Leg</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Design-Pattern/" rel="tag"># Design Pattern</a>
+          
+            <a href="/tags/Construction-Pattern/" rel="tag"># Construction Pattern</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/02/20/工厂模式(创建型)/" rel="next" title="工厂模式（创建型）">
+                <i class="fa fa-chevron-left"></i> 工厂模式（创建型）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/05/单例模式(创建型)/" rel="prev" title="单例模式(创建型)">
+                单例模式(创建型) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="uyan_frame"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/book.jpg" alt="Frank Tao">
+            
+              <p class="site-author-name" itemprop="name">Frank Tao</p>
+              <p class="site-description motion-element" itemprop="description">welcome to franktly’s blog -~-</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/franktly" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.zhihu.com/people/tao-ling-yang/activities" target="_blank" title="ZhiHu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>ZhiHu</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/2273442920/profile?topnav=1&wvr=6&is_all=1" target="_blank" title="WeiBo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>WeiBo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#建造者模式"><span class="nav-number">1.</span> <span class="nav-text">建造者模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#意图"><span class="nav-number">1.1.</span> <span class="nav-text">意图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参与者"><span class="nav-number">1.2.</span> <span class="nav-text">参与者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模式结构"><span class="nav-number">1.3.</span> <span class="nav-text">模式结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码实现"><span class="nav-number">1.4.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用场景"><span class="nav-number">1.5.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优缺点"><span class="nav-number">1.6.</span> <span class="nav-text">优缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#与工厂模式的区别"><span class="nav-number">2.</span> <span class="nav-text">与工厂模式的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#建造者模式具体实例"><span class="nav-number">3.</span> <span class="nav-text">建造者模式具体实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码实现-1"><span class="nav-number">3.1.</span> <span class="nav-text">代码实现</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank Tao</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2136191"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

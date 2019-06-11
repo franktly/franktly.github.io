@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Design Pattern,Behavior Pattern,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言 一般的文档编辑器都会提供一个主菜单(Menu),主菜单中包含一些菜单项(MenuItem),每个菜单项包含很多的命令操作，包括打开命令，创建命令，编辑命令等等，要设计这样的文档编辑系统，可以考虑使用命令模式。">
+<meta name="keywords" content="Design Pattern,Behavior Pattern">
+<meta property="og:type" content="article">
+<meta property="og:title" content="命令模式(行为型)">
+<meta property="og:url" content="http://www.franktly.com/2016/05/11/命令模式(行为型)/index.html">
+<meta property="og:site_name" content="Share Your Mind">
+<meta property="og:description" content="前言 一般的文档编辑器都会提供一个主菜单(Menu),主菜单中包含一些菜单项(MenuItem),每个菜单项包含很多的命令操作，包括打开命令，创建命令，编辑命令等等，要设计这样的文档编辑系统，可以考虑使用命令模式。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FCommand_Abstract.PNG">
+<meta property="og:updated_time" content="2019-06-11T10:59:03.926Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="命令模式(行为型)">
+<meta name="twitter:description" content="前言 一般的文档编辑器都会提供一个主菜单(Menu),主菜单中包含一些菜单项(MenuItem),每个菜单项包含很多的命令操作，包括打开命令，创建命令，编辑命令等等，要设计这样的文档编辑系统，可以考虑使用命令模式。">
+<meta name="twitter:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FCommand_Abstract.PNG">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: "",
+      labels: ""
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.franktly.com/2016/05/11/命令模式(行为型)/">
+
+
+
+
+
+  <title>命令模式(行为型) | Share Your Mind</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Share Your Mind</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Love Reading | Film | Climbing | Snooker</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.franktly.com/2016/05/11/命令模式(行为型)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank Tao">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/book.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Share Your Mind">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">命令模式(行为型)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-11T00:00:00+08:00">
+                2016-05-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Design-Pattern/" itemprop="url" rel="index">
+                    <span itemprop="name">Design Pattern</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>一般的文档编辑器都会提供一个主菜单(Menu),主菜单中包含一些菜单项(MenuItem),每个菜单项包含很多的命令操作，包括打开命令，创建命令，编辑命令等等，要设计这样的文档编辑系统，可以考虑使用命令模式。</p>
+<a id="more"></a>
+
+<h2 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h2><hr>
+<h3 id="意图"><a href="#意图" class="headerlink" title="意图"></a>意图</h3><p>将一个请求封装为一个对象，从而使你可用不同的请求对客户进行参数化;对请求排队或记录请求日志，以及支持可撤销的操作,别名为动作(Action)模式或事务(Transaction)模式</p>
+<blockquote>
+<p>命令模式可以将请求发送者和接收者完全解耦，发送者与接收者之间没有直接引用关系，发送请求的对象只需要知道如何发送请求，而不必知道如何完成请求<br>命令模式的本质是对请求进行封装，一个请求对应于一个命令，将发出命令的责任和执行命令的责任分割开<br>命令模式是回调机制的一个面向对象替代品，所谓回调函数是指函数现在某处注册，而它将在稍后某个需要的时候被调用</p>
+</blockquote>
+<h3 id="参与者"><a href="#参与者" class="headerlink" title="参与者"></a>参与者</h3><ul>
+<li><p>Command<br>抽象命令类，在其中执行请求的execute()方法，通过这些方法可以调用请求接收者的相关操作</p>
+</li>
+<li><p>ConcreteCommand<br>具体命令类，抽象命令类的子类,处理用户请求,实现抽象命令类的方法<br>一般持有接收者对象的引用。它对应具体的接收者对象,将接收者对象的动作绑定其中,在实现execute()方法时，将调用接收者对象的相关操作(Action)</p>
+</li>
+<li><p>Invoker<br>调用者即请求发送者，持有抽象命令对象的引用.它通过命令对象来执行请求。<br>一个调用者并不需要在设计时确定其接收者，因此它只与抽象命令类之间存在关联关系<br>在程序运行时可以将一个具体命令对象注入其中，再调用具体命令对象的execute()方法，从而实现间接调用请求接收者的相关操作</p>
+</li>
+<li><p>Receiver<br>接收者，接收者执行与请求相关的操作，它具体实现对请求的业务处理</p>
+</li>
+<li><p>Client<br>创建一个ConcreteCommand命令对象，并指定它的Receiver对象</p>
+</li>
+</ul>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FCommand_Abstract.PNG" alt="command_pattern"></p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>1.首先定义接收者<code>Receiver</code>,并提供<code>Action()</code>接口：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// Receiver 接收者 ：具体命令内容的实现</span><br><span class="line">class Receiver</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    void Action()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Receiver: Action!&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>2.再定义抽象命令类<code>Command</code>，并提供公共接口<code>Execute()</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// Command 抽象命令 ：定义公共接口</span><br><span class="line">class Command</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual void Execute() = 0;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>3.再定义<code>Command</code>类的一个具体命令子类，并实现其中的<code>Execute()</code>接口，持有命令接收者的对象，该接口主要作用是调用不同接收者<code>Receiver</code>的<code>Action()</code>方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// ConcreteCommand 具体命令：封装的一层</span><br><span class="line">class ConcreteCommand : public Command</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    Receiver *m_pReceiver;</span><br><span class="line">public:</span><br><span class="line">    ConcreteCommand(Receiver *prec) : m_pReceiver(prec) &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    void Execute()</span><br><span class="line">    &#123;</span><br><span class="line">        m_pReceiver-&gt;Action();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>4.定义一个命令调用者，持有抽象命令对象，并提供一个<code>Invoke()</code>接口，供客户端调用:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// Invoker 命令调用者 ：调用命令</span><br><span class="line">class Invoker</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    Command *m_pCommand;</span><br><span class="line">public:</span><br><span class="line">    Invoker(Command *pcmd): m_pCommand(pcmd) &#123;&#125;; </span><br><span class="line">    // 通过构造注入具体命令，也可以通过提供set方法来注入不同的具体命令对象</span><br><span class="line">public:</span><br><span class="line">    void Invoke()</span><br><span class="line">    &#123;</span><br><span class="line">        m_pCommand-&gt;Execute();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>5.测试命令模式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">void CommandTest_General()</span><br><span class="line">&#123;</span><br><span class="line">    // 命令实现</span><br><span class="line">    Receiver *pR = new Receiver();</span><br><span class="line">    // 命令 中间层</span><br><span class="line">    Command  *pC = new ConcreteCommand(pR);</span><br><span class="line">    // 命令调用</span><br><span class="line">    Invoker *pI  = new Invoker(pC);</span><br><span class="line">    </span><br><span class="line">    pI-&gt;Invoke();</span><br><span class="line"></span><br><span class="line">    SAFE_RELASE_POINTER(pR);</span><br><span class="line">    SAFE_RELASE_POINTER(pC);</span><br><span class="line">    SAFE_RELASE_POINTER(pI);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>4.运行结果：</p>
+<pre><code>Receiver: Action!</code></pre><h3 id="命令模式的分类"><a href="#命令模式的分类" class="headerlink" title="命令模式的分类"></a>命令模式的分类</h3><p>命令模式根据应用的使用场景，可以分为以下几类：</p>
+<h4 id="一般场景命令模式"><a href="#一般场景命令模式" class="headerlink" title="一般场景命令模式"></a>一般场景命令模式</h4><p>即一般场景下的请求发送者和请求接收处理者解耦，一般一个请求对应于一个请求处理</p>
+<h4 id="命令队列"><a href="#命令队列" class="headerlink" title="命令队列"></a>命令队列</h4><p>将多个请求排队，当一个请求发送者发送一个请求时,将不止一个请求接收者产生响应,这些请求接收者将逐个执行业务方法,完成对请求的处理<br>一般实现方法是增加一个<code>CommandQueue</code>类,由该类来负责存储多个命令对象,而不同的命令对象可以对应不同的请求接收者,代码实现如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">// 命令队列</span><br><span class="line">class CommandQueue</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    list&lt;Command*&gt; _listCommand;</span><br><span class="line">public:</span><br><span class="line">    void addCommand(Command &amp;cmd)</span><br><span class="line">    &#123;</span><br><span class="line">        _listCommand.push_back(&amp;cmd);</span><br><span class="line">    &#125;</span><br><span class="line">    void removeCommand(Command &amp;cmd)</span><br><span class="line">    &#123;</span><br><span class="line">        _listCommand.remove(&amp;cmd);</span><br><span class="line">    &#125;</span><br><span class="line">    void Execute()</span><br><span class="line">    &#123;</span><br><span class="line">        for (list&lt;Command*&gt;::iterator it = _listCommand.begin();</span><br><span class="line">            it!= _listCommand.end(); ++it)</span><br><span class="line">        &#123;</span><br><span class="line">            (*it)-&gt;Execute(); // 遍历命令集合中每个命令，并执行</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 命令队列调用者</span><br><span class="line">class CommandQueueInvoker</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    CommandQueue *_commandQueue;</span><br><span class="line">public:</span><br><span class="line">    CommandQueueInvoker(CommandQueue &amp;cmdQueue) :_commandQueue(&amp;cmdQueue) &#123;&#125;;</span><br><span class="line">    void setCommandQueue(CommandQueue &amp;cmdQueue)</span><br><span class="line">    &#123;</span><br><span class="line">        _commandQueue = &amp;cmdQueue;</span><br><span class="line">    &#125;</span><br><span class="line">    void Invoke()</span><br><span class="line">    &#123;</span><br><span class="line">        _commandQueue-&gt;Execute();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>命令队列与“批处理”有点类似。批处理—可以对一组对象（命令）进行批量处理，当一个发送者发送请求后，将有一系列接收者对请求作出响应</p>
+</blockquote>
+<h4 id="带有撤销操作的命令模式"><a href="#带有撤销操作的命令模式" class="headerlink" title="带有撤销操作的命令模式"></a>带有撤销操作的命令模式</h4><p>在命令模式中，我们可以通过调用一个命令对象的execute()方法来实现对请求的处理，如果需要撤销(Undo)请求，可通过在命令类中增加一个逆向操作来实现,</p>
+<p><strong>实现计算机加减乘除操作，并带有撤销操作</strong></p>
+<p>1.首先定义命令接受者,即各种操作业务的具体实现者:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">// 命令接受者，具体的业务实现者 Adder</span><br><span class="line">class  Adder</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    float add(float leftOperand, float rightoperand)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; leftOperand &lt;&lt; &quot; add &quot; &lt;&lt; rightoperand &lt;&lt; endl;</span><br><span class="line">        return (leftOperand + rightoperand);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 命令接受者，具体的业务实现者 Minuser</span><br><span class="line">class Minuser</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    float minus(float leftOperand, float rightoperand)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; leftOperand &lt;&lt; &quot; minus &quot; &lt;&lt; rightoperand &lt;&lt; endl;</span><br><span class="line">        return (leftOperand - rightoperand);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 命令接受者，具体的业务实现者 Multiplater</span><br><span class="line">class Multiplater</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    float multiplate(float leftOperand, float rightoperand)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; leftOperand &lt;&lt; &quot; multiplate &quot; &lt;&lt; rightoperand &lt;&lt; endl;</span><br><span class="line">        return  (leftOperand * rightoperand);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 命令接受者，具体的业务实现者 Diviser</span><br><span class="line">class Diviser</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    float dive(float leftOperand, float rightoperand)</span><br><span class="line">    &#123;</span><br><span class="line">        assert(0 != rightoperand);</span><br><span class="line">        cout &lt;&lt; leftOperand &lt;&lt; &quot; dive &quot; &lt;&lt; rightoperand &lt;&lt; endl;</span><br><span class="line">        return (leftOperand / rightoperand);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>2.定义抽象命令对象，和具体的命令对象,分别提供和实现<code>compute()</code>和<code>unCompute()</code>两种方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line">// 抽象计算命令ComputerCommand</span><br><span class="line">class ComputerCommand</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual float compute(float leftOperand, float rightOperand) = 0;</span><br><span class="line">    virtual float unCompute(float leftOperand, float rightOperand) = 0;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 具体add计算命令</span><br><span class="line">class AddCommand : public ComputerCommand</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    Adder *_adder;</span><br><span class="line">    float _result;</span><br><span class="line">public:</span><br><span class="line">    AddCommand(Adder *adder) : _adder(adder), _result(0) &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    virtual float compute(float leftOperand, float rightOperand)</span><br><span class="line">    &#123;</span><br><span class="line">        _result = _adder-&gt;add(leftOperand, rightOperand);</span><br><span class="line">        return _result;</span><br><span class="line">    &#125;</span><br><span class="line">    virtual float unCompute(float leftOperand, float rightOperand)</span><br><span class="line">    &#123;</span><br><span class="line">        _result = _adder-&gt;add(leftOperand, -rightOperand);</span><br><span class="line">        return _result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 具体minus计算命令</span><br><span class="line">class MinusCommand : public ComputerCommand</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    Minuser *_minuser;</span><br><span class="line">    float _result;</span><br><span class="line">public:</span><br><span class="line">    MinusCommand(Minuser *minuser) : _minuser(minuser), _result(0) &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    virtual float compute(float leftOperand, float rightOperand)</span><br><span class="line">    &#123;</span><br><span class="line">        _result = _minuser-&gt;minus(leftOperand, rightOperand);</span><br><span class="line">        return _result;</span><br><span class="line">    &#125;</span><br><span class="line">    virtual float unCompute(float leftOperand, float rightOperand)</span><br><span class="line">    &#123;</span><br><span class="line">        _result = _minuser-&gt;minus(leftOperand, -rightOperand);</span><br><span class="line">        return _result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 具体multiplate计算命令</span><br><span class="line">class MultiplateCommand : public ComputerCommand</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    Multiplater *_multiplater;</span><br><span class="line">    float _result;</span><br><span class="line">public:</span><br><span class="line">    MultiplateCommand(Multiplater *multiplater) : _multiplater(multiplater) , _result(0) &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    virtual float compute(float leftOperand, float rightOperand)</span><br><span class="line">    &#123;</span><br><span class="line">        _result = _multiplater-&gt;multiplate(leftOperand, rightOperand);</span><br><span class="line">        return _result;</span><br><span class="line">    &#125;</span><br><span class="line">    virtual float unCompute(float leftOperand, float rightOperand)</span><br><span class="line">    &#123;</span><br><span class="line">        _result = _multiplater-&gt;multiplate(leftOperand, 1/rightOperand);</span><br><span class="line">        return _result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 具体dive计算命令</span><br><span class="line">class DiveCommand : public ComputerCommand</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    Diviser *_diviser;</span><br><span class="line">    float _result;</span><br><span class="line">public:</span><br><span class="line">    DiveCommand(Diviser *diviser) : _diviser(diviser), _result(0) &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    virtual float compute(float leftOperand, float rightOperand)</span><br><span class="line">    &#123;</span><br><span class="line">        _result = _diviser-&gt;dive(leftOperand, rightOperand);</span><br><span class="line">        return _result;</span><br><span class="line">    &#125;</span><br><span class="line">    virtual float unCompute(float leftOperand, float rightOperand)</span><br><span class="line">    &#123;</span><br><span class="line">        _result = _diviser-&gt;dive(leftOperand, 1/rightOperand);</span><br><span class="line">        return _result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>3.命令的调用者，持有两个stack，分别为撤销操作命令和恢复撤销操作命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">class ComputerInvoker</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    ComputerCommand *_currentComputerCommand;  // 当前操作</span><br><span class="line">    stack&lt;ComputerCommand*&gt; _stackUndoCommand; // 撤销操作堆栈(FILO)</span><br><span class="line">    stack&lt;ComputerCommand*&gt; _stackRedoCommand; // 恢复撤销操作堆栈(FILO)</span><br><span class="line">    float _computeResult;        // 计算结果</span><br><span class="line">public:</span><br><span class="line">    ComputerInvoker(ComputerCommand *cmd) : _currentComputerCommand(cmd), _computeResult(0) &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    void setComputerCommand(ComputerCommand *cmd)</span><br><span class="line">    &#123;</span><br><span class="line">        _currentComputerCommand = cmd;</span><br><span class="line">    &#125;</span><br><span class="line">    void invokeCompute(float operand) // 正常顺序操作</span><br><span class="line">    &#123;</span><br><span class="line">        _computeResult = _currentComputerCommand-&gt;compute(_computeResult, operand); //执行 正常操作 </span><br><span class="line">        _stackUndoCommand.push(_currentComputerCommand);  // 压入正常操作命令到 撤销操作的stack</span><br><span class="line">        cout &lt;&lt; &quot;normal compute: result is : &quot; &lt;&lt; _computeResult &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    void invokeUncompute(float operand)  // 撤销操作</span><br><span class="line">    &#123;   </span><br><span class="line">        if (_stackUndoCommand.empty())</span><br><span class="line">        &#123;</span><br><span class="line">            cout &lt;&lt; &quot;undo command stack is empty!&quot; &lt;&lt; endl;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        _currentComputerCommand = _stackUndoCommand.top(); // 先取 撤销操作的stack顶元素</span><br><span class="line">        _stackUndoCommand.pop();      // 弹出 撤销操作的stack顶元素</span><br><span class="line">        _computeResult = _currentComputerCommand-&gt;unCompute(_computeResult, operand); //执行 撤销操作</span><br><span class="line">        _stackRedoCommand.push(_currentComputerCommand); // 压入撤销操作命令到 恢复操作的stack</span><br><span class="line">        cout &lt;&lt; &quot;undo compute: result is : &quot; &lt;&lt; _computeResult &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    void invokeRecompute(float operand) // 恢复撤销操作</span><br><span class="line">    &#123;</span><br><span class="line">        if (_stackRedoCommand.empty())</span><br><span class="line">        &#123;</span><br><span class="line">            cout &lt;&lt; &quot;resume do command stack is empty!&quot; &lt;&lt; endl;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        _currentComputerCommand = _stackRedoCommand.top();  // 先取 恢复撤销操作的stack顶元素</span><br><span class="line">        _stackRedoCommand.pop();  // 弹出 恢复撤销操作的stack顶元素</span><br><span class="line">        _computeResult = _currentComputerCommand-&gt;compute(_computeResult, operand); //执行 恢复撤销操作 </span><br><span class="line">        _stackUndoCommand.push(_currentComputerCommand); // 压入恢复撤销操作命令到 撤销操作的stack</span><br><span class="line">        cout &lt;&lt; &quot;redo compute: result is : &quot; &lt;&lt; _computeResult &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    float getComputeResult()</span><br><span class="line">    &#123;</span><br><span class="line">        return _computeResult;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>4.测试带有撤销操作的命令模式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">void CommandTest_Compute()</span><br><span class="line">&#123;</span><br><span class="line">    Adder *adder = new Adder();</span><br><span class="line">    ComputerCommand *addCmd = new AddCommand(adder);</span><br><span class="line">    Minuser *minuser = new Minuser();</span><br><span class="line">    ComputerCommand *minusCmd = new MinusCommand(minuser);</span><br><span class="line">    Multiplater *multiplater = new Multiplater();</span><br><span class="line">    ComputerCommand *multiplateCmd = new MultiplateCommand(multiplater);</span><br><span class="line">    Diviser *diviser = new Diviser();</span><br><span class="line">    ComputerCommand *diveCmd = new DiveCommand(diviser);</span><br><span class="line"></span><br><span class="line">    ComputerInvoker *computeInvoke = new ComputerInvoker(addCmd); // 初始化为add 且 + 50</span><br><span class="line">    computeInvoke-&gt;invokeCompute(50); // 0 + 50</span><br><span class="line">    computeInvoke-&gt;setComputerCommand(minusCmd); // -20</span><br><span class="line">    computeInvoke-&gt;invokeCompute(20); </span><br><span class="line">    computeInvoke-&gt;setComputerCommand(multiplateCmd); // *3</span><br><span class="line">    computeInvoke-&gt;invokeCompute(3); </span><br><span class="line">    computeInvoke-&gt;setComputerCommand(diveCmd); //  /9</span><br><span class="line">    computeInvoke-&gt;invokeCompute(9); </span><br><span class="line">    computeInvoke-&gt;setComputerCommand(addCmd); //  + 10</span><br><span class="line">    computeInvoke-&gt;invokeCompute(10);</span><br><span class="line">    cout &lt;&lt; &quot;*** last normal compute result is : &quot; &lt;&lt; computeInvoke-&gt;getComputeResult() &lt;&lt; &quot; ***&quot; &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    computeInvoke-&gt;invokeUncompute(10); //  撤销 +10</span><br><span class="line">    computeInvoke-&gt;invokeUncompute(9);//   撤销 /9</span><br><span class="line">    computeInvoke-&gt;invokeUncompute(3); //   撤销 *3</span><br><span class="line">    computeInvoke-&gt;invokeUncompute(20); //  撤销 -20</span><br><span class="line">    computeInvoke-&gt;invokeUncompute(50); //  撤销 +50</span><br><span class="line">    cout &lt;&lt; &quot;*** last undo compute result is : &quot; &lt;&lt; computeInvoke-&gt;getComputeResult() &lt;&lt; &quot; ***&quot; &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    computeInvoke-&gt;invokeRecompute(50); //  恢复撤销 +50</span><br><span class="line">    computeInvoke-&gt;invokeRecompute(20); //  恢复撤销 -20</span><br><span class="line">    computeInvoke-&gt;invokeRecompute(3); //   恢复撤销 *3</span><br><span class="line">    computeInvoke-&gt;invokeRecompute(9); //   恢复撤销 /9</span><br><span class="line">    computeInvoke-&gt;invokeRecompute(10); //  恢复撤销 +10</span><br><span class="line">    cout &lt;&lt; &quot;*** last redo compute result is : &quot; &lt;&lt; computeInvoke-&gt;getComputeResult() &lt;&lt; &quot; ***&quot; &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    // 输出结果</span><br><span class="line">    float finalResult = computeInvoke-&gt;getComputeResult();</span><br><span class="line">    cout &lt;&lt; &quot;*** final compute result is &quot; &lt;&lt; finalResult &lt;&lt; &quot; ***&quot; &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    SAFE_RELASE_POINTER(adder);</span><br><span class="line">    SAFE_RELASE_POINTER(minuser);</span><br><span class="line">    SAFE_RELASE_POINTER(multiplater);</span><br><span class="line">    SAFE_RELASE_POINTER(diviser);</span><br><span class="line"></span><br><span class="line">    SAFE_RELASE_POINTER(addCmd);</span><br><span class="line">    SAFE_RELASE_POINTER(minusCmd);</span><br><span class="line">    SAFE_RELASE_POINTER(multiplateCmd);</span><br><span class="line">    SAFE_RELASE_POINTER(diveCmd);</span><br><span class="line"></span><br><span class="line">    SAFE_RELASE_POINTER(computeInvoke);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>5.运行结果：</p>
+<pre><code>0 add 50
+normal compute: result is : 50
+50 minus 20
+normal compute: result is : 30
+30 multiplate 3
+normal compute: result is : 90
+90 dive 9
+normal compute: result is : 10
+10 add 10
+normal compute: result is : 20
+\*\*\* last normal compute result is : 20 \*\*\*
+20 add -10
+undo compute: result is : 10
+10 dive 0.111111
+undo compute: result is : 90
+90 multiplate 0.333333
+undo compute: result is : 30
+30 minus -20
+undo compute: result is : 50
+50 add -50
+undo compute: result is : 0
+\*\*\* last undo compute result is : 0 \*\*\*
+0 add 50
+redo compute: result is : 50
+50 minus 20
+redo compute: result is : 30
+30 multiplate 3
+redo compute: result is : 90
+90 dive 9
+redo compute: result is : 10
+10 add 10
+redo compute: result is : 20
+\*\*\* last redo compute result is : 20 \*\*\*
+\*\*\* final compute result is 20 \*\*\*</code></pre><h4 id="请求日志的命令模式"><a href="#请求日志的命令模式" class="headerlink" title="请求日志的命令模式"></a>请求日志的命令模式</h4><p>请求日志就是将请求的历史记录保存下来，通常以日志文件(Log File)的形式永久存储在计算机中</p>
+<blockquote>
+<p>1.可以为系统提供一种恢复机制，在请求日志文件中可以记录用户对系统的每一步操作，从而让系统能够顺利恢复到某一个特定的状态<br>2.用于实现批处理，在一个请求日志文件中可以存储一系列命令对象,如一个命令队列</p>
+</blockquote>
+<p><strong>在上面带恢复功能的简易计算器基础上增加请求日志功能</strong></p>
+<p>1.增加操作命令日志的list:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">typedef struct tag_computeLog</span><br><span class="line">&#123;</span><br><span class="line">    //typedef float(*pComputeFunc)(float, float);</span><br><span class="line">    //pComputeFunc compute;</span><br><span class="line">    ComputerCommand* cmd;</span><br><span class="line">    float leftOperand;</span><br><span class="line">    float rightOperand;</span><br><span class="line">&#125;computeLog;</span><br><span class="line"></span><br><span class="line">list&lt;computeLog&gt; _listComputeLogCommand; // 执行操作记录的list</span><br></pre></td></tr></table></figure>
+
+<p>2.修改调用执行计算的方法，在其中添加command到list:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">void invokeCompute(float operand) // 正常顺序操作</span><br><span class="line">&#123;</span><br><span class="line">    computeLog log;</span><br><span class="line">    log.cmd = _currentComputerCommand;</span><br><span class="line">    log.leftOperand = _computeResult;</span><br><span class="line">    log.rightOperand = operand;</span><br><span class="line">    _listComputeLogCommand.push_back(log); // 添加操作command记录到list</span><br><span class="line"></span><br><span class="line">    _computeResult = _currentComputerCommand-&gt;compute(_computeResult, operand); //执行 正常操作 </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3.增加新的日志命令操作，循环调用操作command记录list中的命令:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">void invokeLogCommand(void)</span><br><span class="line">&#123;</span><br><span class="line">    _computeResult = 0;</span><br><span class="line">    for (list&lt;computeLog&gt;::iterator it = _listComputeLogCommand.begin();</span><br><span class="line">        it != _listComputeLogCommand.end(); ++it)</span><br><span class="line">    &#123;</span><br><span class="line">        _computeResult =((*it).cmd-&gt;compute((*it).leftOperand, (*it).rightOperand));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="宏命令"><a href="#宏命令" class="headerlink" title="宏命令"></a>宏命令</h4><p>宏命令(Macro Command)又称为组合命令，它是组合模式和命令模式联用的产物。宏命令是一个具体命令类，它拥有一个集合属性，在该集合中包含了对其他命令对象的引用。通常宏命令不直接与请求接收者交互，而是通过它的集合成员来调用接收者的方法</p>
+<blockquote>
+<p>宏命令的execute()方法时，将递归调用它所包含的每个成员命令的execute()方法<br>执行一个宏命令将触发多个具体命令的执行，从而实现对命令的批处理</p>
+</blockquote>
+<p><strong>在上面带恢复和日志功能的简易计算器基础上增加宏命令(批处理，依次调用各个命令)</strong></p>
+<p>1.修改抽象命令类<code>ComputerCommand</code>，增加增加和删除命令集合元素的操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// 抽象计算命令ComputerCommand</span><br><span class="line">class ComputerCommand</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual float compute(float leftOperand, float rightOperand) = 0;</span><br><span class="line">    virtual float unCompute(float leftOperand, float rightOperand) = 0;</span><br><span class="line">// for Macro Command:</span><br><span class="line">public:</span><br><span class="line">    virtual void insertCommand(ComputerCommand *cmd) &#123;&#125;;</span><br><span class="line">    virtual void removeCommand(ComputerCommand *cmd) &#123;&#125;;</span><br><span class="line">    ComputerCommand* getCommand(int i) &#123; return NULL; &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>2.增加宏命令具体类<code>MacroCommand</code>，继承于抽象命令类<code>ComputerCommand</code>，并实现其各个方法:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">// 批计算处理：计算给定的两个操作数的四种操作(+ - * /)结果的和</span><br><span class="line">class MacroCommand : public ComputerCommand</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    vector&lt;ComputerCommand*&gt; _vecCmd;</span><br><span class="line">public:</span><br><span class="line">    MacroCommand() &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    void insertCommand(ComputerCommand *cmd)</span><br><span class="line">    &#123;</span><br><span class="line">        _vecCmd.push_back(cmd);</span><br><span class="line">    &#125;</span><br><span class="line">    void removeCommand(ComputerCommand *cmd)</span><br><span class="line">    &#123;</span><br><span class="line">        for (vector&lt;ComputerCommand*&gt;::iterator it = _vecCmd.begin();</span><br><span class="line">             it != _vecCmd.end(); ++it)</span><br><span class="line">        &#123;</span><br><span class="line">            if (*it == cmd)</span><br><span class="line">            &#123;</span><br><span class="line">                _vecCmd.erase(it);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ComputerCommand* getCommand(int i)</span><br><span class="line">    &#123;</span><br><span class="line">        assert(i &lt; _vecCmd.size());</span><br><span class="line">        return _vecCmd[i];</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    // 依次执行集合中的命令</span><br><span class="line">    float compute(float leftOperand, float rightOperand)</span><br><span class="line">    &#123;</span><br><span class="line">        float result = 0;</span><br><span class="line">        for (vector&lt;ComputerCommand*&gt;::iterator it = _vecCmd.begin();</span><br><span class="line">            it != _vecCmd.end(); ++it)</span><br><span class="line">        &#123;</span><br><span class="line">            result += (*it)-&gt;compute(leftOperand, rightOperand);</span><br><span class="line">        &#125;</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    float unCompute(float leftOperand, float rightOperand)</span><br><span class="line">    &#123;</span><br><span class="line">        float result = 0;</span><br><span class="line">        for (vector&lt;ComputerCommand*&gt;::iterator it = _vecCmd.begin();</span><br><span class="line">            it != _vecCmd.end(); ++it)</span><br><span class="line">        &#123;</span><br><span class="line">            result += (*it)-&gt;unCompute(leftOperand, rightOperand);</span><br><span class="line">        &#125;</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>3.使用宏命令,与使用简单命令类似，只是使用前，先添加命令元素:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Adder *adder = new Adder();</span><br><span class="line">ComputerCommand *addCmd = new AddCommand(adder);</span><br><span class="line">Minuser *minuser = new Minuser();</span><br><span class="line">ComputerCommand *minusCmd = new MinusCommand(minuser);</span><br><span class="line">Multiplater *multiplater = new Multiplater();</span><br><span class="line">ComputerCommand *multiplateCmd = new MultiplateCommand(multiplater);</span><br><span class="line">Diviser *diviser = new Diviser();</span><br><span class="line">ComputerCommand *diveCmd = new DiveCommand(diviser);</span><br><span class="line"></span><br><span class="line">// add simple command to Macro Command;</span><br><span class="line">ComputerCommand *macroCmd = new MacroCommand();</span><br><span class="line">macroCmd-&gt;insertCommand(addCmd);</span><br><span class="line">macroCmd-&gt;insertCommand(minusCmd);</span><br><span class="line">macroCmd-&gt;insertCommand(multiplateCmd);</span><br><span class="line">macroCmd-&gt;insertCommand(diveCmd);</span><br><span class="line"></span><br><span class="line">// invoke Macro Command just like Simple Command;</span><br><span class="line">computeInvoke-&gt;setComputerCommand(macroCmd); // 批计算处理</span><br><span class="line">computeInvoke-&gt;invokeCompute(2);</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>系统需要将请求调用者和请求接收者解耦，使得调用者和接收者不直接交互。请求调用者无须知道接收者的存在，也无须知道接收者是谁，接收者也无须关心何时被调用</li>
+<li>系统需要在不同的时间指定请求、将请求排队和执行请求。一个命令对象和请求的初始调用者可以有不同的生命期，换言之，最初的请求发出者可能已经不在了，而命令对象本身仍然是活动的，可以通过该命令对象去调用请求接收者，而无须关心请求调用者的存在性，可以通过请求日志文件等机制来具体实现</li>
+<li>系统需要支持命令的撤销(Undo)操作和恢复(Redo)操作</li>
+<li>系统需要将一组操作组合在一起形成宏命令</li>
+</ul>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><ul>
+<li>优点<ul>
+<li>降低系统的耦合度。由于请求者与接收者之间不存在直接引用，因此请求者与接收者之间实现完全解耦</li>
+<li>新的命令可以很容易地加入到系统中</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>使用命令模式可能会导致某些系统有过多的具体命令类</li>
+</ul>
+</li>
+</ul>
+<h2 id="命令模式具体实例"><a href="#命令模式具体实例" class="headerlink" title="命令模式具体实例"></a>命令模式具体实例</h2><hr>
+<h3 id="编辑器操作问题"><a href="#编辑器操作问题" class="headerlink" title="编辑器操作问题"></a>编辑器操作问题</h3><p><strong>使用命令模式简单实现前言所述的文档编辑器简单操作功能</strong></p>
+<ul>
+<li>支持撤销</li>
+<li>支持宏命令</li>
+<li>支持操作日志恢复</li>
+</ul>
+<p><strong>代码实现</strong><br>1.定义抽象的命令类<code>DocCommand</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// command</span><br><span class="line">class DocCommand</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    DocCommand() &#123;&#125;;</span><br><span class="line">    virtual ~DocCommand() &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    virtual void execute(void) = 0;</span><br><span class="line">    virtual void unexecute(void) = 0;</span><br><span class="line">    virtual void addDocCommand(DocCommand* doc) &#123;&#125;;</span><br><span class="line">    virtual void removeDocCommand(DocCommand* doc) &#123;&#125;;</span><br><span class="line">    virtual Document* getCurrentOpenDoc(void) &#123; return NULL; &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>2.分别定义命令类<code>DocCommand</code>的子类<code>OpenDocCommand</code>和<code>EditDocCommand</code>和<code>SaveDocCommand</code>和<code>CloseDocCommand</code>及宏命令<code>MacroDocCommand</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br></pre></td><td class="code"><pre><span class="line">// open </span><br><span class="line">class OpenDocCommand : public DocCommand</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    OpenDocCommand(Application *app) : _app(app), _currentOpenDoc(NULL), _response(&quot;&quot;) &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    void execute(void)</span><br><span class="line">    &#123;</span><br><span class="line">        askUser();</span><br><span class="line">        if (!_response.empty())</span><br><span class="line">        &#123;</span><br><span class="line">            _currentOpenDoc = _app-&gt;getDocByName(_response);</span><br><span class="line">            if (NULL != _currentOpenDoc)</span><br><span class="line">            &#123;</span><br><span class="line">                _currentOpenDoc-&gt;open();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    void unexecute(void)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;can not unexecute open operate!!!&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line">    void askUser() </span><br><span class="line">    &#123;</span><br><span class="line">        char confirm;</span><br><span class="line">        cout &lt;&lt; &quot;please input a name for the doc: &quot; &lt;&lt; endl;</span><br><span class="line">        cin  &gt;&gt; _response;</span><br><span class="line">        cout &lt;&lt; &quot;you have enter a doc named: &quot; &lt;&lt; _response &lt;&lt; endl;</span><br><span class="line">        cout &lt;&lt; &quot;confirm? (Y/N)&quot; &lt;&lt; endl;</span><br><span class="line">        cin  &gt;&gt; confirm;</span><br><span class="line">        switch (confirm)</span><br><span class="line">        &#123;</span><br><span class="line">            case &apos;y&apos;:</span><br><span class="line">            case &apos;Y&apos;:</span><br><span class="line">                break;</span><br><span class="line">            case &apos;N&apos;:</span><br><span class="line">            case &apos;n&apos;:</span><br><span class="line">            default:</span><br><span class="line">                _response = &quot;&quot;;</span><br><span class="line">                break;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">public:</span><br><span class="line">    Document* getCurrentOpenDoc(void)</span><br><span class="line">    &#123;</span><br><span class="line">        return _currentOpenDoc;</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    Application *_app;</span><br><span class="line">    Document *_currentOpenDoc;</span><br><span class="line">    string _response;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">//edit</span><br><span class="line">class EditDocCommand : public DocCommand</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    EditDocCommand(Document* doc) : _doc(doc) &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    void execute(void)</span><br><span class="line">    &#123;</span><br><span class="line">        if (NULL != _doc)</span><br><span class="line">        &#123;</span><br><span class="line">            _doc-&gt;edit();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    void unexecute(void)</span><br><span class="line">    &#123;</span><br><span class="line">        if (NULL != _doc)</span><br><span class="line">        &#123;</span><br><span class="line">            _doc-&gt;unedit();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    Document* getCurrentOpenDoc(void)</span><br><span class="line">    &#123;</span><br><span class="line">        return _doc;</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    Document *_doc;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">//save</span><br><span class="line">class SaveDocCommand : public DocCommand</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    SaveDocCommand(Document* doc) : _doc(doc) &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    void execute(void)</span><br><span class="line">    &#123;</span><br><span class="line">        if (NULL != _doc)</span><br><span class="line">        &#123;</span><br><span class="line">            _doc-&gt;save();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    void unexecute(void)</span><br><span class="line">    &#123;</span><br><span class="line">        if (NULL != _doc)</span><br><span class="line">        &#123;</span><br><span class="line">            _doc-&gt;unsave();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    Document* getCurrentOpenDoc(void)</span><br><span class="line">    &#123;</span><br><span class="line">        return _doc;</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    Document *_doc;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// close</span><br><span class="line">class CloseDocCommand : public DocCommand</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    CloseDocCommand(Document* doc) : _doc(doc) &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    void execute(void)</span><br><span class="line">    &#123;</span><br><span class="line">        if (NULL != _doc)</span><br><span class="line">        &#123;</span><br><span class="line">            _doc-&gt;close();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    void unexecute(void)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;can not unexecute close operate!!!&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    Document* getCurrentOpenDoc(void)</span><br><span class="line">    &#123;</span><br><span class="line">        return _doc;</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    Document *_doc;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// macro</span><br><span class="line">class MacroDocCommand : public DocCommand</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    MacroDocCommand() &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    void execute(void)</span><br><span class="line">    &#123;</span><br><span class="line">        for (list&lt;DocCommand*&gt;::iterator it = _listDoc.begin();</span><br><span class="line">            it != _listDoc.end(); ++it)</span><br><span class="line">        &#123;</span><br><span class="line">            (*it)-&gt;execute();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    void unexecute(void)</span><br><span class="line">    &#123;</span><br><span class="line">        for (list&lt;DocCommand*&gt;::iterator it = _listDoc.begin();</span><br><span class="line">            it != _listDoc.end(); ++it)</span><br><span class="line">        &#123;</span><br><span class="line">            (*it)-&gt;unexecute();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">public:</span><br><span class="line">    void addDocCommand(DocCommand* doc)</span><br><span class="line">    &#123;</span><br><span class="line">        _listDoc.push_back(doc);</span><br><span class="line">    &#125;</span><br><span class="line">    void removeDocCommand(DocCommand* doc)</span><br><span class="line">    &#123;</span><br><span class="line">        _listDoc.remove(doc);</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    list&lt;DocCommand*&gt; _listDoc;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>3.定义命令的接收者即，实际业务的实现者<code>Document</code>和<code>Application</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line">// receiver</span><br><span class="line">class Document</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    string _name;</span><br><span class="line">public:</span><br><span class="line">    Document(string name) :_name(name) &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    void open(void)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;open document &quot; &lt;&lt; _name &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    void edit(void)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;edit document &quot; &lt;&lt; _name &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    void save(void)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;save document &quot; &lt;&lt; _name &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    void close(void)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;close document &quot; &lt;&lt; _name &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    void unedit(void)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;unedit document &quot; &lt;&lt; _name &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    void unsave(void)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;unsave document &quot; &lt;&lt; _name &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    string getName(void)</span><br><span class="line">    &#123;</span><br><span class="line">        return _name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// application contains docs and act as docs factory as well</span><br><span class="line">class Application</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    list&lt;Document*&gt; _listDoc;</span><br><span class="line">    string _appName;</span><br><span class="line">public:</span><br><span class="line">    Application(string name): _appName(name) &#123;&#125;;</span><br><span class="line">    virtual ~Application() </span><br><span class="line">    &#123;</span><br><span class="line">        for (list&lt;Document*&gt;::iterator it = _listDoc.begin();</span><br><span class="line">            it != _listDoc.end(); ++it)</span><br><span class="line">        &#123;</span><br><span class="line">            delete *it;</span><br><span class="line">            *it = NULL;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">public:</span><br><span class="line">    bool isExitDocByName(string name)</span><br><span class="line">    &#123;</span><br><span class="line">        for (list&lt;Document*&gt;::iterator it = _listDoc.begin();</span><br><span class="line">             it != _listDoc.end(); ++it)</span><br><span class="line">        &#123;</span><br><span class="line">            if (0 == ((*it)-&gt;getName().compare(name)))</span><br><span class="line">            &#123;</span><br><span class="line">                return true;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Document* getDocByName(string name)</span><br><span class="line">    &#123;</span><br><span class="line">        for (list&lt;Document*&gt;::iterator it = _listDoc.begin();</span><br><span class="line">            it != _listDoc.end(); ++it)</span><br><span class="line">        &#123;</span><br><span class="line">            if (0 == ((*it)-&gt;getName().compare(name)))</span><br><span class="line">            &#123;</span><br><span class="line">                return *it;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // if not exit , new one &amp; add &amp; return it</span><br><span class="line">        Document *doc = new Document(name);</span><br><span class="line">        addDoc(doc);</span><br><span class="line">        return doc;</span><br><span class="line">    &#125;</span><br><span class="line">    string getName(void)</span><br><span class="line">    &#123;</span><br><span class="line">        return _appName;</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    void addDoc(Document* doc)</span><br><span class="line">    &#123;</span><br><span class="line">        _listDoc.push_back(doc);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>4.最后定义命令请求的调用者<code>Writer</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line">// invoker</span><br><span class="line">class Writer</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    Writer(string name) : _name(name) &#123;&#125;;</span><br><span class="line">    virtual ~Writer()</span><br><span class="line">    &#123;</span><br><span class="line">        for (list&lt;DocCommandLog*&gt;::iterator it = _listHistoryCmdLog.begin();</span><br><span class="line">            it != _listHistoryCmdLog.end(); ++it)</span><br><span class="line">        &#123;</span><br><span class="line">            delete *it;</span><br><span class="line">            *it = NULL;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">public:</span><br><span class="line">    class DocCommandLog</span><br><span class="line">    &#123;</span><br><span class="line">    public:</span><br><span class="line">        DocCommand *docCmd;</span><br><span class="line">        bool isexecute;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    void setDocCommand(DocCommand *cmd)</span><br><span class="line">    &#123;</span><br><span class="line">        _currentCmd = cmd;</span><br><span class="line">    &#125;</span><br><span class="line">    void doWork(void)</span><br><span class="line">    &#123;</span><br><span class="line">        _currentCmd-&gt;execute();</span><br><span class="line"></span><br><span class="line">        DocCommandLog *cmdLog = new DocCommandLog();</span><br><span class="line">        cmdLog-&gt;docCmd = _currentCmd;</span><br><span class="line">        cmdLog-&gt;isexecute = true;</span><br><span class="line">        _listHistoryCmdLog.push_back(cmdLog);</span><br><span class="line">    &#125;</span><br><span class="line">    void undoWork(void)</span><br><span class="line">    &#123;</span><br><span class="line">        _currentCmd-&gt;unexecute();</span><br><span class="line"></span><br><span class="line">        DocCommandLog *cmdLog = new DocCommandLog();</span><br><span class="line">        cmdLog-&gt;docCmd = _currentCmd;</span><br><span class="line">        cmdLog-&gt;isexecute = false;</span><br><span class="line">        _listHistoryCmdLog.push_back(cmdLog);</span><br><span class="line">    &#125;</span><br><span class="line">    void batWorkByHistoryCmdLog(void)</span><br><span class="line">    &#123;</span><br><span class="line">        for (list&lt;DocCommandLog*&gt;::iterator it = _listHistoryCmdLog.begin();</span><br><span class="line">            it != _listHistoryCmdLog.end(); ++it)</span><br><span class="line">        &#123;</span><br><span class="line">            if ((*it)-&gt;isexecute)</span><br><span class="line">            &#123;</span><br><span class="line">                (*it)-&gt;docCmd-&gt;execute();</span><br><span class="line">            &#125;</span><br><span class="line">            else</span><br><span class="line">            &#123;</span><br><span class="line">                (*it)-&gt;docCmd-&gt;unexecute();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">public:</span><br><span class="line">    string getName(void)</span><br><span class="line">    &#123;</span><br><span class="line">        return _name;</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    string _name;</span><br><span class="line">    DocCommand *_currentCmd;</span><br><span class="line">    list&lt;DocCommandLog*&gt; _listHistoryCmdLog;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>5.测试命令模式:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">void CommandTest_Doc()</span><br><span class="line">&#123;</span><br><span class="line">    Application *app = new Application(&quot;VS 2015&quot;);</span><br><span class="line">    cout &lt;&lt; &quot;app name is : &quot; &lt;&lt; app-&gt;getName() &lt;&lt; endl;</span><br><span class="line">    Writer *writer = new Writer(&quot;tly&quot;);</span><br><span class="line">    cout &lt;&lt; &quot;writer name is: &quot; &lt;&lt; writer-&gt;getName() &lt;&lt; endl;</span><br><span class="line">    </span><br><span class="line">    // 1. open doc</span><br><span class="line">    DocCommand *openCmd = new OpenDocCommand(app);</span><br><span class="line">    writer-&gt;setDocCommand(openCmd);</span><br><span class="line">    writer-&gt;doWork();</span><br><span class="line">    Document *currentOpenDoc = openCmd-&gt;getCurrentOpenDoc();</span><br><span class="line">    if (NULL == currentOpenDoc)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;not open any doc !!!&quot; &lt;&lt; endl;</span><br><span class="line">        SAFE_RELASE_POINTER(openCmd);</span><br><span class="line">        SAFE_RELASE_POINTER(writer);</span><br><span class="line">        SAFE_RELASE_POINTER(app);</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 2. edit doc</span><br><span class="line">    DocCommand *editCmd = new EditDocCommand(currentOpenDoc);</span><br><span class="line">    writer-&gt;setDocCommand(editCmd);</span><br><span class="line">    writer-&gt;doWork();</span><br><span class="line"></span><br><span class="line">    // 3. unedit doc</span><br><span class="line">    writer-&gt;undoWork();</span><br><span class="line"></span><br><span class="line">    // 4. save &amp; close doc</span><br><span class="line">    DocCommand *macroCmd = new MacroDocCommand();</span><br><span class="line">    DocCommand *saveCmd = new SaveDocCommand(currentOpenDoc);</span><br><span class="line">    macroCmd-&gt;addDocCommand(saveCmd);</span><br><span class="line">    DocCommand *closeCmd = new CloseDocCommand(currentOpenDoc);</span><br><span class="line">    macroCmd-&gt;addDocCommand(closeCmd);</span><br><span class="line">    writer-&gt;setDocCommand(macroCmd);</span><br><span class="line">    writer-&gt;doWork();</span><br><span class="line"></span><br><span class="line">    // 5. bat just doc operate:</span><br><span class="line">    cout &lt;&lt; &quot;bat history log: &quot; &lt;&lt; endl;</span><br><span class="line">    writer-&gt;batWorkByHistoryCmdLog();</span><br><span class="line"></span><br><span class="line">    SAFE_RELASE_POINTER(openCmd);</span><br><span class="line">    SAFE_RELASE_POINTER(editCmd);</span><br><span class="line">    SAFE_RELASE_POINTER(saveCmd);</span><br><span class="line">    SAFE_RELASE_POINTER(closeCmd);</span><br><span class="line">    SAFE_RELASE_POINTER(macroCmd);</span><br><span class="line">    SAFE_RELASE_POINTER(writer);</span><br><span class="line">    SAFE_RELASE_POINTER(app);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>6.运行结果:</p>
+<pre><code>app name is : VS 2015
+writer name is: tly
+please input a name for the doc:
+design_pattern
+you have enter a doc named: design_pattern
+confirm? (Y/N)
+y
+open document design_pattern
+edit document design_pattern
+unedit document design_pattern
+save document design_pattern
+close document design_pattern
+bat history log:
+please input a name for the doc:
+design_pattern
+you have enter a doc named: design_pattern
+confirm? (Y/N)
+y
+open document design_pattern
+edit document design_pattern
+unedit document design_pattern
+save document design_pattern
+close document design_pattern</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Design-Pattern/" rel="tag"># Design Pattern</a>
+          
+            <a href="/tags/Behavior-Pattern/" rel="tag"># Behavior Pattern</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/05/解释器模式(行为型)/" rel="next" title="解释器模式(行为型)">
+                <i class="fa fa-chevron-left"></i> 解释器模式(行为型)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/16/状态模式(行为型)/" rel="prev" title="状态模式(行为型)">
+                状态模式(行为型) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="uyan_frame"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/book.jpg" alt="Frank Tao">
+            
+              <p class="site-author-name" itemprop="name">Frank Tao</p>
+              <p class="site-description motion-element" itemprop="description">welcome to franktly’s blog -~-</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/franktly" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.zhihu.com/people/tao-ling-yang/activities" target="_blank" title="ZhiHu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>ZhiHu</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/2273442920/profile?topnav=1&wvr=6&is_all=1" target="_blank" title="WeiBo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>WeiBo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#命令模式"><span class="nav-number">2.</span> <span class="nav-text">命令模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#意图"><span class="nav-number">2.1.</span> <span class="nav-text">意图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参与者"><span class="nav-number">2.2.</span> <span class="nav-text">参与者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模式结构"><span class="nav-number">2.3.</span> <span class="nav-text">模式结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码实现"><span class="nav-number">2.4.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命令模式的分类"><span class="nav-number">2.5.</span> <span class="nav-text">命令模式的分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#一般场景命令模式"><span class="nav-number">2.5.1.</span> <span class="nav-text">一般场景命令模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命令队列"><span class="nav-number">2.5.2.</span> <span class="nav-text">命令队列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#带有撤销操作的命令模式"><span class="nav-number">2.5.3.</span> <span class="nav-text">带有撤销操作的命令模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#请求日志的命令模式"><span class="nav-number">2.5.4.</span> <span class="nav-text">请求日志的命令模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#宏命令"><span class="nav-number">2.5.5.</span> <span class="nav-text">宏命令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用场景"><span class="nav-number">2.6.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优缺点"><span class="nav-number">2.7.</span> <span class="nav-text">优缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#命令模式具体实例"><span class="nav-number">3.</span> <span class="nav-text">命令模式具体实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#编辑器操作问题"><span class="nav-number">3.1.</span> <span class="nav-text">编辑器操作问题</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank Tao</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2136191"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

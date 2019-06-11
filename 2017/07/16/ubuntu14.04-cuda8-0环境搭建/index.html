@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="cuda,hpc,ubuntu,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言 在处理3D图像数据时候，由于图像数据量大，采用传统的CPU方式进行图像算法处理，速度和性能不能满足项目要求，需要借助并行计算的架构进行处理。现在比较流行的并行计算框架有cuda，opencl，openmp等等。cuda虽然没有opencl这样的异构编程模型通用，可以同时使用在cpu,gpu,fpga,dsp等硬件平台上，但是cuda相比于opencl等并行计算框架比较成熟，且资源也比较多，g">
+<meta name="keywords" content="cuda,hpc,ubuntu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ubuntu14.04+cuda8.0环境搭建">
+<meta property="og:url" content="http://www.franktly.com/2017/07/16/ubuntu14.04-cuda8-0环境搭建/index.html">
+<meta property="og:site_name" content="Share Your Mind">
+<meta property="og:description" content="前言 在处理3D图像数据时候，由于图像数据量大，采用传统的CPU方式进行图像算法处理，速度和性能不能满足项目要求，需要借助并行计算的架构进行处理。现在比较流行的并行计算框架有cuda，opencl，openmp等等。cuda虽然没有opencl这样的异构编程模型通用，可以同时使用在cpu,gpu,fpga,dsp等硬件平台上，但是cuda相比于opencl等并行计算框架比较成熟，且资源也比较多，g">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-06-11T10:59:03.926Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ubuntu14.04+cuda8.0环境搭建">
+<meta name="twitter:description" content="前言 在处理3D图像数据时候，由于图像数据量大，采用传统的CPU方式进行图像算法处理，速度和性能不能满足项目要求，需要借助并行计算的架构进行处理。现在比较流行的并行计算框架有cuda，opencl，openmp等等。cuda虽然没有opencl这样的异构编程模型通用，可以同时使用在cpu,gpu,fpga,dsp等硬件平台上，但是cuda相比于opencl等并行计算框架比较成熟，且资源也比较多，g">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: "",
+      labels: ""
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.franktly.com/2017/07/16/ubuntu14.04-cuda8-0环境搭建/">
+
+
+
+
+
+  <title>ubuntu14.04+cuda8.0环境搭建 | Share Your Mind</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Share Your Mind</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Love Reading | Film | Climbing | Snooker</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.franktly.com/2017/07/16/ubuntu14.04-cuda8-0环境搭建/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank Tao">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/book.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Share Your Mind">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ubuntu14.04+cuda8.0环境搭建</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-16T14:32:26+08:00">
+                2017-07-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CUDA/" itemprop="url" rel="index">
+                    <span itemprop="name">CUDA</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>在处理3D图像数据时候，由于图像数据量大，采用传统的CPU方式进行图像算法处理，速度和性能不能满足项目要求，需要借助并行计算的架构进行处理。现在比较流行的并行计算框架有cuda，opencl，openmp等等。cuda虽然没有opencl这样的异构编程模型通用，可以同时使用在cpu,gpu,fpga,dsp等硬件平台上，但是cuda相比于opencl等并行计算框架比较成熟，且资源也比较多，gpu硬件有多核处理的优势，因此cuda必然作为数据计算加速方案的第一选择。</p>
+<a id="more"></a>
+
+<h2 id="CUDA介绍"><a href="#CUDA介绍" class="headerlink" title="CUDA介绍"></a>CUDA介绍</h2><hr>
+<p>wiki上关于CUDA的解释:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CUDA is a parallel computing platform and application programming interface (API) model created by Nvidia. It allows software developers and software engineers to use a CUDA-enabled graphics processing unit (GPU) for general purpose processing – an approach termed GPGPU (General-Purpose computing on Graphics Processing Units). The CUDA platform is a software layer that gives direct access to the GPU&apos;s virtual instruction set and parallel computational elements, for the execution of compute kernels.</span><br><span class="line">The CUDA platform is designed to work with programming languages such as C, C++, and Fortran. This accessibility makes it easier for specialists in parallel programming to use GPU resources, in contrast to prior APIs like Direct3D and OpenGL, which required advanced skills in graphics programming. Also, CUDA supports programming frameworks such as OpenACC and OpenCL. When it was first introduced by Nvidia, the name CUDA was an acronym for Compute Unified Device Architecture, but Nvidia subsequently dropped the use of the acronym.</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>cuda主要是nvidia公司开发的在nvidia GPU硬件上进行GPGPU(通用目的的图形卡计算)的并行计算框架， 支持C/C++/Fortran等计算语言。</p>
+</blockquote>
+<h2 id="CUDA安装"><a href="#CUDA安装" class="headerlink" title="CUDA安装"></a>CUDA安装</h2><hr>
+<p>cuda支持windows,linux,macos等多种操作系统，由于本人使用的是ubuntu14.04LTS操作系统，因此这篇文章主要是在ubuntu操作系统上安装cuda8.0(截止2017.7.16,最新的cuda版本为8.0)的过程。</p>
+<h3 id="安装前准备"><a href="#安装前准备" class="headerlink" title="安装前准备"></a>安装前准备</h3><hr>
+<p>在使用CUDA在系统进行开发之前，需要满足以下几个条件:</p>
+<ul>
+<li>支持CUDA的GPU硬件，关于GPU支持情况可以去NV官网查看(<a href="https://developer.nvidia.com/cuda-gpus" target="_blank" rel="noopener">https://developer.nvidia.com/cuda-gpus</a>)</li>
+<li>支持CUDA运行的Linux Kernel Header和GCC等工具链</li>
+<li>NVIDIA CUDA 工具包(<a href="https://developer.nvidia.com/cuda-downloads" target="_blank" rel="noopener">https://developer.nvidia.com/cuda-downloads</a>)</li>
+</ul>
+<h4 id="检查GPU是否是CUDA-capable"><a href="#检查GPU是否是CUDA-capable" class="headerlink" title="检查GPU是否是CUDA-capable"></a>检查GPU是否是CUDA-capable</h4><hr>
+<p>shell终端输入以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lspci | grep -i nvidia</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>会返回GPU版本信息，去NV官网查看是否在支持列表中(<a href="https://developer.nvidia.com/cuda-gpus" target="_blank" rel="noopener">https://developer.nvidia.com/cuda-gpus</a>)</p>
+</blockquote>
+<p>本人笔记本返回:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">01:00.0 3D controller: NVIDIA Corporation GK107M [GeForce GT 750M] (rev a1)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>本人电脑是GT750M型号的GPU硬件，GeForce系列Kepler架构的GPU，在支持列表中</p>
+</blockquote>
+<h4 id="检查Linux版本是否支持CUDA"><a href="#检查Linux版本是否支持CUDA" class="headerlink" title="检查Linux版本是否支持CUDA"></a>检查Linux版本是否支持CUDA</h4><hr>
+<p>shell终端分别输入以下命令查看Ubuntu版本和基本软硬件信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lsb_release -a</span><br><span class="line">uname -a</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>一般的Linux发行版均支持CUDA，通过查询系统信息确认系统操作系统版本和位数方便下载相应的软件开发包</p>
+</blockquote>
+<p>本人笔记本返回:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">No LSB modules are available.</span><br><span class="line">Distributor ID:	Ubuntu</span><br><span class="line">Description:	Ubuntu 14.04.5 LTS</span><br><span class="line">Release:	14.04</span><br><span class="line">Codename:	trusty</span><br><span class="line"></span><br><span class="line">Linux franktly 3.13.0-123-generic #172-Ubuntu SMP Mon Jun 26 18:04:35 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>本人电脑是3.13 linux kernel版本，64位ubuntu14.04系统，支持CUDA8.0(CUDA8.0在ubuntu14.0上需要Kernel版本为3.13版本)</p>
+</blockquote>
+<h4 id="检查Gcc版本"><a href="#检查Gcc版本" class="headerlink" title="检查Gcc版本"></a>检查Gcc版本</h4><hr>
+<p>shell终端输入以下命令查看Gcc版本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc --version</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>CUDA8.0在ubuntu14.04上需要4.8.2及其以上的Gcc版本支持，若Gcc版本过低可以去<a href="http://gcc.gnu.org/" target="_blank" rel="noopener">http://gcc.gnu.org/</a>下载比较新的</p>
+</blockquote>
+<p>本人笔记本返回:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gcc (Ubuntu 4.8.4-2ubuntu1~14.04.3) 4.8.4</span><br><span class="line">Copyright (C) 2013 Free Software Foundation, Inc.</span><br><span class="line">This is free software; see the source for copying conditions.  There is NO</span><br><span class="line">warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>gcc版本是4.8.4,支持CUDA8.0</p>
+</blockquote>
+<h4 id="检查是否安装了Kernel-Header"><a href="#检查是否安装了Kernel-Header" class="headerlink" title="检查是否安装了Kernel Header"></a>检查是否安装了Kernel Header</h4><hr>
+<p>shell终端输入以下命令查看Kernel版本:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uname -r</span><br></pre></td></tr></table></figure>
+
+<p>shell终端输入以下命令安装对应Kernel版本的Kernel Header和Package Development:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install linux-headers-$(uname -r)</span><br></pre></td></tr></table></figure>
+
+<p>至此，Ubuntu14.04上安装CUDA8.0的环境检查完成。</p>
+<h3 id="安装CUDA"><a href="#安装CUDA" class="headerlink" title="安装CUDA"></a>安装CUDA</h3><hr>
+<p>CUDA提供了Package Manager和runfile两种方式进行安装，此处介绍成功率比较高简单的runfile方式安装。</p>
+<h4 id="下载最新runfile"><a href="#下载最新runfile" class="headerlink" title="下载最新runfile"></a>下载最新runfile</h4><hr>
+<p>根据操作系统及位数在<a href="https://developer.nvidia.com/cuda-downloads" target="_blank" rel="noopener">https://developer.nvidia.com/cuda-downloads</a>选择合适的runfile安装文件下载安装。</p>
+<h4 id="禁用nouveau"><a href="#禁用nouveau" class="headerlink" title="禁用nouveau"></a>禁用nouveau</h4><hr>
+<p>shell终端输入以下命令查看nouveau是否在运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsmod | grep nouveau</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>若有输出表示在运行，否则表示没有运行</p>
+</blockquote>
+<p>若在运行，则需要通过以下方式禁用nouvea，首先在<code>/etc/modeprobe.d</code>路径中创建<code>blacklist-nouveau.config</code>文件，并在文件中加入以下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">blacklist nouveau</span><br><span class="line">option nouveau modeset=0</span><br></pre></td></tr></table></figure>
+
+<p>然后在shell终端输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo update-initramfs -u</span><br></pre></td></tr></table></figure>
+
+<p>再次运行<code>lsmode | grep nouveau</code>检查是否禁用成功</p>
+<h4 id="关闭图形化界面进入字符界面安装CUDA"><a href="#关闭图形化界面进入字符界面安装CUDA" class="headerlink" title="关闭图形化界面进入字符界面安装CUDA"></a>关闭图形化界面进入字符界面安装CUDA</h4><hr>
+<ol>
+<li><p>重启电脑，在进入登录界面后，按下<code>alt+ctrl+F1</code>进入文本模式(text mode)，登录用户名和密码进入</p>
+</li>
+<li><p>输入以下命令关闭图形用户界面：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service lightdm stop</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>切换到下载的runfile文件路劲，运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo sh cuda_XXX_linux.run</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>输入以下命令重启图形用户界面：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service lightdm start</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<blockquote>
+<p>按照安装提示一步一步的安装，选择yes or no或输入相关路径，最终安装成功会提示intalled, 否则failed。安装过程中注意以下几点:</p>
+<ul>
+<li>在进行是否安装OpenGL库时候，对于多显卡系统(包含独立NV GPU显卡和集成的Intel或AMD显卡)，<strong>最好选择NO</strong> ，否则会出现黑屏</li>
+<li>在提示是否进行nvidia-xconfig替换时候，需要自定义的多显卡X系统配置，<strong>最好选择NO</strong></li>
+</ul>
+</blockquote>
+<p>按下<code>alt+ctrl+F7</code>返回图形界面登录，若登录成功一般表示CUDA安装成功</p>
+<h4 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h4><hr>
+<p>编辑<code>/etc/profile</code>文件，添加以下两行将cuda相关工具和库加入系统路径：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export PATH=/usr/local/cuda-XXX/bin:$PATH(XXX为安装CUDA版本号)</span><br><span class="line">export LD_LIBRARY_PATH=/usr/local/cudaXXX/lib64(根据相应的位数选择相应的lib文件)</span><br></pre></td></tr></table></figure>
+
+<p>为了立即生效可以在shell终端输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p>最后在shell终端输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">env | grep cuda</span><br></pre></td></tr></table></figure>
+
+<p>查看环境变量是否设置成功</p>
+<h3 id="安装后检查"><a href="#安装后检查" class="headerlink" title="安装后检查"></a>安装后检查</h3><hr>
+<h4 id="检查NVIDIA设备驱动是否安装成功"><a href="#检查NVIDIA设备驱动是否安装成功" class="headerlink" title="检查NVIDIA设备驱动是否安装成功"></a>检查NVIDIA设备驱动是否安装成功</h4><hr>
+<p>在shell终端输入以下命令查看nvidia设备驱动情况：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /proc/driver/nvidia/version</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>若返回显示NVIDIA设备驱动版本和Gcc版本则表示安装成功</p>
+</blockquote>
+<p>本人电脑返回：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">NVRM version: NVIDIA UNIX x86_64 Kernel Module  375.26  Thu Dec  8 18:36:43 PST 2016</span><br><span class="line">GCC version:  gcc version 4.8.4 (Ubuntu 4.8.4-2ubuntu1~14.04.3)</span><br></pre></td></tr></table></figure>
+
+<p>在shell终端输入以下命令查看nvidia设备文件是否存在：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls /dev | grep -i nvidia</span><br></pre></td></tr></table></figure>
+
+<p>本人电脑返回：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">nvidia0</span><br><span class="line">nvidiactl</span><br><span class="line">nvidia-uvm</span><br><span class="line">nvidia-uvm-tools</span><br></pre></td></tr></table></figure>
+
+<h4 id="检查CUDA-Toolkit是否安装成功"><a href="#检查CUDA-Toolkit是否安装成功" class="headerlink" title="检查CUDA Toolkit是否安装成功"></a>检查CUDA Toolkit是否安装成功</h4><hr>
+<p>在shell终端输入以下命令,查看cuda版本： </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvcc -V</span><br></pre></td></tr></table></figure>
+
+<p>本人电脑返回：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">nvcc: NVIDIA (R) Cuda compiler driver</span><br><span class="line">Copyright (c) 2005-2016 NVIDIA Corporation</span><br><span class="line">Built on Tue_Jan_10_13:22:03_CST_2017</span><br><span class="line">Cuda compilation tools, release 8.0, V8.0.61</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>cuda版本为8.0 </p>
+</blockquote>
+<h4 id="检查CUDA-Sample是否可以正常运行"><a href="#检查CUDA-Sample是否可以正常运行" class="headerlink" title="检查CUDA Sample是否可以正常运行"></a>检查CUDA Sample是否可以正常运行</h4><hr>
+<p>在CUDA Sample的路径下(默认是安装在用户目录下的NVIDIA_CUDA_XXX_Samples文件夹下),输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make -jX(X表示系统CPU核数)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>通过<code>cat /proc/cpuinfo | grep &quot;processor&quot; | sort -u | wc -l</code>命令查看逻辑cpu数<br>通过<code>cat /proc/cpuinfo | grep &quot;physical id&quot; | sort -u | wc -l</code>命令查看物理cpu数</p>
+</blockquote>
+<p>在编译生成的<code>NVIDIA_CUDA_XXX_Samples/bin/x86_64/linux/release/</code>目录下运行其中一个sample，如设备查询sample：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./deviceQuery</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>若有查询结果打印说明sample运行正常</p>
+</blockquote>
+<p>本人电脑运行结果为:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">/home/franktly/NVIDIA_CUDA-8.0_Samples/bin/x86_64/linux/release/deviceQuery Starting...</span><br><span class="line"></span><br><span class="line"> CUDA Device Query (Runtime API) version (CUDART static linking)</span><br><span class="line"></span><br><span class="line">Detected 1 CUDA Capable device(s)</span><br><span class="line"></span><br><span class="line">Device 0: &quot;GeForce GT 750M&quot;</span><br><span class="line">  CUDA Driver Version / Runtime Version          8.0 / 8.0</span><br><span class="line">  CUDA Capability Major/Minor version number:    3.0</span><br><span class="line">  Total amount of global memory:                 4038 MBytes (4233953280 bytes)</span><br><span class="line">  ( 2) Multiprocessors, (192) CUDA Cores/MP:     384 CUDA Cores</span><br><span class="line">  GPU Max Clock rate:                            1085 MHz (1.09 GHz)</span><br><span class="line">  Memory Clock rate:                             900 Mhz</span><br><span class="line">  Memory Bus Width:                              128-bit</span><br><span class="line">  L2 Cache Size:                                 262144 bytes</span><br><span class="line">  Maximum Texture Dimension Size (x,y,z)         1D=(65536), 2D=(65536, 65536), 3D=(4096, 4096, 4096)</span><br><span class="line">  Maximum Layered 1D Texture Size, (num) layers  1D=(16384), 2048 layers</span><br><span class="line">  Maximum Layered 2D Texture Size, (num) layers  2D=(16384, 16384), 2048 layers</span><br><span class="line">  Total amount of constant memory:               65536 bytes</span><br><span class="line">  Total amount of shared memory per block:       49152 bytes</span><br><span class="line">  Total number of registers available per block: 65536</span><br><span class="line">  Warp size:                                     32</span><br><span class="line">  Maximum number of threads per multiprocessor:  2048</span><br><span class="line">  Maximum number of threads per block:           1024</span><br><span class="line">  Max dimension size of a thread block (x,y,z): (1024, 1024, 64)</span><br><span class="line">  Max dimension size of a grid size    (x,y,z): (2147483647, 65535, 65535)</span><br><span class="line">  Maximum memory pitch:                          2147483647 bytes</span><br><span class="line">  Texture alignment:                             512 bytes</span><br><span class="line">  Concurrent copy and kernel execution:          Yes with 1 copy engine(s)</span><br><span class="line">  Run time limit on kernels:                     No</span><br><span class="line">  Integrated GPU sharing Host Memory:            No</span><br><span class="line">  Support host page-locked memory mapping:       Yes</span><br><span class="line">  Alignment requirement for Surfaces:            Yes</span><br><span class="line">  Device has ECC support:                        Disabled</span><br><span class="line">  Device supports Unified Addressing (UVA):      Yes</span><br><span class="line">  Device PCI Domain ID / Bus ID / location ID:   0 / 1 / 0</span><br><span class="line">  Compute Mode:</span><br><span class="line">     &lt; Default (multiple host threads can use ::cudaSetDevice() with device simultaneously) &gt;</span><br><span class="line"></span><br><span class="line">deviceQuery, CUDA Driver = CUDART, CUDA Driver Version = 8.0, CUDA Runtime Version = 8.0, NumDevs = 1, Device0 = GeForce GT 750M</span><br><span class="line">Result = PASS</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，通过以上步骤，CUDA Sample运行成功， deviceQuery检测到一个CUDA设备，并打印出其相关属性。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><hr>
+<p>至此CUDA8.0在Ubuntu14.04系统上安装成功，并成功运行CUDA Samples, 后续会陆续具体的介绍CUDA的使用</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><hr>
+<p><a href="https://developer.nvidia.com/compute/cuda/8.0/Prod2/docs/sidebar/CUDA_Installation_Guide_Linux-pdf" target="_blank" rel="noopener">https://developer.nvidia.com/compute/cuda/8.0/Prod2/docs/sidebar/CUDA_Installation_Guide_Linux-pdf</a><br><a href="https://en.wikipedia.org/wiki/CUDA" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/CUDA</a><br><a href="https://blog.csdn.net/masa_fish/article/details/51882183" target="_blank" rel="noopener">https://blog.csdn.net/masa_fish/article/details/51882183</a></p>
+<hr>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/cuda/" rel="tag"># cuda</a>
+          
+            <a href="/tags/hpc/" rel="tag"># hpc</a>
+          
+            <a href="/tags/ubuntu/" rel="tag"># ubuntu</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/08/vim编辑器使用/" rel="next" title="vim使用介绍">
+                <i class="fa fa-chevron-left"></i> vim使用介绍
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/01/Hexo博客备份/" rel="prev" title="Hexo 博客备份">
+                Hexo 博客备份 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="uyan_frame"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/book.jpg" alt="Frank Tao">
+            
+              <p class="site-author-name" itemprop="name">Frank Tao</p>
+              <p class="site-description motion-element" itemprop="description">welcome to franktly’s blog -~-</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/franktly" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.zhihu.com/people/tao-ling-yang/activities" target="_blank" title="ZhiHu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>ZhiHu</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/2273442920/profile?topnav=1&wvr=6&is_all=1" target="_blank" title="WeiBo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>WeiBo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CUDA介绍"><span class="nav-number">2.</span> <span class="nav-text">CUDA介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CUDA安装"><span class="nav-number">3.</span> <span class="nav-text">CUDA安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装前准备"><span class="nav-number">3.1.</span> <span class="nav-text">安装前准备</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#检查GPU是否是CUDA-capable"><span class="nav-number">3.1.1.</span> <span class="nav-text">检查GPU是否是CUDA-capable</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#检查Linux版本是否支持CUDA"><span class="nav-number">3.1.2.</span> <span class="nav-text">检查Linux版本是否支持CUDA</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#检查Gcc版本"><span class="nav-number">3.1.3.</span> <span class="nav-text">检查Gcc版本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#检查是否安装了Kernel-Header"><span class="nav-number">3.1.4.</span> <span class="nav-text">检查是否安装了Kernel Header</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装CUDA"><span class="nav-number">3.2.</span> <span class="nav-text">安装CUDA</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#下载最新runfile"><span class="nav-number">3.2.1.</span> <span class="nav-text">下载最新runfile</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#禁用nouveau"><span class="nav-number">3.2.2.</span> <span class="nav-text">禁用nouveau</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关闭图形化界面进入字符界面安装CUDA"><span class="nav-number">3.2.3.</span> <span class="nav-text">关闭图形化界面进入字符界面安装CUDA</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置环境变量"><span class="nav-number">3.2.4.</span> <span class="nav-text">配置环境变量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装后检查"><span class="nav-number">3.3.</span> <span class="nav-text">安装后检查</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#检查NVIDIA设备驱动是否安装成功"><span class="nav-number">3.3.1.</span> <span class="nav-text">检查NVIDIA设备驱动是否安装成功</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#检查CUDA-Toolkit是否安装成功"><span class="nav-number">3.3.2.</span> <span class="nav-text">检查CUDA Toolkit是否安装成功</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#检查CUDA-Sample是否可以正常运行"><span class="nav-number">3.3.3.</span> <span class="nav-text">检查CUDA Sample是否可以正常运行</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank Tao</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2136191"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Design Pattern,Behavior Pattern,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言 在找工作写简历的时候，会发现网上有许多简历模板，这些简历模板都包含一些了解一个求职者的基本信息，包括个人基本信息，教育经历，工作经历等等，还有些非英语专业毕业的还需要包括CET的成绩，若英语专业则不需要。像这种简历模板只提供一个基本的模板，而具体的内容由具体的使用者(具体子类)实现的模式可以通过模板方式模式来实现。">
+<meta name="keywords" content="Design Pattern,Behavior Pattern">
+<meta property="og:type" content="article">
+<meta property="og:title" content="模板方法模式(行为型)">
+<meta property="og:url" content="http://www.franktly.com/2016/05/30/模板方法模式(行为型)/index.html">
+<meta property="og:site_name" content="Share Your Mind">
+<meta property="og:description" content="前言 在找工作写简历的时候，会发现网上有许多简历模板，这些简历模板都包含一些了解一个求职者的基本信息，包括个人基本信息，教育经历，工作经历等等，还有些非英语专业毕业的还需要包括CET的成绩，若英语专业则不需要。像这种简历模板只提供一个基本的模板，而具体的内容由具体的使用者(具体子类)实现的模式可以通过模板方式模式来实现。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic/Template_Abstract.PNG">
+<meta property="og:updated_time" content="2019-06-11T10:59:03.930Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="模板方法模式(行为型)">
+<meta name="twitter:description" content="前言 在找工作写简历的时候，会发现网上有许多简历模板，这些简历模板都包含一些了解一个求职者的基本信息，包括个人基本信息，教育经历，工作经历等等，还有些非英语专业毕业的还需要包括CET的成绩，若英语专业则不需要。像这种简历模板只提供一个基本的模板，而具体的内容由具体的使用者(具体子类)实现的模式可以通过模板方式模式来实现。">
+<meta name="twitter:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic/Template_Abstract.PNG">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: "",
+      labels: ""
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.franktly.com/2016/05/30/模板方法模式(行为型)/">
+
+
+
+
+
+  <title>模板方法模式(行为型) | Share Your Mind</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Share Your Mind</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Love Reading | Film | Climbing | Snooker</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.franktly.com/2016/05/30/模板方法模式(行为型)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank Tao">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/book.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Share Your Mind">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">模板方法模式(行为型)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-30T00:00:00+08:00">
+                2016-05-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Design-Pattern/" itemprop="url" rel="index">
+                    <span itemprop="name">Design Pattern</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>在找工作写简历的时候，会发现网上有许多简历模板，这些简历模板都包含一些了解一个求职者的基本信息，包括个人基本信息，教育经历，工作经历等等，还有些非英语专业毕业的还需要包括CET的成绩，若英语专业则不需要。像这种简历模板只提供一个基本的模板，而具体的内容由具体的使用者(具体子类)实现的模式可以通过模板方式模式来实现。</p>
+<a id="more"></a>
+
+<h2 id="模板方法模式"><a href="#模板方法模式" class="headerlink" title="模板方法模式"></a>模板方法模式</h2><hr>
+<p>模板方法模式是一种基于<strong>继承</strong>的代码复用技术，它是一种类行为型模式<br>模板方法模式是结构最简单的行为型设计模式，在其结构中只存在父类与子类之间的继承关系。通过使用模板方法模式，可以将一些复杂流程的实现步骤封装在一系列基本方法中，在抽象父类中提供一个称之为<strong>模板方法</strong>的方法来定义这些基本方法的执行次序，而通过其子类来覆盖某些基本方法，从而使得相同的算法框架可以有不同的执行结果</p>
+<h3 id="意图"><a href="#意图" class="headerlink" title="意图"></a>意图</h3><p>定义了操作算法的框架，而将一些步骤延迟到子类中。模板方法模式使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤</p>
+<h3 id="参与者"><a href="#参与者" class="headerlink" title="参与者"></a>参与者</h3><ul>
+<li><p>AbstractClass<br>抽象类，定义抽象的原语操作(primitive operation)，具体的子类将重定义它们以实现一个算法<br>的各个步骤<br>实现一个模板方法,定义一个算法的骨架。该模板方法不仅调用原语操作，也调用定义在AbstractClass或其他对象中的操作</p>
+</li>
+<li><p>ConcreteClass<br>具体类，实现原语操作(primitive operation)以完成算法中与特定子类相关的步骤</p>
+</li>
+</ul>
+<blockquote>
+<p><strong>模板方法</strong>：定义在抽象类中的、把基本操作方法组合在一起形成一个总算法或一个总行为的方法，模板方法是一个具体方法。它给出了一个顶层逻辑框架，而逻辑的组成步骤在抽象类中可以是具体方法，也可以是抽象方法。由于模板方法是具体方法，因此模板方法模式中的抽象层只能是抽象类，而不是接口<br><strong>基本方法</strong>：基本方法是实现算法各个步骤的方法，是模板方法的组成部分，分为三类<br>1.抽象方法：抽象类声明、由其具体子类实现<br>2.具体方法：个具体方法由一个抽象类或具体类声明并实现，其子类可以进行重写也可以直接继承<br>3.钩子方法：由一个抽象类或具体类声明并实现，而其子类可能会加以扩展，一般来说有两种钩子方法，一种是父类是空的实现钩子方法，子类通过重写该方法来控制父类的流程；另一种是父类是个返回bool型的钩子方法，一般有个默认值，而子类通过重写该bool返回值的钩子方法，来控制父类的流程以实现在不同条件下执行模板方法中的不同步骤</p>
+</blockquote>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic/Template_Abstract.PNG" alt="template_pattern"></p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>1.首先定义抽象类<code>AbstractFrameWork</code>,声明和实现模板方法<code>SkeletonOperator()</code>,并声明或实现相应的原语操作:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">// 骨架流程类</span><br><span class="line">class AbstractFrameWork</span><br><span class="line">&#123;</span><br><span class="line">public:  // 声明为public 客户端调用</span><br><span class="line"></span><br><span class="line">    // 模板方法</span><br><span class="line">    void SkeletonOperator()</span><br><span class="line">    &#123;</span><br><span class="line">        PrimitiveOperator1();</span><br><span class="line">        PrimitiveOperator2();</span><br><span class="line">        PrimitiveOperator3();</span><br><span class="line">        if (isSupportPrimitiveOperator4())</span><br><span class="line">        &#123;</span><br><span class="line">            PrimitiveOperator4();</span><br><span class="line">        &#125;</span><br><span class="line">        PrimitiveOperator5();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">protected:  </span><br><span class="line">// 声明为protected 客户端不可见，子类可见, 也可以声明为private 对于virtual而言即使private属性也有多态</span><br><span class="line"></span><br><span class="line">    //父类抽象虚拟方法，必须被子类实现</span><br><span class="line">    virtual void PrimitiveOperator1() = 0;</span><br><span class="line">    virtual void PrimitiveOperator2() = 0;</span><br><span class="line"></span><br><span class="line">    // 父类具体普通方法，有默认实现，可以被子类覆盖（是有条件的,必须面对具体编程,且显式的直接调用PrimitiveOperator3,不能是模板方法SkeletonOperato）</span><br><span class="line">    //最好是加virtual 子类就重写了该方法</span><br><span class="line">    void PrimitiveOperator3()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;PrimitiveOperator3 Default Implement&quot; &lt;&lt; endl;</span><br><span class="line">        // 此时若在客户端通过基类指针来指向具体的子类对象(通过面对抽象编程)，此时不管指向哪个具体子类对象，调用的均是父类方法</span><br><span class="line">        因为没有virtual,没有多态,是静态绑定的； 若想调用子类对象的方法，必须要面对具体对象编程，通过子类指针来指向子类对象，且显式的直接调用该方法</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //父类具体虚拟方法，有默认实现，可以被子类重写</span><br><span class="line">    virtual void PrimitiveOperator4()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;PrimitiveOperator4 Default Implement&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 父类具体钩子虚拟方法（默认是空的）,可以被子类重写,通过子类重写来控制父类的流程</span><br><span class="line">    virtual void PrimitiveOperator5()</span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    // 父类具体钩子虚拟方法(返回bool类型）,可以被子类重写,通过子类重写来控制父类的流程</span><br><span class="line">    virtual bool isSupportPrimitiveOperator4()</span><br><span class="line">    &#123;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>2.再定义三个具体的实现类<code>ConcreteImplementA</code>、<code>ConcreteImplementB</code>和<code>ConcreteImplementC</code>,并实现或重写相应的原语操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">//ConcreteImplementA</span><br><span class="line">class ConcreteImplementA : public AbstractFrameWork</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    void PrimitiveOperator1()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;ConcreteImplement A Primitive Operator1&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    void PrimitiveOperator2()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;ConcreteImplement A Primitive Operator2&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    void PrimitiveOperator3() //覆盖了父类默认的普通方法PrimitiveOperator3，但是面对抽象编程时候子类该方法不会生效，除非父类该方法加virtual</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;ConcreteImplement A Primitive Operator3&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    void PrimitiveOperator5()  // 重写了父类默认为空的钩子方法PrimitiveOperator5</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;ConcreteImplement A Primitive Operator5&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">//ConcreteImplementB</span><br><span class="line">class ConcreteImplementB : public AbstractFrameWork</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    void PrimitiveOperator1()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;ConcreteImplement B Primitive Operator1&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    void PrimitiveOperator2()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;ConcreteImplement B Primitive Operator2&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    bool isSupportPrimitiveOperator4() // 重写了父类默认返回true的钩子方法isSupportPrimitiveOperator4</span><br><span class="line">    &#123;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">////ConcreteImplementC</span><br><span class="line">class ConcreteImplementC : public AbstractFrameWork</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    void PrimitiveOperator1()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;ConcreteImplement C Primitive Operator1&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    void PrimitiveOperator2()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;ConcreteImplement C Primitive Operator2&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    void PrimitiveOperator3() //覆盖了父类默认的普通方法PrimitiveOperator3，但是面对抽象编程时候子类该方法不会生效，除非父类该方法加virtual</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;ConcreteImplement C Primitive Operator3&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    void PrimitiveOperator4() //重写了父类默认的虚方法PrimitiveOperator4</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;ConcreteImplement C Primitive Operator4&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>3.测试模板方法模式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">void TemplateTest_General()</span><br><span class="line">&#123;</span><br><span class="line">    // 面对抽象编程</span><br><span class="line">    AbstractFrameWork *pCI_A = new ConcreteImplementA();</span><br><span class="line">    pCI_A-&gt;SkeletonOperator();</span><br><span class="line"></span><br><span class="line">    AbstractFrameWork *pCI_B = new ConcreteImplementB();</span><br><span class="line">    pCI_B-&gt;SkeletonOperator();</span><br><span class="line"></span><br><span class="line">    AbstractFrameWork *pCI_C = new ConcreteImplementC();</span><br><span class="line">    pCI_C-&gt;SkeletonOperator();</span><br><span class="line"></span><br><span class="line">    // 面对具体编程</span><br><span class="line">    ConcreteImplementA *pC_A = new ConcreteImplementA();</span><br><span class="line">    pC_A-&gt;SkeletonOperator();   // 没有覆盖父类的方法，仍然调用的是父类的PrimitiveOperator3 Default Implement</span><br><span class="line">    pC_A-&gt;PrimitiveOperator3(); // 覆盖了父类的方法：ConcreteImplement A Primitive Operator3</span><br><span class="line">    ConcreteImplementC *pC_C = new ConcreteImplementC();</span><br><span class="line">    pC_C-&gt;SkeletonOperator();   // 没有覆盖父类的方法，仍然调用的是父类的PrimitiveOperator3 Default Implement</span><br><span class="line">    pC_C-&gt;PrimitiveOperator3(); // 覆盖了父类的方法：ConcreteImplement C Primitive Operator3</span><br><span class="line"></span><br><span class="line">    SAFE_RELASE_POINTER(pCI_A);</span><br><span class="line">    SAFE_RELASE_POINTER(pCI_B);</span><br><span class="line">    SAFE_RELASE_POINTER(pCI_C);</span><br><span class="line">    SAFE_RELASE_POINTER(pC_A);</span><br><span class="line">    SAFE_RELASE_POINTER(pC_C);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>4.运行结果：</p>
+<pre><code>ConcreteImplement A Primitive Operator1
+ConcreteImplement A Primitive Operator2
+PrimitiveOperator3 Default Implement
+PrimitiveOperator4 Default Implement
+ConcreteImplement A Primitive Operator5
+ConcreteImplement B Primitive Operator1
+ConcreteImplement B Primitive Operator2
+PrimitiveOperator3 Default Implement
+ConcreteImplement C Primitive Operator1
+ConcreteImplement C Primitive Operator2
+PrimitiveOperator3 Default Implement
+ConcreteImplement C Primitive Operator4
+ConcreteImplement A Primitive Operator1
+ConcreteImplement A Primitive Operator2
+PrimitiveOperator3 Default Implement
+PrimitiveOperator4 Default Implement
+ConcreteImplement A Primitive Operator5
+ConcreteImplement A Primitive Operator3
+ConcreteImplement C Primitive Operator1
+ConcreteImplement C Primitive Operator2
+PrimitiveOperator3 Default Implement
+ConcreteImplement C Primitive Operator4
+ConcreteImplement C Primitive Operator3</code></pre><h3 id="与策略模式的区别"><a href="#与策略模式的区别" class="headerlink" title="与策略模式的区别"></a>与策略模式的区别</h3><p>策略模式是对象行为型模式，是通过委托对象来达到复用目的；而模板方法模式是类行为型模，是通过继承来实现复用的</p>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>对一些复杂的算法进行分割，将其算法中固定不变的部分设计为模板方法和父类具体方法，而一些可以改变的细节由其子类来实现。即一次性实现一个算法的不变部分，并将可变的行为留给子类来实现</li>
+<li>各子类中公共的行为应被提取出来并集中到一个公共父类中以避免代码重复</li>
+<li>需要通过子类来决定父类算法中某个步骤是否执行，实现子类对父类的反向控制</li>
+</ul>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><ul>
+<li>优点<ul>
+<li>在父类中形式化地定义一个算法，而由它的子类来实现细节的处理，在子类实现详细的处理算法时并不会改变算法中步骤的执行次序</li>
+<li>是一种代码复用技术，它在类库设计中尤为重要，它提取了类库中的公共行为，将公共行为放在父类中，而通过其子类来实现不同的行为，它鼓励我们恰当使用继承来实现代码复用</li>
+<li>可实现一种反向控制结构，通过子类覆盖父类的钩子方法来决定某一特定步骤是否需要执行</li>
+<li>可以通过子类来覆盖父类的基本方法，不同的子类可以提供基本方法的不同实现，更换和增加新的子类很方便，符合单一职责原则和开闭原则</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>如果父类中可变的基本方法太多，将会导致类的个数增加，系统过于庞大</li>
+</ul>
+</li>
+</ul>
+<h2 id="模板方法模式具体实例"><a href="#模板方法模式具体实例" class="headerlink" title="模板方法模式具体实例"></a>模板方法模式具体实例</h2><hr>
+<h3 id="简历模板问题"><a href="#简历模板问题" class="headerlink" title="简历模板问题"></a>简历模板问题</h3><p><strong>使用模板方法模式简单实现前言所述的简历模板问题</strong></p>
+<p><strong>代码实现</strong><br>1.定义简历模板类<code>Resume</code>，并声明和实现模板方法<code>WriteResume()</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">// 简历模板</span><br><span class="line">class Resume</span><br><span class="line">&#123;</span><br><span class="line">public:   // public,供客户端调用</span><br><span class="line">    void WriteResume() //  模板方法</span><br><span class="line">    &#123;</span><br><span class="line">        WritePersonalInfo();</span><br><span class="line">        WriteEnducationExp();</span><br><span class="line">        WriteWorkExp();</span><br><span class="line">        if (isNotEnglishMajor())</span><br><span class="line">        &#123;</span><br><span class="line">            WriteCETScore();</span><br><span class="line">        &#125;</span><br><span class="line">        WritePublishedPaper();</span><br><span class="line">    &#125;</span><br><span class="line">protected:  // protected</span><br><span class="line">    virtual void WritePersonalInfo()  = 0;</span><br><span class="line">    virtual void WriteEnducationExp() = 0;</span><br><span class="line">    virtual void WriteWorkExp()       = 0;</span><br><span class="line">    virtual bool isNotEnglishMajor() //钩子方法</span><br><span class="line">    &#123;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line">    virtual void WriteCETScore() = 0;</span><br><span class="line">    virtual void WritePublishedPaper() //钩子方法</span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>2.定义两个种具体的简历类<code>ResumeA</code>和<code>ResumeB</code>，并实现或重写相应的原语操作:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">class ResumeA : public Resume</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    void WritePersonalInfo()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;My Name is A&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    void WriteEnducationExp()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt;&quot;I Graduated from HUST&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    void WriteWorkExp()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;I Worked in ZTE&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    void WriteCETScore()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;CET4 is 550 score&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">class ResumeB : public Resume</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    void WritePersonalInfo()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;My Name is B&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    void WriteEnducationExp()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt;&quot;I Graduated from WuHan University&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    void WriteWorkExp()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;I Worked in HW&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    bool isNotEnglishMajor()</span><br><span class="line">    &#123;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line">    void WriteCETScore() // 必须实现，否则编译不过，不能实例化抽象类，此处为空实现</span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    void WritePublishedPaper()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;I have published a paper about program learning &quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>3.测试模板方法模式:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">void TemplateTest_Resume()</span><br><span class="line">&#123;</span><br><span class="line">    Resume *pR_A = new ResumeA();</span><br><span class="line">    pR_A-&gt;WriteResume();</span><br><span class="line"></span><br><span class="line">    Resume *pR_B = new ResumeB();</span><br><span class="line">    pR_B-&gt;WriteResume();</span><br><span class="line"></span><br><span class="line">    SAFE_RELASE_POINTER(pR_A);</span><br><span class="line">    SAFE_RELASE_POINTER(pR_B);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>4.运行结果:</p>
+<pre><code>My Name is A
+I Graduated from HUST
+I Worked in ZTE
+CET4 is 550 score
+My Name is B
+I Graduated from WuHan University
+I Worked in HW
+I have published a paper about program learning</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Design-Pattern/" rel="tag"># Design Pattern</a>
+          
+            <a href="/tags/Behavior-Pattern/" rel="tag"># Behavior Pattern</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/30/访问者方法模式(行为型)/" rel="next" title="访问者模式(行为型)">
+                <i class="fa fa-chevron-left"></i> 访问者模式(行为型)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/02/排序算法/" rel="prev" title="排序算法">
+                排序算法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="uyan_frame"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/book.jpg" alt="Frank Tao">
+            
+              <p class="site-author-name" itemprop="name">Frank Tao</p>
+              <p class="site-description motion-element" itemprop="description">welcome to franktly’s blog -~-</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/franktly" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.zhihu.com/people/tao-ling-yang/activities" target="_blank" title="ZhiHu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>ZhiHu</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/2273442920/profile?topnav=1&wvr=6&is_all=1" target="_blank" title="WeiBo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>WeiBo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模板方法模式"><span class="nav-number">2.</span> <span class="nav-text">模板方法模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#意图"><span class="nav-number">2.1.</span> <span class="nav-text">意图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参与者"><span class="nav-number">2.2.</span> <span class="nav-text">参与者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模式结构"><span class="nav-number">2.3.</span> <span class="nav-text">模式结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码实现"><span class="nav-number">2.4.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#与策略模式的区别"><span class="nav-number">2.5.</span> <span class="nav-text">与策略模式的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用场景"><span class="nav-number">2.6.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优缺点"><span class="nav-number">2.7.</span> <span class="nav-text">优缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模板方法模式具体实例"><span class="nav-number">3.</span> <span class="nav-text">模板方法模式具体实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简历模板问题"><span class="nav-number">3.1.</span> <span class="nav-text">简历模板问题</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank Tao</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2136191"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

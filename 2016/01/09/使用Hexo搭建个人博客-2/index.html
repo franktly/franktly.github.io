@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="GitHub,博客,Git,Hexo,Next,Node.js,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言 上一篇介绍了使用Hexo在本地搭建的过程，本篇将本地搭建的博客网站部署到服务器去，常见的服务器有:  GitHub Heroku …  本文选用使用比较多的GitHub作为目标服务器">
+<meta name="keywords" content="GitHub,博客,Git,Hexo,Next,Node.js">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Hexo搭建个人博客(2)">
+<meta property="og:url" content="http://www.franktly.com/2016/01/09/使用Hexo搭建个人博客-2/index.html">
+<meta property="og:site_name" content="Share Your Mind">
+<meta property="og:description" content="前言 上一篇介绍了使用Hexo在本地搭建的过程，本篇将本地搭建的博客网站部署到服务器去，常见的服务器有:  GitHub Heroku …  本文选用使用比较多的GitHub作为目标服务器">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FSSH-Key.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FGoDaddy%20Products.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FDomain_Set1.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FDomain_Set2.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FDomain_Set3.PNG">
+<meta property="og:updated_time" content="2019-06-11T10:59:03.926Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用Hexo搭建个人博客(2)">
+<meta name="twitter:description" content="前言 上一篇介绍了使用Hexo在本地搭建的过程，本篇将本地搭建的博客网站部署到服务器去，常见的服务器有:  GitHub Heroku …  本文选用使用比较多的GitHub作为目标服务器">
+<meta name="twitter:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FSSH-Key.PNG">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: "",
+      labels: ""
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.franktly.com/2016/01/09/使用Hexo搭建个人博客-2/">
+
+
+
+
+
+  <title>使用Hexo搭建个人博客(2) | Share Your Mind</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Share Your Mind</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Love Reading | Film | Climbing | Snooker</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.franktly.com/2016/01/09/使用Hexo搭建个人博客-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank Tao">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/book.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Share Your Mind">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用Hexo搭建个人博客(2)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-01-09T00:00:00+08:00">
+                2016-01-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/博客搭建/" itemprop="url" rel="index">
+                    <span itemprop="name">博客搭建</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>上一篇介绍了使用Hexo在本地搭建的过程，本篇将本地搭建的博客网站部署到服务器去，常见的服务器有:</p>
+<ul>
+<li><a href="https://github.com/" target="_blank" rel="noopener">GitHub</a></li>
+<li><a href="https://www.heroku.com/" target="_blank" rel="noopener">Heroku</a></li>
+<li>…</li>
+</ul>
+<p>本文选用使用比较多的GitHub作为目标服务器</p>
+<a id="more"></a>
+
+<h2 id="GitHub简介"><a href="#GitHub简介" class="headerlink" title="GitHub简介"></a>GitHub简介</h2><hr>
+<p><a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>是Git工具的远程库，托管各种Git库，并提供Web界面。GitHub为一个项目贡献代码非常简单：首先点击项目站点的“fork”的按钮，然后将代码检出并将修改加入到刚才分出的代码库中，最后通过内建的“pull request”机制向项目负责人申请代码合并，GitHub是软件开发人员的Facebook</p>
+<h2 id="GitHub注册"><a href="#GitHub注册" class="headerlink" title="GitHub注册"></a>GitHub注册</h2><hr>
+<blockquote>
+<p>已有账户的忽略此步</p>
+</blockquote>
+<h3 id="注册GitHub账号"><a href="#注册GitHub账号" class="headerlink" title="注册GitHub账号"></a>注册GitHub账号</h3><h3 id="建立GitHub-Pages"><a href="#建立GitHub-Pages" class="headerlink" title="建立GitHub Pages"></a>建立GitHub Pages</h3><p>对于<a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages</a>分两种：</p>
+<ul>
+<li>用户&amp;组织页：根据GitHub用户名建立的<code>username.github.io</code>的repository,如笔者的仓库名为<code>franktly.github.io</code>,此时网页使用的是该仓库的master分支</li>
+<li>项目页: 比前者稍微麻烦些，需要在新的或已有的repository上新建一个gh-pages分支，具体方法见<a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages 官网</a></li>
+</ul>
+<p>这次我们选择第一种<strong>用户&amp;组织页</strong>类型的GitHub Pages</p>
+<h3 id="设置GitHub-SSH-Key"><a href="#设置GitHub-SSH-Key" class="headerlink" title="设置GitHub SSH Key"></a>设置GitHub SSH Key</h3><h4 id="本地设置git邮箱、用户名和密码"><a href="#本地设置git邮箱、用户名和密码" class="headerlink" title="本地设置git邮箱、用户名和密码"></a>本地设置git邮箱、用户名和密码</h4><pre><code>git config --global user.email &quot;your_email_addr&quot;
+git config --global user.name  &quot;user_name&quot;</code></pre><h4 id="本地创建SSH-Key"><a href="#本地创建SSH-Key" class="headerlink" title="本地创建SSH Key"></a>本地创建SSH Key</h4><pre><code>ssh-keygen -t rsa -C &quot;your_email@your_email.com&quot;</code></pre><blockquote>
+<p>首先打开用户根目录（用户根目录一般为为C:\Users\username）查看是否已经有了SSH Key的文件夹<code>.ssh</code>,若有了先备份下，</p>
+</blockquote>
+<h4 id="添加生成的SSH-Key到GitHub账户"><a href="#添加生成的SSH-Key到GitHub账户" class="headerlink" title="添加生成的SSH Key到GitHub账户"></a>添加生成的SSH Key到GitHub账户</h4><p>打开在当前用户的根目录下生成的<code>.ssh</code>文件里面的ssh.pub（ssh 公钥）,拷贝其内容到[Account setting -&gt; SSH Keys -&gt; Add SSH Key]</p>
+<h4 id="验证下SSH是否设置成功"><a href="#验证下SSH是否设置成功" class="headerlink" title="验证下SSH是否设置成功"></a>验证下SSH是否设置成功</h4><pre><code>ssh -T git@github.com</code></pre><p>第一次提示不能连接，直接输入yes即可</p>
+<p><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FSSH-Key.PNG" alt="SSH_SET"></p>
+<h2 id="GitHub部署"><a href="#GitHub部署" class="headerlink" title="GitHub部署"></a>GitHub部署</h2><hr>
+<p>建立GitHub Pages之后，即可以将本地搭建的Hexo网站部署到GitHub上去</p>
+<h3 id="修改站点-config-yml配置文件"><a href="#修改站点-config-yml配置文件" class="headerlink" title="修改站点_config.yml配置文件"></a>修改站点_config.yml配置文件</h3><p>如下面所示：类型配置为git，仓库地址为建立的GitHub Pages仓库地址，分支为master</p>
+<pre><code>deploy:
+type: git
+repo: https://github.com/username/username.github.io.git
+branch: master</code></pre><h3 id="执行部署命令"><a href="#执行部署命令" class="headerlink" title="执行部署命令"></a>执行部署命令</h3><pre><code>$ hexo deploy</code></pre><blockquote>
+<p>可以使用<code>-g，--generate</code>可选参数部署之前预先生成静态文件</p>
+</blockquote>
+<p>在GitHub上部署完成之后，以后别人也可以通过<a href="http://username.github.io网站访问你的个人博客网站了" target="_blank" rel="noopener">http://username.github.io网站访问你的个人博客网站了</a></p>
+<h2 id="域名绑定"><a href="#域名绑定" class="headerlink" title="域名绑定"></a>域名绑定</h2><hr>
+<h3 id="Godaddy域名申请"><a href="#Godaddy域名申请" class="headerlink" title="Godaddy域名申请"></a>Godaddy域名申请</h3><p>如果想使用自己申请的域名来访问GitHub上部署的个人博客，可以先到<a href="https://www.godaddy.com/" target="_blank" rel="noopener">Godaddy</a>上申请域名,笔者申请的域名为<a href="http://www.franktly.com">http://www.franktly.com</a></p>
+<p>Godaddy的域名申请一般分为：</p>
+<ol>
+<li>Search Domain： 查找自己想要申请的域名，若未被别人申请才行</li>
+<li>Select Extensions: 选择域名的扩展名，有.com、.net等等可以选择</li>
+<li>Continue To Chart: 选择提供的相应的服务去付款，支持支付宝支付</li>
+</ol>
+<h3 id="Godaddy域名设置"><a href="#Godaddy域名设置" class="headerlink" title="Godaddy域名设置"></a>Godaddy域名设置</h3><p>申请成功后，需要设置Godaddy的域名，将申请到的域名关联到username.github.io网址上,具体步骤如下：<br>1) 打开个人Godday主页查看购买的Products:   </p>
+<p><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FGoDaddy%20Products.PNG" alt="DomainSet1"></p>
+<p>2) 选择管理DNS，在DNS ZONE FILE中选择Add Record：</p>
+<p><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FDomain_Set1.PNG" alt="DomainSet2"></p>
+<p>3) 在ZONE RECORD中选择CNAME文件类型，HOST为www或<a href="http://www.yourdomain,POINTS" target="_blank" rel="noopener">www.yourdomain,POINTS</a> TO为github地址：</p>
+<p><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FDomain_Set2.PNG" alt="DomainSet3"></p>
+<p>4) 设置成功后，会在CNAME记录上显示新加的记录：</p>
+<p><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FDomain_Set3.PNG" alt="DomainSet4"></p>
+<h3 id="GitHub域名设置"><a href="#GitHub域名设置" class="headerlink" title="GitHub域名设置"></a>GitHub域名设置</h3><p>在GitHub端也相应的设置下域名，只需在本地博客的根目录下source文件夹下增加一个CNAME文件，文件内容为你申请的域名地址，如本人的是：<code>www.franktly.com</code></p>
+<blockquote>
+<p>本地根目录下的source文件夹下的增加CNAME文件后，需要重新执行下<code>hexo deploy</code>命令将CNAME文件部署到GitHub服务器才能生效，成功后，一般需要等十几分钟左右才能通过新申请的域名访问你的博客<br>放到博客根目录的source文件夹下面比直接通过Git客户端将本地CNAME文件push到GitHub上好些，这样可以避免每次<code>hexo deploy</code>后，hexo自动将 CNAME文件删除掉</p>
+</blockquote>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><hr>
+<p>本篇主要介绍了将本地Hexo搭建的个人博客网站部署到GitHub服务器上的方法，并且简要的介绍了在Godaddy上域名的申请方法和设置，至此，就可以使用域名在网络上访问自己的博客了，如果觉得博客的主题不是自己喜欢的还可以更改Hexo的默认主题，下篇将会简介Hexo中怎么使用Next主题来使Blog更好看</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/GitHub/" rel="tag"># GitHub</a>
+          
+            <a href="/tags/博客/" rel="tag"># 博客</a>
+          
+            <a href="/tags/Git/" rel="tag"># Git</a>
+          
+            <a href="/tags/Hexo/" rel="tag"># Hexo</a>
+          
+            <a href="/tags/Next/" rel="tag"># Next</a>
+          
+            <a href="/tags/Node-js/" rel="tag"># Node.js</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/01/05/使用Hexo搭建个人博客-1/" rel="next" title="使用Hexo搭建个人博客(1)">
+                <i class="fa fa-chevron-left"></i> 使用Hexo搭建个人博客(1)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/01/10/使用Hexo搭建个人博客-3/" rel="prev" title="使用Hexo搭建个人博客(3)">
+                使用Hexo搭建个人博客(3) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="uyan_frame"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/book.jpg" alt="Frank Tao">
+            
+              <p class="site-author-name" itemprop="name">Frank Tao</p>
+              <p class="site-description motion-element" itemprop="description">welcome to franktly’s blog -~-</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/franktly" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.zhihu.com/people/tao-ling-yang/activities" target="_blank" title="ZhiHu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>ZhiHu</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/2273442920/profile?topnav=1&wvr=6&is_all=1" target="_blank" title="WeiBo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>WeiBo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GitHub简介"><span class="nav-number">2.</span> <span class="nav-text">GitHub简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GitHub注册"><span class="nav-number">3.</span> <span class="nav-text">GitHub注册</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#注册GitHub账号"><span class="nav-number">3.1.</span> <span class="nav-text">注册GitHub账号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#建立GitHub-Pages"><span class="nav-number">3.2.</span> <span class="nav-text">建立GitHub Pages</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置GitHub-SSH-Key"><span class="nav-number">3.3.</span> <span class="nav-text">设置GitHub SSH Key</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#本地设置git邮箱、用户名和密码"><span class="nav-number">3.3.1.</span> <span class="nav-text">本地设置git邮箱、用户名和密码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#本地创建SSH-Key"><span class="nav-number">3.3.2.</span> <span class="nav-text">本地创建SSH Key</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加生成的SSH-Key到GitHub账户"><span class="nav-number">3.3.3.</span> <span class="nav-text">添加生成的SSH Key到GitHub账户</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#验证下SSH是否设置成功"><span class="nav-number">3.3.4.</span> <span class="nav-text">验证下SSH是否设置成功</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GitHub部署"><span class="nav-number">4.</span> <span class="nav-text">GitHub部署</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#修改站点-config-yml配置文件"><span class="nav-number">4.1.</span> <span class="nav-text">修改站点_config.yml配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行部署命令"><span class="nav-number">4.2.</span> <span class="nav-text">执行部署命令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#域名绑定"><span class="nav-number">5.</span> <span class="nav-text">域名绑定</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Godaddy域名申请"><span class="nav-number">5.1.</span> <span class="nav-text">Godaddy域名申请</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Godaddy域名设置"><span class="nav-number">5.2.</span> <span class="nav-text">Godaddy域名设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GitHub域名设置"><span class="nav-number">5.3.</span> <span class="nav-text">GitHub域名设置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">6.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank Tao</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2136191"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

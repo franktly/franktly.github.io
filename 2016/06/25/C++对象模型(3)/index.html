@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="C++,Object Model,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言 前一篇主要介绍了C++对象在普通单继承和普通多继承体系下的对象模型，没有考虑到虚继承的情况。接下来将从虚拟单继承，虚拟多继承（包括一部分虚继承和全部虚继承）等几种继承方式下分别探究下C++对象模型的特点，如未特别说明，所有虚拟继承体系下的基类实现代码与前一篇是一致的">
+<meta name="keywords" content="C++,Object Model">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++对象模型(3)">
+<meta property="og:url" content="http://www.franktly.com/2016/06/25/C++对象模型(3)/index.html">
+<meta property="og:site_name" content="Share Your Mind">
+<meta property="og:description" content="前言 前一篇主要介绍了C++对象在普通单继承和普通多继承体系下的对象模型，没有考虑到虚继承的情况。接下来将从虚拟单继承，虚拟多继承（包括一部分虚继承和全部虚继承）等几种继承方式下分别探究下C++对象模型的特点，如未特别说明，所有虚拟继承体系下的基类实现代码与前一篇是一致的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fobj_mod_4.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fobj_mod_5.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fobj_mod_6.PNG">
+<meta property="og:updated_time" content="2019-06-11T10:59:03.922Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C++对象模型(3)">
+<meta name="twitter:description" content="前言 前一篇主要介绍了C++对象在普通单继承和普通多继承体系下的对象模型，没有考虑到虚继承的情况。接下来将从虚拟单继承，虚拟多继承（包括一部分虚继承和全部虚继承）等几种继承方式下分别探究下C++对象模型的特点，如未特别说明，所有虚拟继承体系下的基类实现代码与前一篇是一致的">
+<meta name="twitter:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fobj_mod_4.PNG">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: "",
+      labels: ""
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.franktly.com/2016/06/25/C++对象模型(3)/">
+
+
+
+
+
+  <title>C++对象模型(3) | Share Your Mind</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Share Your Mind</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Love Reading | Film | Climbing | Snooker</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.franktly.com/2016/06/25/C++对象模型(3)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank Tao">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/book.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Share Your Mind">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">C++对象模型(3)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-25T00:00:00+08:00">
+                2016-06-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>前一篇主要介绍了C++对象在普通单继承和普通多继承体系下的对象模型，没有考虑到虚继承的情况。接下来将从虚拟单继承，虚拟多继承（包括一部分虚继承和全部虚继承）等几种继承方式下分别探究下C++对象模型的特点，如未特别说明，所有虚拟继承体系下的基类实现代码与前一篇是一致的</p>
+<a id="more"></a>
+
+<h2 id="虚拟继承"><a href="#虚拟继承" class="headerlink" title="虚拟继承"></a>虚拟继承</h2><hr>
+<h3 id="单虚拟继承的子类"><a href="#单虚拟继承的子类" class="headerlink" title="单虚拟继承的子类"></a>单虚拟继承的子类</h3><hr>
+<h4 id="简单实现代码"><a href="#简单实现代码" class="headerlink" title="简单实现代码"></a>简单实现代码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">// Single Virtual Derive: Second Inheritance Level</span><br><span class="line">class Derive_Sin_Vir : virtual public Base</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    Derive_Sin_Vir(int var = 40) : Base(var), _derive_sin_vir_var(var) &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    virtual void Run(void) // override Base::Run()</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; &quot;Derive_Sin_Vir Class Run()&quot; &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">    virtual void RunDerive_Sin_Vir(void) // new virtual function</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; &quot;Derive_Sin_Vir Class RunDerive_Sin_Vir()&quot; &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    int _derive_sin_vir_var;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="cl命令的内存布局"><a href="#cl命令的内存布局" class="headerlink" title="cl命令的内存布局"></a><code>cl</code>命令的内存布局</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">class Derive_Sin_Vir    size(48):</span><br><span class="line">        +---</span><br><span class="line"> 0      | &#123;vfptr&#125;               // 子类自己的vfptr</span><br><span class="line"> 8      | &#123;vbptr&#125;               // 虚基表vbptr</span><br><span class="line">16      | _derive_sin_vir_var   // 子类 _derive_sin_vir_var</span><br><span class="line">        | &lt;alignment member&gt; (size=4)</span><br><span class="line">        | &lt;alignment member&gt; (size=4)</span><br><span class="line">        +---</span><br><span class="line">28      | (vtordisp for vbase Base)  // vtordisp == 0</span><br><span class="line">        +--- (virtual base Base)</span><br><span class="line">32      | &#123;vfptr&#125;            // base类vfptr</span><br><span class="line">40      | _base_var          // base类_base_var</span><br><span class="line">        | &lt;alignment member&gt; (size=4)</span><br><span class="line">        +---</span><br><span class="line"></span><br><span class="line">Derive_Sin_Vir::$vftable@Derive_Sin_Vir@: // 子类自己新生成的虚函数表</span><br><span class="line">        | &amp;Derive_Sin_Vir_meta</span><br><span class="line">        |  0</span><br><span class="line"> 0      | &amp;Derive_Sin_Vir::RunDerive_Sin_Vir // 子类新加的虚函数</span><br><span class="line"></span><br><span class="line">Derive_Sin_Vir::$vbtable@:  // 虚基表</span><br><span class="line"> 0      | -8               //vbptr偏移</span><br><span class="line"> 1      | 24 (Derive_Sin_Vird(Derive_Sin_Vir+8)Base) //virtual Base偏移</span><br><span class="line"></span><br><span class="line">Derive_Sin_Vir::$vftable@Base@:  // Base类自己虚函数表</span><br><span class="line">        | -32</span><br><span class="line"> 0      | &amp;(vtordisp) Derive_Sin_Vir::Run // override：子类替换基类虚函数</span><br><span class="line"> 1      | &amp;Base::RunBase // 基类原有的虚函数</span><br><span class="line"></span><br><span class="line">Derive_Sin_Vir::Run this adjustor: 32</span><br><span class="line">Derive_Sin_Vir::RunDerive_Sin_Vir this adjustor: 0</span><br><span class="line">vbi:       class  offset o.vbptr  o.vbte fVtorDisp</span><br><span class="line">            Base      32       8       4 1</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>可以看到单虚拟继承的子类的内存空间特点是<strong>子类自己的内存布局+vtordisp+虚基类的内存布局</strong>。子类自己的内存布局包括自己生成的虚函数表，虚基表及子类的成员变量；虚基类的内存布局包括基类的虚函数表和基类的成员变量。子类的新增的虚函数是在自己生成的虚函数表中的；而其他类型的虚函数则是在继承而来的基类的虚函数表基础上进行替换(override)、保持操作(没有override)</p>
+</blockquote>
+<h4 id="内存布局的代码验证"><a href="#内存布局的代码验证" class="headerlink" title="内存布局的代码验证"></a>内存布局的代码验证</h4><p>1.测试代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">void SingleVirtualDeriveTest(void)</span><br><span class="line">&#123;</span><br><span class="line">    Derive_Sin_Vir d;</span><br><span class="line">    std::cout &lt;&lt; &quot;---------begin single virtual derive object inner memory layout test-------&quot; &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; &quot; object size is: &quot; &lt;&lt; sizeof(d) &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; &quot; object addr is: &quot; &lt;&lt; &amp;d &lt;&lt; std::endl; // d指针转换为int指针</span><br><span class="line">    std::cout &lt;&lt; &quot; typeid(d) is: &quot; &lt;&lt; typeid(d).name() &lt;&lt; std::endl;  // d对象类型</span><br><span class="line">    std::cout &lt;&lt; &quot; object vfptr addr is: &quot; &lt;&lt; (int*)*(int*)&amp;d &lt;&lt; std::endl; //  derive vfptr地址 在对象第1个位置</span><br><span class="line">    std::cout &lt;&lt; &quot; object vfptr[0] func ptr  is: &quot; &lt;&lt; (int*)*(int*)(*(int*)&amp;d) &lt;&lt; std::endl; //vfptr[0]的值 </span><br><span class="line">    std::cout &lt;&lt; &quot; object vfptr[0] func invoke res: &quot;;</span><br><span class="line">    pFunc pRunDerive_Sin_Vir = (pFunc)(*(int*)(*(int*)&amp;d));</span><br><span class="line">    (*pRunDerive_Sin_Vir)(); //调用vfptr[0](函数地址值)指向的函数</span><br><span class="line">    std::cout &lt;&lt; &quot; object vbptr addr is: &quot; &lt;&lt; (int*)*((int*)&amp;d + 1) &lt;&lt; std::endl; //  derive vbptr 地址 在对象第2个位置</span><br><span class="line">    std::cout &lt;&lt; &quot; object vbptr[0] value is: &quot; &lt;&lt; *((int*)*((int*)&amp;d + 1)) &lt;&lt; std::endl; //  vbptr[0]的值： vbptr在对象中的偏移,负值</span><br><span class="line">    std::cout &lt;&lt; &quot; object vbptr[1] value is: &quot; &lt;&lt; *((int*)*((int*)&amp;d + 1) + 1) &lt;&lt; std::endl; // vbptr[1]的值： 虚基类base 在对象中的偏移,正值</span><br><span class="line">    std::cout &lt;&lt; &quot; object _derive_sin_vir_var addr is: &quot; &lt;&lt; (int*)&amp;d + 2 &lt;&lt; std::endl; //_derive_sin_vir_var 在对象第3个位置 </span><br><span class="line">    std::cout &lt;&lt; &quot; object _derive_sin_vir_var value is: &quot; &lt;&lt; *((int*)&amp;d + 2) &lt;&lt; std::endl;</span><br><span class="line">    </span><br><span class="line">    std::cout &lt;&lt; &quot; object vtordisp for vbase Base addr is: &quot; &lt;&lt; (int*)&amp;d + 3 &lt;&lt; std::endl; //vtordisp for virtual base 在对象第4个位置 </span><br><span class="line">    std::cout &lt;&lt; &quot; object vtordisp for vbase Base value is: &quot; &lt;&lt; *((int*)&amp;d + 3) &lt;&lt; std::endl;</span><br><span class="line">    </span><br><span class="line">    std::cout &lt;&lt; &quot; object base vfptr addr is: &quot; &lt;&lt; (int*)*((int*)&amp;d + 4) &lt;&lt; std::endl; //  virtual base vfptr地址在对象第5个位置</span><br><span class="line">    std::cout &lt;&lt; &quot; object base vfptr[0] func ptr  is: &quot; &lt;&lt; (int*)*(int*)(*((int*)&amp;d + 4)) &lt;&lt; std::endl; //vfptr[0]的值 </span><br><span class="line">    std::cout &lt;&lt; &quot; object base vfptr[0] func invoke res: &quot;;</span><br><span class="line">    pFunc pRun = (pFunc)(*(int*)(*((int*)&amp;d + 4)));</span><br><span class="line">    (*pRun)(); //调用vfptr[0](函数地址值)指向的函数</span><br><span class="line">    std::cout &lt;&lt; &quot; object base vfptr[1] func ptr  is: &quot; &lt;&lt; (int*)*((int*)(*((int*)&amp;d + 4)) + 1) &lt;&lt; std::endl; //vfptr[1]的值 </span><br><span class="line">    std::cout &lt;&lt; &quot; object base vfptr[1] func invoke res: &quot;;</span><br><span class="line">    pFunc pRunBase = (pFunc)(*((int*)(*((int*)&amp;d + 4)) + 1));</span><br><span class="line">    (*pRunBase)(); //调用vfptr[1](函数地址值)指向的函数</span><br><span class="line">    std::cout &lt;&lt; &quot; object _base_var addr is: &quot; &lt;&lt; (int*)&amp;d + 5 &lt;&lt; std::endl; //_base_var 在对象第6个位置 </span><br><span class="line">    std::cout &lt;&lt; &quot; object _base_var value is: &quot; &lt;&lt; *((int*)&amp;d + 5) &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; &quot;---------end  single virtual  derive  object inner memory layout test-------&quot; &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2.运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">---------begin single virtual derive object inner memory layout test-------</span><br><span class="line"> object size is: 24</span><br><span class="line"> object addr is: 00FEF958</span><br><span class="line"> typeid(d) is: class Derive_Sin_Vir</span><br><span class="line"> object vfptr addr is: 00C0C4AC</span><br><span class="line"> object vfptr[0] func ptr  is: 00C011EA</span><br><span class="line"> object vfptr[0] func invoke res: Derive_Sin_Vir Class RunDerive_Sin_Vir()</span><br><span class="line"> object vbptr addr is: 00C0C4C4</span><br><span class="line"> object vbptr[0] value is: -4</span><br><span class="line"> object vbptr[1] value is: 12</span><br><span class="line"> object _derive_sin_vir_var addr is: 00FEF960</span><br><span class="line"> object _derive_sin_vir_var value is: 40</span><br><span class="line"> object vtordisp for vbase Base addr is: 00FEF964</span><br><span class="line"> object vtordisp for vbase Base value is: 0</span><br><span class="line"> object base vfptr addr is: 00C0C4B8</span><br><span class="line"> object base vfptr[0] func ptr  is: 00C013E3</span><br><span class="line"> object base vfptr[0] func invoke res: Derive_Sin_Vir Class Run()</span><br><span class="line"> object base vfptr[1] func ptr  is: 00C011A4</span><br><span class="line"> object base vfptr[1] func invoke res: Base Class RunBase()</span><br><span class="line"> object _base_var addr is: 00FEF96C</span><br><span class="line"> object _base_var value is: 40</span><br><span class="line">---------end  single virtual  derive  object inner memory layout test-------</span><br></pre></td></tr></table></figure>
+
+<p>3.内存布局示意图：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fobj_mod_4.PNG" alt="single virtual derive"></p>
+<h3 id="多虚拟继承的子类-Half"><a href="#多虚拟继承的子类-Half" class="headerlink" title="多虚拟继承的子类(Half)"></a>多虚拟继承的子类(Half)</h3><hr>
+<h4 id="简单实现代码-1"><a href="#简单实现代码-1" class="headerlink" title="简单实现代码"></a>简单实现代码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">// Multi Half Virtual Derive: Second Inheritance Level</span><br><span class="line">class Derive_Half_Mul_Vir : virtual public Base,  public Base2</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    Derive_Half_Mul_Vir(int var = 50) : Base(var), Base2(var), _derive_half_mul_vir_var(var) &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    virtual void Run(void) // override Base::Run()</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; &quot;Derive_Half_Mul_Vir Class Run()&quot; &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">    virtual void RunBase2(void) // override Base2::RunBase2()</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; &quot;Derive_Half_Mul_Vir Class RunBase2()&quot; &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">    virtual void RunDerive_Half_Mul_Vir(void) // new virtual function</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; &quot;Derive_Half_Mul_Vir Class RunDerive_Half_Mul_Vir()&quot; &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    int _derive_half_mul_vir_var;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="cl命令的内存布局-1"><a href="#cl命令的内存布局-1" class="headerlink" title="cl命令的内存布局"></a><code>cl</code>命令的内存布局</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">class Derive_Half_Mul_Vir       size(56):</span><br><span class="line">        +---</span><br><span class="line"> 0      | +--- (base class Base2)      </span><br><span class="line"> 0      | | &#123;vfptr&#125;              // Base2的vfptr</span><br><span class="line"> 8      | | _base2_var           // Base2的_base2_var</span><br><span class="line">        | | &lt;alignment member&gt; (size=4)</span><br><span class="line">        | +---</span><br><span class="line">16      | &#123;vbptr&#125;              // 虚基表vbptr</span><br><span class="line">24      | _derive_half_mul_vir_var  //子类的_derive_half_mul_vir_var</span><br><span class="line">        | &lt;alignment member&gt; (size=4)</span><br><span class="line">        | &lt;alignment member&gt; (size=4)</span><br><span class="line">        +---</span><br><span class="line">36      | (vtordisp for vbase Base) //  vtordisp == 0</span><br><span class="line">        +--- (virtual base Base)</span><br><span class="line">40      | &#123;vfptr&#125;        // Base的vfptr</span><br><span class="line">48      | _base_var      // Base的_base_var</span><br><span class="line">        | &lt;alignment member&gt; (size=4)</span><br><span class="line">        +---</span><br><span class="line"></span><br><span class="line">Derive_Half_Mul_Vir::$vftable@Base2@: // Base2的虚函数表</span><br><span class="line">        | &amp;Derive_Half_Mul_Vir_meta</span><br><span class="line">        |  0</span><br><span class="line"> 0      | &amp;Derive_Half_Mul_Vir::Run        // override：子类替换基类Base虚函数</span><br><span class="line"> 1      | &amp;Derive_Half_Mul_Vir::RunBase2   // override：子类替换基类Base虚函数</span><br><span class="line"> 2      | &amp;Derive_Half_Mul_Vir::RunDerive_Half_Mul_Vir // override：子类新加的虚函数</span><br><span class="line"></span><br><span class="line">Derive_Half_Mul_Vir::$vbtable@:     // 虚基表</span><br><span class="line"> 0      | -16         //vbptr偏移 </span><br><span class="line"> 1      | 24 (Derive_Half_Mul_Vird(Derive_Half_Mul_Vir+16)Base) //virtual Base 偏移</span><br><span class="line"></span><br><span class="line">Derive_Half_Mul_Vir::$vftable@Base@: // Base的虚函数表</span><br><span class="line">        | -40</span><br><span class="line"> 0      | &amp;(vtordisp) thunk: this-=40; goto Derive_Half_Mul_Vir::Run // override：子类替换基类Base2虚函数</span><br><span class="line"> 1      | &amp;Base::RunBase  // 基类原有的虚函数</span><br><span class="line"></span><br><span class="line">Derive_Half_Mul_Vir::Run this adjustor: 0</span><br><span class="line">Derive_Half_Mul_Vir::RunBase2 this adjustor: 0</span><br><span class="line">Derive_Half_Mul_Vir::RunDerive_Half_Mul_Vir this adjustor: 0</span><br><span class="line">vbi:       class  offset o.vbptr  o.vbte fVtorDisp</span><br><span class="line">            Base      40      16       4 1</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>可以看到多虚拟继承的子类(Half)的内存空间特点是<strong>普通继承基类内存布局+子类自己的内存布局+vtordisp+虚基类的内存布局</strong>。子类自己的内存布局包括虚基表和子类的成员变量；基类(包括普通继承的和虚继承的)的内存布局包括基类的虚函数表和基类的成员变量。子类的虚函数则是在<strong>普通继承而来的基类</strong>的虚函数表基础上进行新增、替换(override)、保持操作(没有override)</p>
+</blockquote>
+<h4 id="内存布局的代码验证-1"><a href="#内存布局的代码验证-1" class="headerlink" title="内存布局的代码验证"></a>内存布局的代码验证</h4><p>1.测试代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">void HalfMultiVirtualDeriveTest(void)</span><br><span class="line">&#123;</span><br><span class="line">    Derive_Half_Mul_Vir d;</span><br><span class="line">    std::cout &lt;&lt; &quot;---------begin half multi virtual derive object inner memory layout test-------&quot; &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; &quot; object size is: &quot; &lt;&lt; sizeof(d) &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; &quot; object addr is: &quot; &lt;&lt; &amp;d &lt;&lt; std::endl; // d指针转换为int指针</span><br><span class="line">    std::cout &lt;&lt; &quot; typeid(d) is: &quot; &lt;&lt; typeid(d).name() &lt;&lt; std::endl;  // d对象类型</span><br><span class="line">    std::cout &lt;&lt; &quot; object vfptr addr is: &quot; &lt;&lt; (int*)*(int*)&amp;d &lt;&lt; std::endl; //  derive(base2) vfptr地址 在对象第1个位置</span><br><span class="line">    std::cout &lt;&lt; &quot; object vfptr[0] func ptr  is: &quot; &lt;&lt; (int*)*(int*)(*(int*)&amp;d) &lt;&lt; std::endl; //vfptr[0]的值 </span><br><span class="line">    std::cout &lt;&lt; &quot; object vfptr[0] func invoke res: &quot;;</span><br><span class="line">    pFunc pRun = (pFunc)(*(int*)(*(int*)&amp;d));</span><br><span class="line">    (*pRun)(); //调用vfptr[0](函数地址值)指向的函数</span><br><span class="line">    std::cout &lt;&lt; &quot; object vfptr[1] func ptr  is: &quot; &lt;&lt; (int*)*((int*)(*(int*)&amp;d) + 1) &lt;&lt; std::endl; //vfptr[1]的值 </span><br><span class="line">    std::cout &lt;&lt; &quot; object vfptr[1] func invoke res: &quot;;</span><br><span class="line">    pFunc pRunBase2 = (pFunc)(*((int*)(*(int*)&amp;d) + 1));</span><br><span class="line">    (*pRunBase2)(); //调用vfptr[1](函数地址值)指向的函数</span><br><span class="line">    std::cout &lt;&lt; &quot; object vfptr[2] func ptr  is: &quot; &lt;&lt; (int*)*((int*)(*(int*)&amp;d) + 2) &lt;&lt; std::endl; //vfptr[2]的值 </span><br><span class="line">    std::cout &lt;&lt; &quot; object vfptr[2] func invoke res: &quot;;</span><br><span class="line">    pFunc pRunDerive_Half_Mul_Vir = (pFunc)(*((int*)(*(int*)&amp;d) + 2));</span><br><span class="line">    (*pRunDerive_Half_Mul_Vir)(); //调用vfptr[2](函数地址值)指向的函数</span><br><span class="line">    std::cout &lt;&lt; &quot; object _base2_var addr is: &quot; &lt;&lt; (int*)&amp;d + 1 &lt;&lt; std::endl; //_base2_var 在对象第2个位置 </span><br><span class="line">    std::cout &lt;&lt; &quot; object _base2_var value is: &quot; &lt;&lt; *((int*)&amp;d + 1) &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; &quot; object vbptr addr is: &quot; &lt;&lt; (int*)*((int*)&amp;d + 2) &lt;&lt; std::endl; //  derive vbptr 地址 在对象第3个位置</span><br><span class="line">    std::cout &lt;&lt; &quot; object vbptr[0] value is: &quot; &lt;&lt; *((int*)*((int*)&amp;d + 2)) &lt;&lt; std::endl; //  vbptr[0]的值： vbptr在对象中的偏移,负值</span><br><span class="line">    std::cout &lt;&lt; &quot; object vbptr[1] value is: &quot; &lt;&lt; *((int*)*((int*)&amp;d + 2) + 1) &lt;&lt; std::endl; // vbptr[1]的值： 虚基类base在对象中的偏移,正值</span><br><span class="line">    std::cout &lt;&lt; &quot; object _derive_half_mul_vir_var addr is: &quot; &lt;&lt; (int*)&amp;d + 3 &lt;&lt; std::endl; //_derive_half_mul_vir_var 在对象第4个位置 </span><br><span class="line">    std::cout &lt;&lt; &quot; object _derive_half_mul_vir_var value is: &quot; &lt;&lt; *((int*)&amp;d + 3) &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; &quot; object vtordisp for vbase Base addr is: &quot; &lt;&lt; (int*)&amp;d + 4 &lt;&lt; std::endl; //vtordisp for virtual base 在对象第5个位置 </span><br><span class="line">    std::cout &lt;&lt; &quot; object vtordisp for vbase Base value is: &quot; &lt;&lt; *((int*)&amp;d + 4) &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; &quot; object base vfptr addr is: &quot; &lt;&lt; (int*)*((int*)&amp;d + 5) &lt;&lt; std::endl; //  virtual base vfptr地址在对象第6个位置</span><br><span class="line">    std::cout &lt;&lt; &quot; object base vfptr[0] func ptr  is: &quot; &lt;&lt; (int*)*(int*)(*((int*)&amp;d + 5)) &lt;&lt; std::endl; //vfptr[0]的值 </span><br><span class="line">    std::cout &lt;&lt; &quot; object base vfptr[0] func invoke res: &quot;;</span><br><span class="line">    pFunc pRun2 = (pFunc)(*(int*)(*((int*)&amp;d + 5)));</span><br><span class="line">    (*pRun2)(); //调用vfptr[0](函数地址值)指向的函数</span><br><span class="line">    std::cout &lt;&lt; &quot; object base vfptr[1] func ptr  is: &quot; &lt;&lt; (int*)*((int*)(*((int*)&amp;d + 5)) + 1) &lt;&lt; std::endl; //vfptr[1]的值 </span><br><span class="line">    std::cout &lt;&lt; &quot; object base vfptr[1] func invoke res: &quot;;</span><br><span class="line">    pFunc pRunBase = (pFunc)(*((int*)(*((int*)&amp;d + 5)) + 1));</span><br><span class="line">    (*pRunBase)(); //调用vfptr[1](函数地址值)指向的函数</span><br><span class="line">    std::cout &lt;&lt; &quot; object _base_var addr is: &quot; &lt;&lt; (int*)&amp;d + 6 &lt;&lt; std::endl; //_base_var 在对象第7个位置 </span><br><span class="line">    std::cout &lt;&lt; &quot; object _base_var value is: &quot; &lt;&lt; *((int*)&amp;d + 6) &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; &quot;---------end  half multi virtual  derive  object inner memory layout test-------&quot; &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2.运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">---------begin half multi virtual derive object inner memory layout test-------</span><br><span class="line"> object size is: 28</span><br><span class="line"> object addr is: 009BFA60</span><br><span class="line"> typeid(d) is: class Derive_Half_Mul_Vir</span><br><span class="line"> object vfptr addr is: 0125BE88</span><br><span class="line"> object vfptr[0] func ptr  is: 012514A6</span><br><span class="line"> object vfptr[0] func invoke res: Derive_Half_Mul_Vir Class Run()</span><br><span class="line"> object vfptr[1] func ptr  is: 012514B0</span><br><span class="line"> object vfptr[1] func invoke res: Derive_Half_Mul_Vir Class RunBase2()</span><br><span class="line"> object vfptr[2] func ptr  is: 012514AB</span><br><span class="line"> object vfptr[2] func invoke res: Derive_Half_Mul_Vir Class RunDerive_Half_Mul_Vir()</span><br><span class="line"> object _base2_var addr is: 009BFA64</span><br><span class="line"> object _base2_var value is: 50</span><br><span class="line"> object vbptr addr is: 0125BCB4</span><br><span class="line"> object vbptr[0] value is: -8</span><br><span class="line"> object vbptr[1] value is: 12</span><br><span class="line"> object _derive_half_mul_vir_var addr is: 009BFA6C</span><br><span class="line"> object _derive_half_mul_vir_var value is: 50</span><br><span class="line"> object vtordisp for vbase Base addr is: 009BFA70</span><br><span class="line"> object vtordisp for vbase Base value is: 0</span><br><span class="line"> object base vfptr addr is: 0125BC2C</span><br><span class="line"> object base vfptr[0] func ptr  is: 012514A1</span><br><span class="line"> object base vfptr[0] func invoke res: Derive_Half_Mul_Vir Class Run()</span><br><span class="line"> object base vfptr[1] func ptr  is: 012511A4</span><br><span class="line"> object base vfptr[1] func invoke res: Base Class RunBase()</span><br><span class="line"> object _base_var addr is: 009BFA78</span><br><span class="line"> object _base_var value is: 50</span><br><span class="line">---------end  half multi virtual  derive  object inner memory layout test-------</span><br></pre></td></tr></table></figure>
+
+<p>3.内存布局示意图：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fobj_mod_5.PNG" alt="half multi virtual derive"></p>
+<h3 id="多虚拟继承的子类-Both"><a href="#多虚拟继承的子类-Both" class="headerlink" title="多虚拟继承的子类(Both)"></a>多虚拟继承的子类(Both)</h3><hr>
+<h4 id="简单实现代码-2"><a href="#简单实现代码-2" class="headerlink" title="简单实现代码"></a>简单实现代码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">// Multi Both Virtual Derive: Second Inheritance Level</span><br><span class="line">class Derive_Both_Mul_Vir : virtual public Base, virtual public Base2</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    Derive_Both_Mul_Vir(int var = 50) : Base(var), Base2(var), _derive_both_mul_vir_var(var) &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    virtual void Run(void) // override Base::Run()</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; &quot;Derive_Both_Mul_Vir Class Run()&quot; &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">    virtual void RunBase2(void) // override Base2::RunBase2()</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; &quot;Derive_Both_Mul_Vir Class RunBase2()&quot; &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">    virtual void RunDerive_Both_Mul_Vir(void) // new virtual function</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; &quot;Derive_Both_Mul_Vir Class RunDerive_Both_Mul_Vir()&quot; &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    int _derive_both_mul_vir_var;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="cl命令的内存布局-2"><a href="#cl命令的内存布局-2" class="headerlink" title="cl命令的内存布局"></a><code>cl</code>命令的内存布局</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">class Derive_Both_Mul_Vir       size(72):</span><br><span class="line">        +---</span><br><span class="line"> 0      | &#123;vfptr&#125;             // 子类自己生成的vfptr</span><br><span class="line"> 8      | &#123;vbptr&#125;             // vbptr</span><br><span class="line">16      | _derive_both_mul_vir_var // 子类_derive_both_mul_vir_var</span><br><span class="line">        | &lt;alignment member&gt; (size=4)</span><br><span class="line">        | &lt;alignment member&gt; (size=4)</span><br><span class="line">        | &lt;alignment member&gt; (size=4)</span><br><span class="line">        +---</span><br><span class="line">28      | (vtordisp for vbase Base) </span><br><span class="line">        +--- (virtual base Base) </span><br><span class="line">32      | &#123;vfptr&#125;             // Base类的vfptr</span><br><span class="line">40      | _base_var           // Base类的_base_var</span><br><span class="line">        | &lt;alignment member&gt; (size=4)</span><br><span class="line">        +---</span><br><span class="line">52      | (vtordisp for vbase Base2)</span><br><span class="line">        +--- (virtual base Base2)</span><br><span class="line">56      | &#123;vfptr&#125;          // Base2类的vfptr</span><br><span class="line">64      | _base2_var       // Base2类的_base2_var</span><br><span class="line">        | &lt;alignment member&gt; (size=4)</span><br><span class="line">        +---</span><br><span class="line"></span><br><span class="line">Derive_Both_Mul_Vir::$vftable@Derive_Both_Mul_Vir@: // 子类自己生成的虚函数表</span><br><span class="line">        | &amp;Derive_Both_Mul_Vir_meta</span><br><span class="line">        |  0</span><br><span class="line"> 0      | &amp;Derive_Both_Mul_Vir::RunDerive_Both_Mul_Vir //子类新增的虚函数</span><br><span class="line"></span><br><span class="line">Derive_Both_Mul_Vir::$vbtable@: // 虚基表</span><br><span class="line"> 0      | -8           // vbptr偏移</span><br><span class="line"> 1      | 24 (Derive_Both_Mul_Vird(Derive_Both_Mul_Vir+8)Base) // virtual Base 偏移</span><br><span class="line"> 2      | 48 (Derive_Both_Mul_Vird(Derive_Both_Mul_Vir+8)Base2) // virtual Base2 偏移</span><br><span class="line"></span><br><span class="line">Derive_Both_Mul_Vir::$vftable@Base@: // Base虚函数表</span><br><span class="line">        | -32</span><br><span class="line"> 0      | &amp;(vtordisp) Derive_Both_Mul_Vir::Run </span><br><span class="line">      // override：子类替换基类Base虚函数 </span><br><span class="line"> 1      | &amp;Base::RunBase // 基类Base原有的虚函数</span><br><span class="line"></span><br><span class="line">Derive_Both_Mul_Vir::$vftable@Base2@: // Base2虚函数表</span><br><span class="line">        | -56</span><br><span class="line"> 0      | &amp;(vtordisp) thunk: this-=24; goto Derive_Both_Mul_Vir::Run // override：子类替换基类Base2虚函数</span><br><span class="line"> 1      | &amp;(vtordisp) Derive_Both_Mul_Vir::RunBase2 // override：子类替换基类Base2虚函数</span><br><span class="line"></span><br><span class="line">Derive_Both_Mul_Vir::Run this adjustor: 32</span><br><span class="line">Derive_Both_Mul_Vir::RunBase2 this adjustor: 56</span><br><span class="line">Derive_Both_Mul_Vir::RunDerive_Both_Mul_Vir this adjustor: 0</span><br><span class="line">vbi:       class  offset o.vbptr  o.vbte fVtorDisp</span><br><span class="line">            Base      32       8       4 1</span><br><span class="line">           Base2      56       8       8 1</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>可以看到多虚拟继承的子类(Both)的内存空间特点是<strong>子类自己的内存布局+vtordisp+虚基类的内存布局+vtordisp+虚基类2的内存布局+…</strong>。子类自己的内存布局包括自己生成的虚函数表，虚基表及子类的成员变量；虚基类的内存布局包括基类的虚函数表和基类的成员变量。子类的新增的虚函数是在自己生成的虚函数表中的；而其他类型的虚函数则是在继承而来的基类的虚函数表基础上进行替换(override)、保持操作(没有override)</p>
+</blockquote>
+<h4 id="内存布局的代码验证-2"><a href="#内存布局的代码验证-2" class="headerlink" title="内存布局的代码验证"></a>内存布局的代码验证</h4><p>1.测试代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">void BothMultiVirtualDeriveTest(void)</span><br><span class="line">&#123;</span><br><span class="line">    Derive_Both_Mul_Vir d;</span><br><span class="line">    std::cout &lt;&lt; &quot;---------begin both multi virtual derive object inner memory layout test-------&quot; &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; &quot; object size is: &quot; &lt;&lt; sizeof(d) &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; &quot; object addr is: &quot; &lt;&lt; &amp;d &lt;&lt; std::endl; // d指针转换为int指针</span><br><span class="line">    std::cout &lt;&lt; &quot; typeid(d) is: &quot; &lt;&lt; typeid(d).name() &lt;&lt; std::endl;  // d对象类型</span><br><span class="line">    std::cout &lt;&lt; &quot; object vfptr addr is: &quot; &lt;&lt; (int*)*(int*)&amp;d &lt;&lt; std::endl; //  derive vfptr地址 在对象第1个位置</span><br><span class="line">    std::cout &lt;&lt; &quot; object vfptr[0] func ptr  is: &quot; &lt;&lt; (int*)*(int*)(*(int*)&amp;d) &lt;&lt; std::endl; //vfptr[0]的值 </span><br><span class="line">    std::cout &lt;&lt; &quot; object vfptr[0] func invoke res: &quot;;</span><br><span class="line">    pFunc pRunDerive_Both_Mul_Vir = (pFunc)(*(int*)(*(int*)&amp;d));</span><br><span class="line">    (*pRunDerive_Both_Mul_Vir)(); //调用vfptr[0](函数地址值)指向的函数</span><br><span class="line">    std::cout &lt;&lt; &quot; object vbptr addr is: &quot; &lt;&lt; (int*)*((int*)&amp;d + 1) &lt;&lt; std::endl; //  derive vbptr 地址 在对象第2个位置</span><br><span class="line">    std::cout &lt;&lt; &quot; object vbptr[0] value is: &quot; &lt;&lt; *((int*)*((int*)&amp;d + 1)) &lt;&lt; std::endl; //  vbptr[0]的值： vbptr在对象中的偏移,负值</span><br><span class="line">    std::cout &lt;&lt; &quot; object vbptr[1] value is: &quot; &lt;&lt; *((int*)*((int*)&amp;d + 1) + 1) &lt;&lt; std::endl; // vbptr[1]的值： 虚基类base在对象中的偏移,正值</span><br><span class="line">    std::cout &lt;&lt; &quot; object vbptr[2] value is: &quot; &lt;&lt; *((int*)*((int*)&amp;d + 1) + 1) &lt;&lt; std::endl; // vbptr[2]的值： 虚基类base2在对象中的偏移,正值</span><br><span class="line">    std::cout &lt;&lt; &quot; object _derive_both_mul_vir_var addr is: &quot; &lt;&lt; (int*)&amp;d + 2 &lt;&lt; std::endl; //_derive_both_mul_vir_var 在对象第3个位置 </span><br><span class="line">    std::cout &lt;&lt; &quot; object _derive_both_mul_vir_var value is: &quot; &lt;&lt; *((int*)&amp;d + 2) &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; &quot; object vtordisp for vbase Base addr is: &quot; &lt;&lt; (int*)&amp;d + 3 &lt;&lt; std::endl; //vtordisp for virtual base 在对象第4个位置 </span><br><span class="line">    std::cout &lt;&lt; &quot; object vtordisp for vbase Base value is: &quot; &lt;&lt; *((int*)&amp;d + 3) &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; &quot; object base vfptr addr is: &quot; &lt;&lt; (int*)*((int*)&amp;d + 4) &lt;&lt; std::endl; //  virtual base vfptr地址在对象第5个位置</span><br><span class="line">    std::cout &lt;&lt; &quot; object base vfptr[0] func ptr  is: &quot; &lt;&lt; (int*)*(int*)(*((int*)&amp;d + 4)) &lt;&lt; std::endl; //vfptr[0]的值 </span><br><span class="line">    std::cout &lt;&lt; &quot; object base vfptr[0] func invoke res: &quot;;</span><br><span class="line">    pFunc pRun = (pFunc)(*(int*)(*((int*)&amp;d + 4)));</span><br><span class="line">    (*pRun)(); //调用vfptr[0](函数地址值)指向的函数</span><br><span class="line">    std::cout &lt;&lt; &quot; object base vfptr[1] func ptr  is: &quot; &lt;&lt; (int*)*((int*)(*((int*)&amp;d + 4)) + 1) &lt;&lt; std::endl; //vfptr[1]的值 </span><br><span class="line">    std::cout &lt;&lt; &quot; object base vfptr[1] func invoke res: &quot;;</span><br><span class="line">    pFunc pRunBase = (pFunc)(*((int*)(*((int*)&amp;d + 4)) + 1));</span><br><span class="line">    (*pRunBase)(); //调用vfptr[1](函数地址值)指向的函数</span><br><span class="line">    std::cout &lt;&lt; &quot; object _base_var addr is: &quot; &lt;&lt; (int*)&amp;d + 5 &lt;&lt; std::endl; //_base_var 在对象第6个位置 </span><br><span class="line">    std::cout &lt;&lt; &quot; object _base_var value is: &quot; &lt;&lt; *((int*)&amp;d + 5) &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; &quot; object vtordisp for vbase Base2 addr is: &quot; &lt;&lt; (int*)&amp;d + 6 &lt;&lt; std::endl; //vtordisp for virtual base2 在对象第7个位置 </span><br><span class="line">    std::cout &lt;&lt; &quot; object vtordisp for vbase Base2 value is: &quot; &lt;&lt; *((int*)&amp;d + 6) &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; &quot; object base2 vfptr addr is: &quot; &lt;&lt; (int*)*((int*)&amp;d + 7) &lt;&lt; std::endl; //  virtual base2 vfptr地址在对象第8个位置</span><br><span class="line">    std::cout &lt;&lt; &quot; object base2 vfptr[0] func ptr  is: &quot; &lt;&lt; (int*)*(int*)(*((int*)&amp;d + 7)) &lt;&lt; std::endl; //vfptr[0]的值 </span><br><span class="line">    std::cout &lt;&lt; &quot; object base2 vfptr[0] func invoke res: &quot;;</span><br><span class="line">    pFunc pRun2 = (pFunc)(*(int*)(*((int*)&amp;d + 7)));</span><br><span class="line">    (*pRun2)(); //调用vfptr[0](函数地址值)指向的函数</span><br><span class="line">    std::cout &lt;&lt; &quot; object base2 vfptr[1] func ptr  is: &quot; &lt;&lt; (int*)*((int*)(*((int*)&amp;d + 7)) + 1) &lt;&lt; std::endl; //vfptr[1]的值 </span><br><span class="line">    std::cout &lt;&lt; &quot; object base2 vfptr[1] func invoke res: &quot;;</span><br><span class="line">    pFunc pRunBase2 = (pFunc)(*((int*)(*((int*)&amp;d + 7)) + 1));</span><br><span class="line">    (*pRunBase2)(); //调用vfptr[1](函数地址值)指向的函数</span><br><span class="line">    std::cout &lt;&lt; &quot; object _base2_var addr is: &quot; &lt;&lt; (int*)&amp;d + 8 &lt;&lt; std::endl; //_base2_var 在对象第9个位置 </span><br><span class="line">    std::cout &lt;&lt; &quot; object _base2_var value is: &quot; &lt;&lt; *((int*)&amp;d + 8) &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; &quot;---------end  both multi virtual  derive  object inner memory layout test-------&quot; &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2.运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">---------begin both multi virtual derive object inner memory layout test-------</span><br><span class="line"> object size is: 36</span><br><span class="line"> object addr is: 004FFA30</span><br><span class="line"> typeid(d) is: class Derive_Both_Mul_Vir</span><br><span class="line"> object vfptr addr is: 0006D964</span><br><span class="line"> object vfptr[0] func ptr  is: 000614DD</span><br><span class="line"> object vfptr[0] func invoke res: Derive_Both_Mul_Vir Class RunDerive_Both_Mul_Vir()</span><br><span class="line"> object vbptr addr is: 0006D9FC</span><br><span class="line"> object vbptr[0] value is: -4</span><br><span class="line"> object vbptr[1] value is: 12</span><br><span class="line"> object vbptr[2] value is: 12</span><br><span class="line"> object _derive_both_mul_vir_var addr is: 004FFA38</span><br><span class="line"> object _derive_both_mul_vir_var value is: 50</span><br><span class="line"> object vtordisp for vbase Base addr is: 004FFA3C</span><br><span class="line"> object vtordisp for vbase Base value is: 0</span><br><span class="line"> object base vfptr addr is: 0006D998</span><br><span class="line"> object base vfptr[0] func ptr  is: 000614D8</span><br><span class="line"> object base vfptr[0] func invoke res: Derive_Both_Mul_Vir Class Run()</span><br><span class="line"> object base vfptr[1] func ptr  is: 000611B3</span><br><span class="line"> object base vfptr[1] func invoke res: Base Class RunBase()</span><br><span class="line"> object _base_var addr is: 004FFA44</span><br><span class="line"> object _base_var value is: 50</span><br><span class="line"> object vtordisp for vbase Base2 addr is: 004FFA48</span><br><span class="line"> object vtordisp for vbase Base2 value is: 0</span><br><span class="line"> object base2 vfptr addr is: 0006D9CC</span><br><span class="line"> object base2 vfptr[0] func ptr  is: 000614CE</span><br><span class="line"> object base2 vfptr[0] func invoke res: Derive_Both_Mul_Vir Class Run()</span><br><span class="line"> object base2 vfptr[1] func ptr  is: 000614BF</span><br><span class="line"> object base2 vfptr[1] func invoke res: Derive_Both_Mul_Vir Class RunBase2()</span><br><span class="line"> object _base2_var addr is: 004FFA50</span><br><span class="line"> object _base2_var value is: 50</span><br><span class="line">---------end  both multi virtual  derive  object inner memory layout test-------</span><br></pre></td></tr></table></figure>
+
+<p>3.内存布局示意图：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fobj_mod_6.PNG" alt="both multi virtual derive"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><hr>
+<p>本篇主要介绍了C++类在虚拟继承下的子类对象内存特点，可以看出，只要存在虚拟继承，子类就会多一张虚基表，虚基表中存放着偏移值；对于纯虚继承，即所有基类均是虚拟继承（包括但不限于单虚拟继承）来说，子类对象中的新增的虚函数均是在自己生成的新虚函数表中进行操作的（若子类没有新增的虚函数则不需要生成），重写类型的虚函数均是在基类虚函数表中进行的。而对于不纯情况，子类会类似于前一篇描述的普通继承情况，使用普通继承而来的基类的虚函数表，而不会自己生成。可见，虚拟继承体系下通常情况下会存在多张虚函数表（子类继承而来的和某些情况下自己新生成的）和一张虚基表</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/C/" rel="tag"># C++</a>
+          
+            <a href="/tags/Object-Model/" rel="tag"># Object Model</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/22/C++对象模型(2)/" rel="next" title="C++对象模型(2)">
+                <i class="fa fa-chevron-left"></i> C++对象模型(2)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/01/C++对象模型(4)/" rel="prev" title="C++对象模型(4)">
+                C++对象模型(4) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="uyan_frame"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/book.jpg" alt="Frank Tao">
+            
+              <p class="site-author-name" itemprop="name">Frank Tao</p>
+              <p class="site-description motion-element" itemprop="description">welcome to franktly’s blog -~-</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/franktly" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.zhihu.com/people/tao-ling-yang/activities" target="_blank" title="ZhiHu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>ZhiHu</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/2273442920/profile?topnav=1&wvr=6&is_all=1" target="_blank" title="WeiBo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>WeiBo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚拟继承"><span class="nav-number">2.</span> <span class="nav-text">虚拟继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#单虚拟继承的子类"><span class="nav-number">2.1.</span> <span class="nav-text">单虚拟继承的子类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简单实现代码"><span class="nav-number">2.1.1.</span> <span class="nav-text">简单实现代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cl命令的内存布局"><span class="nav-number">2.1.2.</span> <span class="nav-text">cl命令的内存布局</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#内存布局的代码验证"><span class="nav-number">2.1.3.</span> <span class="nav-text">内存布局的代码验证</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多虚拟继承的子类-Half"><span class="nav-number">2.2.</span> <span class="nav-text">多虚拟继承的子类(Half)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简单实现代码-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">简单实现代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cl命令的内存布局-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">cl命令的内存布局</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#内存布局的代码验证-1"><span class="nav-number">2.2.3.</span> <span class="nav-text">内存布局的代码验证</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多虚拟继承的子类-Both"><span class="nav-number">2.3.</span> <span class="nav-text">多虚拟继承的子类(Both)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简单实现代码-2"><span class="nav-number">2.3.1.</span> <span class="nav-text">简单实现代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cl命令的内存布局-2"><span class="nav-number">2.3.2.</span> <span class="nav-text">cl命令的内存布局</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#内存布局的代码验证-2"><span class="nav-number">2.3.3.</span> <span class="nav-text">内存布局的代码验证</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank Tao</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2136191"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="博客,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言 搭建自己的博客，然后写了几十篇文章，悲催的是发现用搜索引擎无法搜索到自己的博客网站。按照网上的方法和自己的摸索，下面以Baidu和Google搜索为例简单介绍了下怎么让搜索引擎搜到自己的博客网站（由于hexo博客是同时部署在Github和Coding上的，虽然百度搜索对外网Github有屏蔽，但仍然可以通过Coding搜索到）">
+<meta name="keywords" content="博客">
+<meta property="og:type" content="article">
+<meta property="og:title" content="让Baidu和Google收录Hexo博客">
+<meta property="og:url" content="http://www.franktly.com/2016/07/06/让Baidu和Google收录Hexo博客/index.html">
+<meta property="og:site_name" content="Share Your Mind">
+<meta property="og:description" content="前言 搭建自己的博客，然后写了几十篇文章，悲催的是发现用搜索引擎无法搜索到自己的博客网站。按照网上的方法和自己的摸索，下面以Baidu和Google搜索为例简单介绍了下怎么让搜索引擎搜到自己的博客网站（由于hexo博客是同时部署在Github和Coding上的，虽然百度搜索对外网Github有屏蔽，但仍然可以通过Coding搜索到）">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic/google1.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic/google_site1.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic/google_site2.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic/google_site3.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic/google_site4.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic/google_site6.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic/bd_1.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fbd_site_1.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fbd_site_3.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fbd_site_5.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fbd_site_4.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fbd_site_6.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic/google_site10.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic/google_site12.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic/google_site11.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fbd_site_8.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic/google_site_new.PNG">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic/bd_site_12.PNG">
+<meta property="og:updated_time" content="2019-06-11T10:59:03.930Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="让Baidu和Google收录Hexo博客">
+<meta name="twitter:description" content="前言 搭建自己的博客，然后写了几十篇文章，悲催的是发现用搜索引擎无法搜索到自己的博客网站。按照网上的方法和自己的摸索，下面以Baidu和Google搜索为例简单介绍了下怎么让搜索引擎搜到自己的博客网站（由于hexo博客是同时部署在Github和Coding上的，虽然百度搜索对外网Github有屏蔽，但仍然可以通过Coding搜索到）">
+<meta name="twitter:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic/google1.PNG">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: "",
+      labels: ""
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.franktly.com/2016/07/06/让Baidu和Google收录Hexo博客/">
+
+
+
+
+
+  <title>让Baidu和Google收录Hexo博客 | Share Your Mind</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Share Your Mind</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Love Reading | Film | Climbing | Snooker</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.franktly.com/2016/07/06/让Baidu和Google收录Hexo博客/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank Tao">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/book.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Share Your Mind">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">让Baidu和Google收录Hexo博客</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-06T00:00:00+08:00">
+                2016-07-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/博客搭建/" itemprop="url" rel="index">
+                    <span itemprop="name">博客搭建</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><hr>
+<p>搭建自己的博客，然后写了几十篇文章，悲催的是发现用搜索引擎无法搜索到自己的博客网站。按照网上的方法和自己的摸索，下面以<code>Baidu</code>和<code>Google</code>搜索为例简单介绍了下怎么让搜索引擎搜到自己的博客网站（由于<code>hexo</code>博客是同时部署在<code>Github</code>和<code>Coding</code>上的，虽然百度搜索对外网<code>Github</code>有屏蔽，但仍然可以通过<code>Coding</code>搜索到）</p>
+<a id="more"></a>
+
+
+
+<hr>
+<h1 id="验证网站"><a href="#验证网站" class="headerlink" title="验证网站"></a>验证网站</h1><hr>
+<h2 id="Google搜索"><a href="#Google搜索" class="headerlink" title="Google搜索"></a><code>Google</code>搜索</h2><hr>
+<p>1.未验证之前的<code>Google</code>搜索结果：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic/google1.PNG" alt="g1"></p>
+<blockquote>
+<p>输入的网站Google无法识别</p>
+</blockquote>
+<p>2.登陆<a href="https://www.google.com/webmasters/tools/home" title="google search console" target="_blank" rel="noopener">Google Search Console</a>，输入需要验证的网站域名：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic/google_site1.PNG" alt="g2"></p>
+<p>3.<code>Search Console</code>会推荐使用域名提供商方式进行验证(自己的博客域名是在<code>GoDaddy</code>上购买的)：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic/google_site2.PNG" alt="g3"></p>
+<p>还可以选择其他的验证方式：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic/google_site3.PNG" alt="g3_2"></p>
+<p>4.确认<code>Accept Google Access</code>:
+<img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic/google_site4.PNG" alt="g4"></p>
+<p>5.验证完成：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic/google_site6.PNG" alt="g5"></p>
+<h2 id="Baidu搜索"><a href="#Baidu搜索" class="headerlink" title="Baidu搜索"></a><code>Baidu</code>搜索</h2><hr>
+<p>1.未验证之前的<code>Baidu</code>搜索结果：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic/bd_1.PNG" alt="g6"></p>
+<p>2.<a href="http://zhanzhang.baidu.com/site/index" target="_blank" rel="noopener">进入百度站长</a>的站点管理-添加网站，输入域名结果：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fbd_site_1.PNG" alt="g7"></p>
+<p>3.百度站长工具有三种方式进行站点验证，最常用第一种下载验证文件方式，由于本人尝试每次都验证失败，所以采用第三种<code>CNAME</code>方式：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fbd_site_3.PNG" alt="g8"></p>
+<ul>
+<li>登陆域名解析服务器（本人是<code>DNSPod</code>）增加一条<code>CNAME</code>记录：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fbd_site_5.PNG" alt="g9"></li>
+<li>点击验证完成：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fbd_site_4.PNG" alt="g10"></li>
+</ul>
+<h1 id="提交Sitemap"><a href="#提交Sitemap" class="headerlink" title="提交Sitemap"></a>提交<code>Sitemap</code></h1><hr>
+<h2 id="生成Google和Baidu-Sitemap文件"><a href="#生成Google和Baidu-Sitemap文件" class="headerlink" title="生成Google和Baidu Sitemap文件"></a>生成<code>Google</code>和<code>Baidu</code> <code>Sitemap</code>文件</h2><hr>
+<p><code>Sitemap</code>是一种文件，可以通过该文件列出您网站上的网页，从而将您网站内容的组织架构告知<code>Google</code>和<code>Baidu</code>等搜索引擎，以便更加智能的抓取你的网站信息</p>
+<h3 id="安装hexo-sitemap插件"><a href="#安装hexo-sitemap插件" class="headerlink" title="安装hexo sitemap插件"></a>安装<code>hexo sitemap</code>插件</h3><hr>
+<p>命令行输入如下命令：</p>
+<pre><code>npm install hexo-generator-sitemap // Google 
+npm install hexo-generator-baidu-sitemap // Baidu</code></pre><h3 id="修改博客配置文件"><a href="#修改博客配置文件" class="headerlink" title="修改博客配置文件"></a>修改博客配置文件</h3><hr>
+<p>在<code>_config.yml</code>全局配置文件中增加如下文本：</p>
+<pre><code># Extensions
+Plugins: 
+\- hexo-generator-sitemap
+# 自动生成sitemap
+sitemap:
+  path: sitemap.xml
+baidusitemap:
+  path: baidusitemap.xml</code></pre><p>然后重新<code>hexo g</code>博客即可以在博客的<code>public</code>文件夹下生成<code>sitemap.xml</code>和<code>baidusitemap.xml</code>文件：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fbd_site_6.PNG" alt="g11"></p>
+<h2 id="提交Sitemap文件"><a href="#提交Sitemap文件" class="headerlink" title="提交Sitemap文件"></a>提交<code>Sitemap</code>文件</h2><hr>
+<h3 id="Google搜索-1"><a href="#Google搜索-1" class="headerlink" title="Google搜索"></a><code>Google</code>搜索</h3><hr>
+<p>在站点地图中提交上一步生成的<code>sitemap.xml</code>文件：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic/google_site10.PNG" alt="g12"></p>
+<p>然后提交，正常提交结果如下图所示：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic/google_site12.PNG" alt="g13"></p>
+<p>千万要注意博客的标题中不用包含XML的实体字符如<code>&amp;</code>、<code>&lt;</code>、<code>&gt;</code>等等，否则提交之后，会提示解析错误：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic/google_site11.PNG" alt="g14"></p>
+<h3 id="Baidu搜索-1"><a href="#Baidu搜索-1" class="headerlink" title="Baidu搜索"></a><code>Baidu</code>搜索</h3><hr>
+<p>百度支持三种自动提交方式：<br><strong>主动推送</strong>、<strong>自动推送</strong>和<strong>sitemap</strong>提交，三者的搜索发现的效率和难度依次递减</p>
+<blockquote>
+<p>如何选择链接提交方式<br>1 主动推送：最为快速的提交方式，推荐您将站点当天新产出链接立即通过此方式推送给百度，以保证新链接可以及时被百度收录。<br>2 自动推送：最为便捷的提交方式，请将自动推送的JS代码部署在站点的每一个页面源代码中，部署代码的页面在每次被浏览时，链接会被自动推送给百度。可以与主动推送配合使用。<br>3 sitemap：您可以定期将网站链接放到sitemap中，然后将sitemap提交给百度。百度会周期性的抓取检查您提交的sitemap，对其中的链接进行处理，但收录速度慢于主动推送。<br>4 手动提交：一次性提交链接给百度，可以使用此种方式。</p>
+</blockquote>
+<h4 id="Baidu-Sitemap"><a href="#Baidu-Sitemap" class="headerlink" title="Baidu Sitemap"></a><code>Baidu Sitemap</code></h4><p>在站点地图的自动提交选项卡的<code>sitemap</code>部分中提交上一步生成的<code>sitemap.xml</code>文件的地址，点击提交即可：<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fbd_site_8.PNG" alt="g15"></p>
+<h4 id="自动推送"><a href="#自动推送" class="headerlink" title="自动推送"></a>自动推送</h4><p>把如下的<code>JS</code>代码放在网页页面中即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">(function()&#123;</span><br><span class="line">    var bp = document.createElement(&apos;script&apos;);</span><br><span class="line">    var curProtocol = window.location.protocol.split(&apos;:&apos;)[0];</span><br><span class="line">    if (curProtocol === &apos;https&apos;) &#123;</span><br><span class="line">        bp.src = &apos;https://zz.bdstatic.com/linksubmit/push.js&apos;;        </span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">        bp.src = &apos;http://push.zhanzhang.baidu.com/push.js&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">    var s = document.getElementsByTagName(&quot;script&quot;)[0];</span><br><span class="line">    s.parentNode.insertBefore(bp, s);</span><br><span class="line">&#125;)();</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>最好把上述代码放在hexo生成的每个页面的公共部分,本博客放在<code>blog\themes\next\layout\_layout.swig</code>的<code>&lt;body&gt;</code>标签的最后面</p>
+</blockquote>
+<h4 id="主动推送"><a href="#主动推送" class="headerlink" title="主动推送"></a>主动推送</h4><p>需要编写主动推送代码，<a href="http://zhanzhang.baidu.com/college/courseinfo?id=267&page=2#h2_article_title8" target="_blank" rel="noopener"><strong>主动推送编写示例</strong></a></p>
+<h1 id="等待处理"><a href="#等待处理" class="headerlink" title="等待处理"></a>等待处理</h1><hr>
+<p>过几天之后，Google和Baidu就会处理你提交的站点，再次输入网址或相关关键字，就可以搜索到自己的博客了</p>
+<p>Google可以搜索到自己的站点内容:<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic/google_site_new.PNG" alt="g11"></p>
+<p>Baidu也可以搜索到自己的站点内容:<br><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic/bd_site_12.PNG" alt="g11"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/博客/" rel="tag"># 博客</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/05/Hexo同时部署在Coding和GitHub上并使用DNSPod分流/" rel="next" title="Hexo同时部署在Coding和GitHub上并使用DNSPod分流">
+                <i class="fa fa-chevron-left"></i> Hexo同时部署在Coding和GitHub上并使用DNSPod分流
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/15/C++虚函数表归属/" rel="prev" title="C++虚函数表归属">
+                C++虚函数表归属 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="uyan_frame"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/book.jpg" alt="Frank Tao">
+            
+              <p class="site-author-name" itemprop="name">Frank Tao</p>
+              <p class="site-description motion-element" itemprop="description">welcome to franktly’s blog -~-</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/franktly" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.zhihu.com/people/tao-ling-yang/activities" target="_blank" title="ZhiHu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>ZhiHu</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/2273442920/profile?topnav=1&wvr=6&is_all=1" target="_blank" title="WeiBo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>WeiBo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#验证网站"><span class="nav-number">2.</span> <span class="nav-text">验证网站</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Google搜索"><span class="nav-number">2.1.</span> <span class="nav-text">Google搜索</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Baidu搜索"><span class="nav-number">2.2.</span> <span class="nav-text">Baidu搜索</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#提交Sitemap"><span class="nav-number">3.</span> <span class="nav-text">提交Sitemap</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#生成Google和Baidu-Sitemap文件"><span class="nav-number">3.1.</span> <span class="nav-text">生成Google和Baidu Sitemap文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装hexo-sitemap插件"><span class="nav-number">3.1.1.</span> <span class="nav-text">安装hexo sitemap插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改博客配置文件"><span class="nav-number">3.1.2.</span> <span class="nav-text">修改博客配置文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提交Sitemap文件"><span class="nav-number">3.2.</span> <span class="nav-text">提交Sitemap文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Google搜索-1"><span class="nav-number">3.2.1.</span> <span class="nav-text">Google搜索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Baidu搜索-1"><span class="nav-number">3.2.2.</span> <span class="nav-text">Baidu搜索</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Baidu-Sitemap"><span class="nav-number">3.2.2.1.</span> <span class="nav-text">Baidu Sitemap</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自动推送"><span class="nav-number">3.2.2.2.</span> <span class="nav-text">自动推送</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#主动推送"><span class="nav-number">3.2.2.3.</span> <span class="nav-text">主动推送</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#等待处理"><span class="nav-number">4.</span> <span class="nav-text">等待处理</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank Tao</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2136191"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

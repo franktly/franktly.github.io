@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Design Pattern,Construction Pattern,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言 在公司上班时候，每周都需要写工作周报，而写周报的时候，每次的格式都差不多，有时候想偷懒，就想自己弄个周报的模板，然后每次填充模板的内容，这样既提高了工作效率，又保证了格式的一致性，上级领导每次浏览周报的时候也一目了然了，真是一石二鸟–)，这种可以看成原型模式的应用，即每次周报对象内容都大概相同，仅需要复制粘贴，然后修改下每周的差异内容即可。">
+<meta name="keywords" content="Design Pattern,Construction Pattern">
+<meta property="og:type" content="article">
+<meta property="og:title" content="原型模式(创建型)">
+<meta property="og:url" content="http://www.franktly.com/2016/03/10/原型模式(创建型)/index.html">
+<meta property="og:site_name" content="Share Your Mind">
+<meta property="og:description" content="前言 在公司上班时候，每周都需要写工作周报，而写周报的时候，每次的格式都差不多，有时候想偷懒，就想自己弄个周报的模板，然后每次填充模板的内容，这样既提高了工作效率，又保证了格式的一致性，上级领导每次浏览周报的时候也一目了然了，真是一石二鸟–)，这种可以看成原型模式的应用，即每次周报对象内容都大概相同，仅需要复制粘贴，然后修改下每周的差异内容即可。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fprototype.PNG">
+<meta property="og:updated_time" content="2019-06-11T10:59:03.926Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="原型模式(创建型)">
+<meta name="twitter:description" content="前言 在公司上班时候，每周都需要写工作周报，而写周报的时候，每次的格式都差不多，有时候想偷懒，就想自己弄个周报的模板，然后每次填充模板的内容，这样既提高了工作效率，又保证了格式的一致性，上级领导每次浏览周报的时候也一目了然了，真是一石二鸟–)，这种可以看成原型模式的应用，即每次周报对象内容都大概相同，仅需要复制粘贴，然后修改下每周的差异内容即可。">
+<meta name="twitter:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fprototype.PNG">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: "",
+      labels: ""
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.franktly.com/2016/03/10/原型模式(创建型)/">
+
+
+
+
+
+  <title>原型模式(创建型) | Share Your Mind</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Share Your Mind</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Love Reading | Film | Climbing | Snooker</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.franktly.com/2016/03/10/原型模式(创建型)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank Tao">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/book.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Share Your Mind">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">原型模式(创建型)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-10T00:00:00+08:00">
+                2016-03-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Design-Pattern/" itemprop="url" rel="index">
+                    <span itemprop="name">Design Pattern</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>在公司上班时候，每周都需要写工作周报，而写周报的时候，每次的格式都差不多，有时候想偷懒，就想自己弄个周报的模板，然后每次填充模板的内容，这样既提高了工作效率，又保证了格式的一致性，上级领导每次浏览周报的时候也一目了然了，真是一石二鸟–)，这种可以看成原型模式的应用，即每次周报对象内容都大概相同，仅需要复制粘贴，然后修改下每周的差异内容即可。</p>
+<a id="more"></a>
+
+<h2 id="原型模式"><a href="#原型模式" class="headerlink" title="原型模式"></a>原型模式</h2><hr>
+<p>原型模式，顾名思义，就是有个对象的原型，然后再通过此原型对象来创建新的对象。而这些新的对象，可以内容相同，也可以不同。</p>
+<h3 id="意图"><a href="#意图" class="headerlink" title="意图"></a>意图</h3><p>用原型实例指定创建对象的种类，并通过拷贝这些原型创建新的对象</p>
+<h3 id="参与者"><a href="#参与者" class="headerlink" title="参与者"></a>参与者</h3><ul>
+<li><p>AbstractPrototype<br>抽象原型类，声明一个克隆自身的接口</p>
+</li>
+<li><p>ConcretePrototype<br>具体原型类，实现一个克隆自身的操作</p>
+</li>
+<li><p>Client<br>让一个原型克隆自身从而创建一个新的对象</p>
+</li>
+</ul>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2Fprototype.PNG" alt="prototype"></p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><ol>
+<li><p>首先声明一个抽象的原型类<code>AbstractPrototype</code>，原型类中必须有<code>clone()</code>接口(虚函数):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">class AbstractPrototype</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    AbstractPrototype() &#123;&#125;;</span><br><span class="line">    virtual ~AbstractPrototype() &#123;&#125;;</span><br><span class="line">    virtual AbstractPrototype* Clone() = 0; // 克隆接口,返回自身的类型</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然后分别实现两个具体的原型对象，实现其中的<code>clone()</code>接口(一般通过拷贝构造函数来实现)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">// 具体原型对象1</span><br><span class="line">class Prototype1: public AbstractPrototype</span><br><span class="line"> &#123;</span><br><span class="line"> private:</span><br><span class="line">     int m_ValueTest;         //浅拷贝 测试值</span><br><span class="line"> public:</span><br><span class="line">     Prototype1(int value): m_ValueTest(value) &#123;&#125;;</span><br><span class="line">     Prototype1(const Prototype1&amp; rhs) // 拷贝构造函数</span><br><span class="line">     &#123;</span><br><span class="line">         m_ValueTest = rhs.m_ValueTest;</span><br><span class="line">     &#125;</span><br><span class="line">     Prototype1* Clone() // 返回自己类类型</span><br><span class="line">     &#123;</span><br><span class="line">         return new Prototype1(*this); // 通过调用拷贝构造函数来Clone对象</span><br><span class="line">     &#125;</span><br><span class="line">     void ShowValue()</span><br><span class="line">     &#123;</span><br><span class="line">         cout &lt;&lt; m_ValueTest &lt;&lt; endl;</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;;</span><br><span class="line"></span><br><span class="line"> class Prototype2: public AbstractPrototype</span><br><span class="line"> &#123;</span><br><span class="line"> private:</span><br><span class="line">     int m_ValueTest;     // 浅拷贝，一般的拷贝</span><br><span class="line">     char *m_pName;      // 涉及到深拷贝</span><br><span class="line"> public:</span><br><span class="line">     Prototype2(int value, const char* pname)</span><br><span class="line">     &#123;</span><br><span class="line">         m_ValueTest = value;</span><br><span class="line">         if (NULL == pname)</span><br><span class="line">         &#123;</span><br><span class="line">             m_pName = new char[1];</span><br><span class="line">             m_pName[0] = &apos;\0&apos;;</span><br><span class="line">         &#125;</span><br><span class="line">         else</span><br><span class="line">         &#123;</span><br><span class="line">             m_pName = new char[strlen(pname) + 1]; </span><br><span class="line">             strcpy(m_pName, pname);</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;;</span><br><span class="line">     virtual ~Prototype2()</span><br><span class="line">     &#123;</span><br><span class="line">         delete m_pName; // 释放内存</span><br><span class="line">     &#125;</span><br><span class="line">     Prototype2(const Prototype2&amp; rhs) // 拷贝构造函数</span><br><span class="line">     &#123;</span><br><span class="line">         //浅拷贝：只会拷贝对象中的基本的数据类型 </span><br><span class="line">         m_ValueTest = rhs.m_ValueTest;  </span><br><span class="line"></span><br><span class="line">         //深拷贝：需要手动申请内存，对于数组、容器对象、引用（指针）对象       </span><br><span class="line">         m_pName = new  char[strlen(rhs.m_pName) + 1];     </span><br><span class="line">         strcpy(m_pName, rhs.m_pName);</span><br><span class="line">     &#125;</span><br><span class="line">     Prototype2* Clone() // 返回自己类类型</span><br><span class="line">     &#123; </span><br><span class="line">          // 通过调用拷贝构造函数来Clone对象</span><br><span class="line">         Prototype2 *pP2 = new Prototype2(*this);</span><br><span class="line">         pP2-&gt;m_ValueTest++; //改变克隆的对象内部成员，克隆出不同m_ValueTest的对象</span><br><span class="line">         return pP2; </span><br><span class="line">     &#125;</span><br><span class="line">     void ShowValue()</span><br><span class="line">     &#123;</span><br><span class="line">         cout &lt;&lt; m_ValueTest &lt;&lt; endl;</span><br><span class="line">         cout &lt;&lt; m_pName &lt;&lt; endl;</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试原型模式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">void PrototypeTest()</span><br><span class="line">&#123;</span><br><span class="line">   // 返回子类型的类指针，抽象类没有ShowValue方法</span><br><span class="line">    Prototype1 *pP1= new Prototype1(10); </span><br><span class="line"></span><br><span class="line">    Prototype1 *pPcopy= pP1-&gt;Clone(); // 克隆出新对象pPcopy</span><br><span class="line">    pP1-&gt;ShowValue();      //  10</span><br><span class="line">    pPcopy-&gt;ShowValue();   // 10</span><br><span class="line"></span><br><span class="line">    Prototype2 *pP2= new Prototype2(20, &quot;Tly&quot;);</span><br><span class="line">    Prototype2 *pPcopy2= pP2-&gt;Clone();</span><br><span class="line">    pP2-&gt;ShowValue();        // 20, &quot;Tly&quot;</span><br><span class="line">    pPcopy2-&gt;ShowValue();    // 21  &quot;Tly&quot;</span><br><span class="line"></span><br><span class="line">    delete pP1; pP1 = NULL;</span><br><span class="line">    delete pPcopy; pPcopy = NULL;</span><br><span class="line">    delete pP2; pP2 = NULL;</span><br><span class="line">    delete pPcopy2; pPcopy2 = NULL;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>运行结果：</p>
+<pre><code>10
+10
+20
+Tly
+21
+Tly</code></pre><h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>创建新对象成本较大，如初始化需要占用较长的时间、内存资源、网络资源等等，新的对象可以通过已有对象的复制得来，如是相似，则更改相应的属性成员变量即可</li>
+<li>如果系统要保存对象的状态，而对象的状态变化很小，或者对象本身占用内存较少时，可以使用原型模式配合备忘录模式来实现</li>
+<li>当我们的对象类型不是开始就能确定的，而这个类型是在运行期确定的话，那么我们通过这个类型的对象克隆出一个新的对象比较容易一些</li>
+<li>重复地创建相似对象时可以考虑使用原型模式</li>
+<li>创建对象时，构造函数的参数很多，而自己又不完全的知道每个参数的意义，就可以使用原型模式来创建一个新的对象，不必去理会创建的过程</li>
+</ul>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><ul>
+<li>优点<ul>
+<li>当创建新的对象实例较为复杂时，使用原型模式可以简化对象的创建过程，通过复制一个已有实例可以提高新实例的创建效率</li>
+<li>扩展性较好，由于在原型模式中提供了抽象原型类，在客户端可以针对抽象原型类进行编程，而将具体原型类写在配置文件中，增加或减少产品类对原有系统都没有任何影响</li>
+<li>可以使用深克隆的方式保存对象的状态，使用原型模式将对象复制一份并将其状态保存起来，以便在需要的时候使用（如恢复到某一历史状态），可辅助实现撤销操作</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>需要为每一个类配备一个克隆方法，而且该克隆方法位于一个类的内部，当对已有的类进行改造时，需要修改源代码，违背了“开闭原则”</li>
+<li>在实现深克隆时需要编写较为复杂的代码，而且当对象之间存在多重的嵌套引用时，为了实现深克隆，每一层对象对应的类都必须支持深克隆，实现起来可能会比较麻烦</li>
+</ul>
+</li>
+</ul>
+<h3 id="与其他创建型模型区别"><a href="#与其他创建型模型区别" class="headerlink" title="与其他创建型模型区别"></a>与其他创建型模型区别</h3><ul>
+<li>工厂方法模式、抽象工厂模式、建造者模式和原型模式都是创建型模式</li>
+<li>工厂方法模式适用于生产较复杂，一个工厂生产单一的一种产品的时候</li>
+<li>抽象工厂模式适用于一个工厂生产多个相互依赖的产品；</li>
+<li>建造者模式着重于复杂对象的一步一步创建，组装产品的过程，并在创建的过程中，可以控制每一个简单对象的创建；</li>
+<li>原型模式则更强调的是从自身复制自己，创建要给和自己一模一样的对象</li>
+</ul>
+<h2 id="原型模式具体实例"><a href="#原型模式具体实例" class="headerlink" title="原型模式具体实例"></a>原型模式具体实例</h2><hr>
+<p><strong>实现前言所描述的简单工作周报和工作月报原型，增加一个原型管理器来管理这两种原型</strong></p>
+<h3 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h3><ol>
+<li><p>声明一个抽象的原型类：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// 抽象原型</span><br><span class="line">class AbstractReport</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    AbstractReport()&#123;&#125;;</span><br><span class="line">    virtual ~AbstractReport() &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    virtual AbstractReport* Clone() = 0; // 抽象克隆方法</span><br><span class="line">    virtual void display(void) &#123;&#125;; //用来显示</span><br><span class="line">    virtual void setReportTitle(string title) &#123;&#125;; //用来修改title</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>分别实现两个具体的原型类：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br></pre></td><td class="code"><pre><span class="line">// 周报具体原型</span><br><span class="line">class WeeklyReport : public AbstractReport</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    string _reportTitle;</span><br><span class="line">    int _weekNo;</span><br><span class="line">    string _name;</span><br><span class="line">    string _description;</span><br><span class="line">    char* _accessory;</span><br><span class="line">public:</span><br><span class="line">    WeeklyReport(string title, int no, string name, string description, \</span><br><span class="line">        const char* accessory): _reportTitle(title), _weekNo(no), _name(name), _description(description)</span><br><span class="line">    &#123;</span><br><span class="line">        if (NULL == accessory)</span><br><span class="line">        &#123;</span><br><span class="line">            _accessory  = new char[0];</span><br><span class="line">            _accessory[0] = &apos;\0&apos;;</span><br><span class="line">        &#125;</span><br><span class="line">        else</span><br><span class="line">        &#123;</span><br><span class="line">            _accessory = new char[strlen(accessory) + 1];</span><br><span class="line">            strcpy(_accessory, accessory);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    virtual ~WeeklyReport()</span><br><span class="line">    &#123;</span><br><span class="line">        if (NULL != _accessory)</span><br><span class="line">        &#123;</span><br><span class="line">            delete _accessory;</span><br><span class="line">            _accessory = NULL;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">public:</span><br><span class="line">    WeeklyReport(WeeklyReport &amp;rhs) //拷贝构造函数，浅拷贝 + 深拷贝</span><br><span class="line">    &#123;</span><br><span class="line">        _reportTitle = rhs._reportTitle; </span><br><span class="line">        _weekNo = rhs._weekNo;</span><br><span class="line">        _name =  rhs._name;</span><br><span class="line">        _description = rhs._description;</span><br><span class="line">        _accessory = new char[strlen(rhs._accessory) + 1]; // 深拷贝</span><br><span class="line">        memmove(_accessory, rhs._accessory, (strlen(rhs._accessory) + 1));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    WeeklyReport* Clone() // 克隆接口</span><br><span class="line">    &#123;</span><br><span class="line">        WeeklyReport *report = new WeeklyReport(*this);</span><br><span class="line">        return report;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    void setReportTitle(string reportTitle)</span><br><span class="line">    &#123;</span><br><span class="line">        _reportTitle = reportTitle;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    void display(void)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;weekly report title: &quot; &lt;&lt; _reportTitle &lt;&lt; endl;</span><br><span class="line">        cout &lt;&lt; &quot;weekly no: &quot; &lt;&lt; _weekNo &lt;&lt; endl;</span><br><span class="line">        cout &lt;&lt; &quot;reporter: &quot; &lt;&lt; _name &lt;&lt; endl;</span><br><span class="line">        cout &lt;&lt; &quot;description: &quot; &lt;&lt; _description  &lt;&lt;endl;</span><br><span class="line">        cout &lt;&lt; &quot;accessory: &quot; &lt;&lt; _accessory  &lt;&lt;endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 月报具体原型</span><br><span class="line">class MonthlyReport : public AbstractReport</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    string _reportTitle;</span><br><span class="line">    int _monthNo;</span><br><span class="line">    string _name;</span><br><span class="line">    string _description;</span><br><span class="line">    char* _accessory;</span><br><span class="line">public:</span><br><span class="line">    MonthlyReport(string title, int no, string name, string description, \</span><br><span class="line">        const char* accessory): _reportTitle(title), _monthNo(no), _name(name), _description(description)</span><br><span class="line">    &#123;</span><br><span class="line">        if (NULL == accessory)</span><br><span class="line">        &#123;</span><br><span class="line">            _accessory  = new char[0];</span><br><span class="line">            _accessory[0] = &apos;\0&apos;;</span><br><span class="line">        &#125;</span><br><span class="line">        else</span><br><span class="line">        &#123;</span><br><span class="line">            _accessory = new char[strlen(accessory) + 1];</span><br><span class="line">            strcpy(_accessory, accessory);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    virtual ~MonthlyReport()</span><br><span class="line">    &#123;</span><br><span class="line">        if (NULL != _accessory)</span><br><span class="line">        &#123;</span><br><span class="line">            delete _accessory;</span><br><span class="line">            _accessory = NULL;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">public:</span><br><span class="line">    MonthlyReport(MonthlyReport &amp;rhs) //拷贝构造函数，浅拷贝 + 深拷贝</span><br><span class="line">    &#123;</span><br><span class="line">        _reportTitle = rhs._reportTitle; </span><br><span class="line">        _monthNo = rhs._monthNo;</span><br><span class="line">        _name =  rhs._name;</span><br><span class="line">        _description = rhs._description;</span><br><span class="line">        _accessory = new char[strlen(rhs._accessory) + 1]; // 深拷贝</span><br><span class="line">        memmove(_accessory, rhs._accessory, (strlen(rhs._accessory) + 1));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    MonthlyReport* Clone() // 克隆接口</span><br><span class="line">    &#123;</span><br><span class="line">        MonthlyReport *report = new MonthlyReport(*this);</span><br><span class="line">        return report;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    void setReportTitle(string reportTitle)</span><br><span class="line">    &#123;</span><br><span class="line">        _reportTitle = reportTitle;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    void display(void)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;monthly report title: &quot; &lt;&lt; _reportTitle &lt;&lt;endl;</span><br><span class="line">        cout &lt;&lt; &quot;monthly no: &quot; &lt;&lt; _monthNo &lt;&lt;endl;</span><br><span class="line">        cout &lt;&lt; &quot;reporter: &quot; &lt;&lt; _name &lt;&lt;endl;</span><br><span class="line">        cout &lt;&lt; &quot;description: &quot; &lt;&lt; _description &lt;&lt;endl;</span><br><span class="line">        cout &lt;&lt; &quot;accessory: &quot; &lt;&lt; _accessory &lt;&lt;endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义一个原型管理器类，使用单例模式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">// Report Manager</span><br><span class="line">class ReportManager</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    map&lt;string, AbstractReport*&gt; reportMap;</span><br><span class="line">private:</span><br><span class="line">    ReportManager()&#123;&#125;;</span><br><span class="line">    ReportManager(const ReportManager &amp;rhs) &#123;&#125;;</span><br><span class="line">    ReportManager&amp; operator = (const ReportManager &amp;rhs) &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    static ReportManager* getInstance(void)</span><br><span class="line">    &#123;</span><br><span class="line">        static ReportManager reportMgr;</span><br><span class="line">        return &amp;reportMgr;</span><br><span class="line">    &#125;</span><br><span class="line">public:</span><br><span class="line">    // 增加新的report</span><br><span class="line">    void addReport(string name, AbstractReport* report)</span><br><span class="line">    &#123;</span><br><span class="line">        reportMap.insert(make_pair(name, report));</span><br><span class="line">    &#125;</span><br><span class="line">    AbstractReport* getReport(string name) // 返回一个report副本</span><br><span class="line">    &#123;</span><br><span class="line">        for (map&lt;string, AbstractReport*&gt;::iterator it = reportMap.begin(); \</span><br><span class="line">             it  != reportMap.end(); ++it)</span><br><span class="line">        &#123;</span><br><span class="line">            if (it-&gt;first == name)</span><br><span class="line">            &#123;</span><br><span class="line">                return (it-&gt;second)-&gt;Clone(); // clone方法返回副本</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return NULL;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试实例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">void ReportPrototypeTest()</span><br><span class="line">&#123;</span><br><span class="line">    ReportManager *rm = ReportManager::getInstance();</span><br><span class="line"></span><br><span class="line">    WeeklyReport  *wr =new WeeklyReport (&quot;design model&quot;, 1, &quot;tly&quot;, &quot;design domain object model&quot;,&quot;no accessory&quot;);</span><br><span class="line">    MonthlyReport *mr =new MonthlyReport(&quot;complete design all model&quot;, 3, &quot;tly&quot;, &quot;complte design all domain object model&quot;,&quot;month accessory&quot;);</span><br><span class="line">    </span><br><span class="line">    cout &lt;&lt; &quot;$$$$$$$$$$origin$$$$$$$$$$&quot; &lt;&lt; endl;</span><br><span class="line">    wr-&gt;display();</span><br><span class="line">    mr-&gt;display();</span><br><span class="line"></span><br><span class="line">    rm-&gt;addReport(&quot;week&quot;, wr);</span><br><span class="line">    rm-&gt;addReport(&quot;month&quot;, mr);</span><br><span class="line"></span><br><span class="line">    AbstractReport *wrCopy = rm-&gt;getReport(&quot;week&quot;);</span><br><span class="line">    AbstractReport *mrCopy = rm-&gt;getReport(&quot;month&quot;);</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; &quot;$$$$$$$$$$copy$$$$$$$$$$&quot; &lt;&lt; endl;</span><br><span class="line">    wrCopy-&gt;setReportTitle(&quot;change weekly report title&quot;); //修改title</span><br><span class="line">    wrCopy-&gt;display();</span><br><span class="line">    mrCopy-&gt;display();</span><br><span class="line"></span><br><span class="line">    delete wr; wr = NULL;</span><br><span class="line">    delete mr; mr = NULL;</span><br><span class="line">    delete wrCopy; wrCopy = NULL;</span><br><span class="line">    delete mrCopy; mrCopy = NULL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>运行结果：</p>
+<pre><code>$$$$$$$$$$origin$$$$$$$$$$
+weekly report title: design model
+weekly no: 1
+reporter: tly
+description: design domain object model
+accessory: no accessory
+monthly report title: complete design all model
+monthly no: 3
+reporter: tly
+description: complte design all domain object model
+accessory: month accessory
+$$$$$$$$$$copy$$$$$$$$$$
+weekly report title: change weekly report title
+weekly no: 1
+reporter: tly
+description: design domain object model
+accessory: no accessory
+monthly report title: complete design all model
+monthly no: 3
+reporter: tly
+description: complte design all domain object model
+accessory: month accessory</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Design-Pattern/" rel="tag"># Design Pattern</a>
+          
+            <a href="/tags/Construction-Pattern/" rel="tag"># Construction Pattern</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/05/单例模式(创建型)/" rel="next" title="单例模式(创建型)">
+                <i class="fa fa-chevron-left"></i> 单例模式(创建型)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/15/适配器模式(结构型) /" rel="prev" title="适配器模式(结构型)">
+                适配器模式(结构型) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="uyan_frame"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/book.jpg" alt="Frank Tao">
+            
+              <p class="site-author-name" itemprop="name">Frank Tao</p>
+              <p class="site-description motion-element" itemprop="description">welcome to franktly’s blog -~-</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/franktly" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.zhihu.com/people/tao-ling-yang/activities" target="_blank" title="ZhiHu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>ZhiHu</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/2273442920/profile?topnav=1&wvr=6&is_all=1" target="_blank" title="WeiBo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>WeiBo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原型模式"><span class="nav-number">2.</span> <span class="nav-text">原型模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#意图"><span class="nav-number">2.1.</span> <span class="nav-text">意图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参与者"><span class="nav-number">2.2.</span> <span class="nav-text">参与者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模式结构"><span class="nav-number">2.3.</span> <span class="nav-text">模式结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码实现"><span class="nav-number">2.4.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用场景"><span class="nav-number">2.5.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优缺点"><span class="nav-number">2.6.</span> <span class="nav-text">优缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#与其他创建型模型区别"><span class="nav-number">2.7.</span> <span class="nav-text">与其他创建型模型区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原型模式具体实例"><span class="nav-number">3.</span> <span class="nav-text">原型模式具体实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码实现-1"><span class="nav-number">3.1.</span> <span class="nav-text">代码实现</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank Tao</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2136191"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

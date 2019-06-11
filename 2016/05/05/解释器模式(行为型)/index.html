@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Design Pattern,Behavior Pattern,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言 有时候，我们想用一些简单的语言来实现一些特点的操作，只要向计算机输入一个特定的句子，能够按照预定的文法规则对其进行解释。如一个简单的加减法解释器，只要输入一个加减法表达式，他就能计算出表达式的结果。像这种设计自定义的简单语言文法的功能可以采用解释器模式来实现。">
+<meta name="keywords" content="Design Pattern,Behavior Pattern">
+<meta property="og:type" content="article">
+<meta property="og:title" content="解释器模式(行为型)">
+<meta property="og:url" content="http://www.franktly.com/2016/05/05/解释器模式(行为型)/index.html">
+<meta property="og:site_name" content="Share Your Mind">
+<meta property="og:description" content="前言 有时候，我们想用一些简单的语言来实现一些特点的操作，只要向计算机输入一个特定的句子，能够按照预定的文法规则对其进行解释。如一个简单的加减法解释器，只要输入一个加减法表达式，他就能计算出表达式的结果。像这种设计自定义的简单语言文法的功能可以采用解释器模式来实现。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FInterpreter.jpg">
+<meta property="og:updated_time" content="2019-06-11T10:59:03.930Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="解释器模式(行为型)">
+<meta name="twitter:description" content="前言 有时候，我们想用一些简单的语言来实现一些特点的操作，只要向计算机输入一个特定的句子，能够按照预定的文法规则对其进行解释。如一个简单的加减法解释器，只要输入一个加减法表达式，他就能计算出表达式的结果。像这种设计自定义的简单语言文法的功能可以采用解释器模式来实现。">
+<meta name="twitter:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FInterpreter.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: "",
+      labels: ""
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.franktly.com/2016/05/05/解释器模式(行为型)/">
+
+
+
+
+
+  <title>解释器模式(行为型) | Share Your Mind</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Share Your Mind</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Love Reading | Film | Climbing | Snooker</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.franktly.com/2016/05/05/解释器模式(行为型)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank Tao">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/book.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Share Your Mind">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">解释器模式(行为型)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-05T00:00:00+08:00">
+                2016-05-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Design-Pattern/" itemprop="url" rel="index">
+                    <span itemprop="name">Design Pattern</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>有时候，我们想用一些简单的语言来实现一些特点的操作，只要向计算机输入一个特定的句子，能够按照预定的文法规则对其进行解释。如一个简单的加减法解释器，只要输入一个加减法表达式，他就能计算出表达式的结果。像这种设计自定义的简单语言文法的功能可以采用解释器模式来实现。</p>
+<a id="more"></a>
+
+<h2 id="解释器模式"><a href="#解释器模式" class="headerlink" title="解释器模式"></a>解释器模式</h2><hr>
+<h3 id="意图"><a href="#意图" class="headerlink" title="意图"></a>意图</h3><p>给定一个语言，定义它的文法的一种表示，并定义一个解释器，这个解释器使用该表示来解释语言中的句子</p>
+<blockquote>
+<p>解释器模式描述了如何为简单的语言定义一个文法，如何在该语言中表示一个句子，以及如何解释这些句子<br>在解释器模式中还可以通过一种称之为抽象语法树(AST)的图形方式来直观地表示语言的构成，每一颗抽象语法树对应一个语言实例。通常，终结符表达式类的实例作为树的叶子节点，而非终结符表达式类的实例作为非叶子节点，它们可以将终结符表达式类的实例以及包含终结符和非终结符实例的子表达式作为其子节点<br><strong>非终结符表达式</strong>:它的组成元素仍然可以是表达式，可以进一步分解<br><strong>终结符表达式</strong>:它的组成元素是最基本的语言单位，不能再进行分解</p>
+</blockquote>
+<h3 id="参与者"><a href="#参与者" class="headerlink" title="参与者"></a>参与者</h3><ul>
+<li><p>AbstractExpression<br>抽象表达式，声明了抽象的解释操作，他是所有终结符表达式和非终结符表达式的公共父类</p>
+</li>
+<li><p>TerminalExpression<br>抽象表达式的子类，实现了与文法中的终结符相关联的解释操作，在句子中的每一个终结符都是该类的一个实例<br>通常在一个解释器模式中只有少数几个终结符表达式类，它们的实例可以通过非终结符表达式组成较为复杂的句子</p>
+</li>
+<li><p>NonterminalExpression<br>非终结符表达式也是抽象表达式的子类，它实现了文法中非终结符的解释操作<br>由于在非终结符表达式中可以包含终结符表达式，也可以继续包含非终结符表达式，因此其解释操作一般通过递归的方式来完成</p>
+</li>
+<li><p>Context<br>环境类又称为上下文类，它用于存储解释器之外的一些全局信息，通常它临时存储了需要解释的语句<br>这个角色的任务一般是也用来存放文法中各个终结符所对应的具体值，比如R=R1+R2，我们给R1赋值100，给R2赋值200。这些信息需要存放到环境角色中，很多情况下我们使用Map来充当环境角色就足够了</p>
+</li>
+</ul>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FInterpreter.jpg" alt="interpreter_pattern"></p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>1.首先定义抽象的表达式<code>AbstractExpression</code>,并提供<code>Interpreter()</code>接口：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// Abstract Expression</span><br><span class="line">class AbstractExpression</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual int Interpreter(Context ctx) = 0;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>2.再定义<code>AbstractExpression</code>类的一个具体终结符表达式子类<code>TerminalExpression</code>，并实现其中的<code>Interpreter()</code>接口，该接口主要作用是返回一个操作数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// Terminal Expression</span><br><span class="line">class TerminalExpression : public AbstractExpression</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    int m_Value;</span><br><span class="line">public:</span><br><span class="line">    TerminalExpression(int value) : m_Value(value) &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    virtual int Interpreter(Context ctx)</span><br><span class="line">    &#123;</span><br><span class="line">        return m_Value;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>3.分别在定义两个具体的<code>+</code>和<code>-</code>操作符非终结符表达式类<code>PlusNonterminalExpression</code>和<code>SubNonterminalExpression</code>类，并分别实现其<code>Interpreter()</code>接口，主要通过递归调用来实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">// NonTerminal Expression 2: Plus (&apos;+&apos;)</span><br><span class="line">class PlusNonterminalExpression : public AbstractExpression </span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    AbstractExpression *m_pLeftExpr;</span><br><span class="line">    AbstractExpression *m_pRightExpr;</span><br><span class="line">public:</span><br><span class="line">    PlusNonterminalExpression(AbstractExpression *pLeft, AbstractExpression *pRight) : m_pLeftExpr(pLeft), m_pRightExpr(pRight) &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    virtual int Interpreter(Context ctx)</span><br><span class="line">    &#123;</span><br><span class="line">        return m_pLeftExpr-&gt;Interpreter(ctx) + m_pRightExpr-&gt;Interpreter(ctx);</span><br><span class="line">        //调用两个操作数的Interpreter接口</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// NonTerminal Expression 1: Sub (&apos;-&apos;)</span><br><span class="line">class SubNonterminalExpression : public AbstractExpression // 默认是私有继承</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    AbstractExpression *m_pLeftExpr;</span><br><span class="line">    AbstractExpression *m_pRightExpr;</span><br><span class="line">public:</span><br><span class="line">    SubNonterminalExpression(AbstractExpression *pLeft, AbstractExpression *pRight) : m_pLeftExpr(pLeft), m_pRightExpr(pRight) &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    virtual int Interpreter(Context ctx)</span><br><span class="line">    &#123;</span><br><span class="line">        return m_pLeftExpr-&gt;Interpreter(ctx) - m_pRightExpr-&gt;Interpreter(ctx); //调用两个操作数的Interpreter接口</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>4.上下文环境类<code>Context</code>,主要是存储解释器之外的一些全局信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// Context，一般使用map或list实现</span><br><span class="line">class Context</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    map&lt;string, int&gt; m_mapValue;</span><br><span class="line">public:</span><br><span class="line">    void AddValue(string key, int value)</span><br><span class="line">    &#123;</span><br><span class="line">        m_mapValue.insert(make_pair(key, value));</span><br><span class="line">    &#125;</span><br><span class="line">    int GetValue(string key)</span><br><span class="line">    &#123;</span><br><span class="line">        return m_mapValue[key];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>5.测试解释器模式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">void InterpreterTest_Computaion()</span><br><span class="line">&#123;</span><br><span class="line">    Context ctx;</span><br><span class="line">    ctx.AddValue(&quot;x&quot;, 5);</span><br><span class="line">    ctx.AddValue(&quot;y&quot;, 8);</span><br><span class="line">    ctx.AddValue(&quot;z&quot;, 7);</span><br><span class="line">    </span><br><span class="line">    // Create Terminal Expression </span><br><span class="line">    AbstractExpression *pTE1 = new TerminalExpression(ctx.GetValue(&quot;x&quot;));</span><br><span class="line">    AbstractExpression *pTE2 = new TerminalExpression(ctx.GetValue(&quot;y&quot;));</span><br><span class="line">    AbstractExpression *pTE3 = new TerminalExpression(ctx.GetValue(&quot;z&quot;));</span><br><span class="line"></span><br><span class="line">    AbstractExpression *pPNE = new PlusNonterminalExpression(pTE1, pTE2); //pPNE： PTE1-&gt;Interpreter() + pTE2-&gt;Intepreter()</span><br><span class="line">    AbstractExpression *pSNE = new SubNonterminalExpression(pPNE, pTE3); // pSNE： PNE-&gt;Interpreter() - pTE3-&gt;Intepreter()</span><br><span class="line">    AbstractExpression *pPNE2 = new PlusNonterminalExpression(pSNE, pPNE); //pPNE2: PSNE-&gt;Interpreter() + pPNE-&gt;Intepreter()</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; &quot;The Final Result of Express : x(5) + y(8) is &quot; &lt;&lt; pPNE-&gt;Interpreter(ctx) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; &quot;The Final Result of Express : x(5) + y(8) - z(7)  is &quot; &lt;&lt; pSNE-&gt;Interpreter(ctx) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; &quot;The Final Result of Express : x(5) + y(8) - z(7) + x(5) + y(8) is &quot; &lt;&lt; pPNE2-&gt;Interpreter(ctx) &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    SAFE_RELASE_POINTER(pTE1);</span><br><span class="line">    SAFE_RELASE_POINTER(pTE2);</span><br><span class="line">    SAFE_RELASE_POINTER(pTE3);</span><br><span class="line">    SAFE_RELASE_POINTER(pPNE);</span><br><span class="line">    SAFE_RELASE_POINTER(pSNE);</span><br><span class="line">    SAFE_RELASE_POINTER(pPNE2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>6.运行结果：</p>
+<pre><code>The Final Result of Express : x(5) + y(8) is 13
+The Final Result of Express : x(5) + y(8) - z(7)  is 6
+The Final Result of Express : x(5) + y(8) - z(7) + x(5) + y(8) is 19</code></pre><h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>有一个简单的语法规则，比如一个sql语句，如果我们需要根据sql语句进行rm转换，就可以使用解释器模式来对语句进行解释</li>
+<li>一些重复发生的问题，比如加减乘除四则运算，但是公式每次都不同，有时是a+b-c<em>d，有时是a</em>b+c-d，等等等等个，公式千变万化，但是都是由加减乘除四个非终结符来连接的，这时我们就可以使用解释器模式</li>
+</ul>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><ul>
+<li>优点<ul>
+<li>解释器是一个简单的语法分析工具，它最显著的优点就是扩展性，修改语法规则只需要修改相应的非终结符就可以了，若扩展语法，只需要增加非终结符类就可以了</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>解释器模式会引起类的膨胀，每个语法都需要产生一个非终结符表达式，语法规则比较复杂时，就可能产生大量的类文件，为维护带来非常多的麻烦</li>
+<li>由于采用递归调用方法，每个非终结符表达式只关心与自己相关的表达式，每个表达式需要知道最终的结果，必须通过递归方式，无论是面向对象的语言还是面向过程的语言，递归都是一个不推荐的方式。由于使用了大量的循环和递归，效率是一个不容忽视的问题</li>
+</ul>
+</li>
+</ul>
+<h2 id="解释器模式具体实例"><a href="#解释器模式具体实例" class="headerlink" title="解释器模式具体实例"></a>解释器模式具体实例</h2><hr>
+<h3 id="机器人控制问题"><a href="#机器人控制问题" class="headerlink" title="机器人控制问题"></a>机器人控制问题</h3><p>该机器人控制程序中包含一些简单的英文控制指令，如”down  run 10 and left move 20”表示快速向下移动10cm，并向左移动20cm,具体文法如下：</p>
+<ul>
+<li>每一个指令对应一个表达式(expression)，该表达式可以是简单表达式也可以是复合表达式，</li>
+<li>每一个简单表达式由方向(direction)，移动方式(action)和移动距离(distance)三部分组成</li>
+<li>其中移动方向包括上(up)、下(down)、左(left)、右(right)；</li>
+<li>移动方式包括移动(move)和快速移动(run)；</li>
+<li>移动距离为一个正整数</li>
+<li>两个表达式之间可以通过与(and)连接，形成复合(composite)表达式</li>
+</ul>
+<h4 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h4><p>1.定义抽象的<code>AbstractControlExpression</code>类，并提供<code>interpreter</code>接口:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// abstract expr</span><br><span class="line">class AbstractControlExpression</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual string interpreter(void) = 0;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>2.分别定义抽象表达式<code>AbstractControlExpression</code>的终结表达式子类<code>DirectionExpression</code>和<code>ActionExpression</code>及<code>DistanceExpression</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line">// 方向终结符表达式：把英文的方向解释为中文</span><br><span class="line">class DirectionExpression : public AbstractControlExpression</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    DirectionExpression(string direction) : _direction(direction) &#123;&#125;;</span><br><span class="line">    string interpreter(void)</span><br><span class="line">    &#123;</span><br><span class="line">        if (_direction.compare(&quot;up&quot;))</span><br><span class="line">        &#123;</span><br><span class="line">            return &quot;向上&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">        else if (_direction.compare(&quot;down&quot;))</span><br><span class="line">        &#123;</span><br><span class="line">            return &quot;向下&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">        else if (_direction.compare(&quot;left&quot;))</span><br><span class="line">        &#123;</span><br><span class="line">            return &quot;向左&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">        else if (_direction.compare(&quot;right&quot;))</span><br><span class="line">        &#123;</span><br><span class="line">            return &quot;向右&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">        else</span><br><span class="line">        &#123;</span><br><span class="line">            return &quot;无效的命令&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    string _direction;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 动作终结符表达式：把英文的动作解释为中文</span><br><span class="line">class ActionExpression : public AbstractControlExpression</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    ActionExpression(string action) : _action(action) &#123;&#125;;</span><br><span class="line">    string interpreter(void)</span><br><span class="line">    &#123;</span><br><span class="line">        if (_action.compare(&quot;run&quot;))</span><br><span class="line">        &#123;</span><br><span class="line">            return &quot;快速移动&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">        else if (_action.compare(&quot;move&quot;))</span><br><span class="line">        &#123;</span><br><span class="line">            return &quot;移动&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">        else</span><br><span class="line">        &#123;</span><br><span class="line">            return &quot;无效的命令&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    string _action;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 距离终结符表达式</span><br><span class="line">class DistanceExpression : public AbstractControlExpression</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    DistanceExpression(string distance) : _distance(distance) &#123;&#125;;</span><br><span class="line">    string interpreter(void)</span><br><span class="line">    &#123;</span><br><span class="line">        return _distance + &quot;厘米&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    string _distance;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>3.分别定义抽象表达式<code>AbstractControlExpression</code>的非终结表达式子类<code>SimpleSentenceExpression</code>和<code>AndSentenceExpression</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">// 简单句子非终结符表达式</span><br><span class="line">class SimpleSentenceExpression : public AbstractControlExpression</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    SimpleSentenceExpression(AbstractControlExpression *direction, AbstractControlExpression *action, AbstractControlExpression *distance):</span><br><span class="line">        _direction(direction), _action(action), _distance(distance) &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    string interpreter(void)</span><br><span class="line">    &#123;</span><br><span class="line">        return (_direction-&gt;interpreter() + _action-&gt;interpreter() + _distance-&gt;interpreter()); //调用终结符的interpreter</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    AbstractControlExpression *_direction;</span><br><span class="line">    AbstractControlExpression *_action;</span><br><span class="line">    AbstractControlExpression *_distance;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// And句子非终结符表达式</span><br><span class="line">class AndSentenceExpression : public AbstractControlExpression</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    AndSentenceExpression(AbstractControlExpression *leftSentence, AbstractControlExpression* rightSentence):</span><br><span class="line">        _leftSentence(leftSentence), _rightSentence(rightSentence) &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    string interpreter(void)</span><br><span class="line">    &#123;</span><br><span class="line">        return (_leftSentence-&gt;interpreter() + &quot;并且&quot; + _rightSentence-&gt;interpreter());</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    AbstractControlExpression *_leftSentence;</span><br><span class="line">    AbstractControlExpression *_rightSentence;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>4.测试解释器模式:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">//Robot Control Test</span><br><span class="line">void InterpreterTest_RobotControl(void)</span><br><span class="line">&#123;</span><br><span class="line">    string finalRes;</span><br><span class="line">    AbstractControlExpression *direction = new DirectionExpression(&quot;down&quot;);</span><br><span class="line">    AbstractControlExpression *action = new ActionExpression(&quot;move&quot;);</span><br><span class="line">    AbstractControlExpression *distance = new DistanceExpression(&quot;100&quot;);</span><br><span class="line"></span><br><span class="line">    AbstractControlExpression *simple_sentence = new SimpleSentenceExpression(direction, action, distance);</span><br><span class="line"></span><br><span class="line">    AbstractControlExpression *direction2 = new DirectionExpression(&quot;up&quot;);</span><br><span class="line">    AbstractControlExpression *action2 = new ActionExpression(&quot;run&quot;);</span><br><span class="line">    AbstractControlExpression *simple_sentence2 = new SimpleSentenceExpression(direction2, action2, distance);</span><br><span class="line"></span><br><span class="line">    AbstractControlExpression *complex_sentence = new AndSentenceExpression(simple_sentence, simple_sentence2);</span><br><span class="line">    finalRes = complex_sentence-&gt;interpreter();</span><br><span class="line">    cout &lt;&lt; finalRes &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    SAFE_RELASE_POINTER(direction);</span><br><span class="line">    SAFE_RELASE_POINTER(action);</span><br><span class="line">    SAFE_RELASE_POINTER(distance);</span><br><span class="line">    SAFE_RELASE_POINTER(simple_sentence);</span><br><span class="line"></span><br><span class="line">    SAFE_RELASE_POINTER(direction2);</span><br><span class="line">    SAFE_RELASE_POINTER(action2);</span><br><span class="line">    SAFE_RELASE_POINTER(simple_sentence2);</span><br><span class="line">    SAFE_RELASE_POINTER(complex_sentence);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>5.运行结果:</p>
+<pre><code>向上快速移动100厘米并且向下移动100厘米</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Design-Pattern/" rel="tag"># Design Pattern</a>
+          
+            <a href="/tags/Behavior-Pattern/" rel="tag"># Behavior Pattern</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/01/迭代器模式(行为型)/" rel="next" title="迭代器模式(行为型)">
+                <i class="fa fa-chevron-left"></i> 迭代器模式(行为型)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/11/命令模式(行为型)/" rel="prev" title="命令模式(行为型)">
+                命令模式(行为型) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="uyan_frame"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/book.jpg" alt="Frank Tao">
+            
+              <p class="site-author-name" itemprop="name">Frank Tao</p>
+              <p class="site-description motion-element" itemprop="description">welcome to franktly’s blog -~-</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/franktly" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.zhihu.com/people/tao-ling-yang/activities" target="_blank" title="ZhiHu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>ZhiHu</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/2273442920/profile?topnav=1&wvr=6&is_all=1" target="_blank" title="WeiBo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>WeiBo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解释器模式"><span class="nav-number">2.</span> <span class="nav-text">解释器模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#意图"><span class="nav-number">2.1.</span> <span class="nav-text">意图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参与者"><span class="nav-number">2.2.</span> <span class="nav-text">参与者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模式结构"><span class="nav-number">2.3.</span> <span class="nav-text">模式结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码实现"><span class="nav-number">2.4.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用场景"><span class="nav-number">2.5.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优缺点"><span class="nav-number">2.6.</span> <span class="nav-text">优缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解释器模式具体实例"><span class="nav-number">3.</span> <span class="nav-text">解释器模式具体实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#机器人控制问题"><span class="nav-number">3.1.</span> <span class="nav-text">机器人控制问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代码实现-1"><span class="nav-number">3.1.1.</span> <span class="nav-text">代码实现</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank Tao</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2136191"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Gcc,编译,链接,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言 GNU CC（简称Gcc）是GNU项目中符合ANSI C标准的编译系统，能够编译用C、C++和Object- C等语言编写的程序。Gcc不仅功能强大，而且可以编译如C、C++、Object C、Java等多种语言，而且Gcc又是一个交叉平台编译器，它能够在当前CPU平台上为多种不同体系结构的硬件平台开发软件。本章中的示例均采用Gcc版本为4.8.2。">
+<meta name="keywords" content="Gcc,编译,链接">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gcc编译链接及常用选项总结">
+<meta property="og:url" content="http://www.franktly.com/2016/06/08/Gcc编译链接及常用选项总结/index.html">
+<meta property="og:site_name" content="Share Your Mind">
+<meta property="og:description" content="前言 GNU CC（简称Gcc）是GNU项目中符合ANSI C标准的编译系统，能够编译用C、C++和Object- C等语言编写的程序。Gcc不仅功能强大，而且可以编译如C、C++、Object C、Java等多种语言，而且Gcc又是一个交叉平台编译器，它能够在当前CPU平台上为多种不同体系结构的硬件平台开发软件。本章中的示例均采用Gcc版本为4.8.2。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-06-11T10:59:03.922Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Gcc编译链接及常用选项总结">
+<meta name="twitter:description" content="前言 GNU CC（简称Gcc）是GNU项目中符合ANSI C标准的编译系统，能够编译用C、C++和Object- C等语言编写的程序。Gcc不仅功能强大，而且可以编译如C、C++、Object C、Java等多种语言，而且Gcc又是一个交叉平台编译器，它能够在当前CPU平台上为多种不同体系结构的硬件平台开发软件。本章中的示例均采用Gcc版本为4.8.2。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: "",
+      labels: ""
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.franktly.com/2016/06/08/Gcc编译链接及常用选项总结/">
+
+
+
+
+
+  <title>Gcc编译链接及常用选项总结 | Share Your Mind</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Share Your Mind</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Love Reading | Film | Climbing | Snooker</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.franktly.com/2016/06/08/Gcc编译链接及常用选项总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank Tao">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/book.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Share Your Mind">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Gcc编译链接及常用选项总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-08T00:00:00+08:00">
+                2016-06-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编译-链接/" itemprop="url" rel="index">
+                    <span itemprop="name">编译&链接</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>GNU CC（简称Gcc）是GNU项目中符合ANSI C标准的编译系统，能够编译用C、C++和Object- C等语言编写的程序。Gcc不仅功能强大，而且可以编译如C、C++、Object C、Java等多种语言，而且Gcc又是一个交叉平台编译器，它能够在当前CPU平台上为多种不同体系结构的硬件平台开发软件。本章中的示例均采用Gcc版本为4.8.2。</p>
+<a id="more"></a>
+
+<h2 id="Gcc编译链接流程"><a href="#Gcc编译链接流程" class="headerlink" title="Gcc编译链接流程"></a>Gcc编译链接流程</h2><hr>
+<p>Gcc编译链接流程分为<strong>四个步骤</strong>:</p>
+<ol>
+<li>预处理(Pre-Processsing)</li>
+<li>编译(Compiling)</li>
+<li>汇编(Assembling)</li>
+<li>链接(Linking)</li>
+</ol>
+<p>Gcc指令的一般格式为：</p>
+<pre><code>gcc [option1] compile-files [option2] object-files</code></pre><blockquote>
+<p>其中目标文件可缺省，Gcc默认生成的可执行文件命名为:编译文件名.out</p>
+</blockquote>
+<p>下面以简单的<code>hello world</code>程序为例说明Gcc编译的四个过程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">void main(int argc, char* argv[])</span><br><span class="line">&#123;</span><br><span class="line">  printf(&quot;hello world&quot;);</span><br><span class="line">  return;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="预处理过程"><a href="#预处理过程" class="headerlink" title="预处理过程"></a>预处理过程</h3><p><code>option1</code> 为<code>-E</code>,生成的目标文件为<code>.i</code>(c)或<code>.ii</code>(c++)后缀的经过预处理的编译输入文件,Gcc指令为：</p>
+<pre><code>tly@ubuntu ~&gt; gcc -E test.c -o test.i</code></pre><p>生成的预编译文件内容为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"># 1 &quot;test.c&quot;</span><br><span class="line"># 1 &quot;&lt;command-line&gt;&quot;</span><br><span class="line"># 1 &quot;/usr/include/stdc-predef.h&quot; 1 3 4</span><br><span class="line"># 1 &quot;&lt;command-line&gt;&quot; 2</span><br><span class="line"># 1 &quot;test.c&quot;</span><br><span class="line"># 1 &quot;/usr/include/stdio.h&quot; 1 3 4</span><br><span class="line"># 27 &quot;/usr/include/stdio.h&quot; 3 4</span><br><span class="line"># 1 &quot;/usr/include/features.h&quot; 1 3 4</span><br><span class="line"># 374 &quot;/usr/include/features.h&quot; 3 4</span><br><span class="line"># 1 &quot;/usr/include/i386-linux-gnu/sys/cdefs.h&quot; 1 3 4</span><br><span class="line">... 省略</span><br><span class="line">...</span><br><span class="line">extern char *ctermid (char *__s) __attribute__ ((__nothrow__ , __leaf__));</span><br><span class="line"># 913 &quot;/usr/include/stdio.h&quot; 3 4</span><br><span class="line">extern void flockfile (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__));</span><br><span class="line"></span><br><span class="line">extern int ftrylockfile (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__)) ;</span><br><span class="line"></span><br><span class="line">extern void funlockfile (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__));</span><br><span class="line"># 943 &quot;/usr/include/stdio.h&quot; 3 4</span><br><span class="line"># 2 &quot;test.c&quot; 2</span><br><span class="line">void main(int argc, char* argv[])</span><br><span class="line">&#123;</span><br><span class="line">  printf(&quot;hello world&quot;);</span><br><span class="line">  return;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Gcc预处理过程把<code>&lt;stdio.h&gt;</code>的内容插入到hello.i文件中了</p>
+</blockquote>
+<h3 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h3><p><code>option1</code> 为<code>-S</code>,生成的目标文件为<code>.s</code>或<code>.S</code>后缀的经过编译但是没有汇编过的汇编文件,Gcc编译过程首先要检查代码的规范性、是否有语法错误等，以确定代码的实际要做的工作，在检查无误后，Gcc把代码翻译成汇编语言Gcc指令为：</p>
+<pre><code>tly@ubuntu ~&gt; gcc -S test.i -o test.s</code></pre><p>生成的编译之后的汇编文件内容为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">        .file   &quot;test.c&quot;</span><br><span class="line">        .section        .rodata</span><br><span class="line">.LC0:</span><br><span class="line">        .string &quot;hello world&quot;</span><br><span class="line">        .text</span><br><span class="line">        .globl  main</span><br><span class="line">        .type   main, @function</span><br><span class="line">main:</span><br><span class="line">.LFB0:</span><br><span class="line">        .cfi_startproc</span><br><span class="line">        pushl   %ebp</span><br><span class="line">        .cfi_def_cfa_offset 8</span><br><span class="line">        .cfi_offset 5, -8</span><br><span class="line">        movl    %esp, %ebp</span><br><span class="line">        .cfi_def_cfa_register 5</span><br><span class="line">        andl    $-16, %esp</span><br><span class="line">        subl    $16, %esp</span><br><span class="line">        movl    $.LC0, (%esp)</span><br><span class="line">        call    printf</span><br><span class="line">        nop</span><br><span class="line">        leave</span><br><span class="line">        .cfi_restore 5</span><br><span class="line">        .cfi_def_cfa 4, 4</span><br><span class="line">        ret</span><br><span class="line">        .cfi_endproc</span><br><span class="line">.LFE0:</span><br><span class="line">        .size   main, .-main</span><br><span class="line">        .ident  &quot;GCC: (Ubuntu 4.8.2-19ubuntu1) 4.8.2&quot;</span><br><span class="line">        .section        .note.GNU-stack,&quot;&quot;,@progbits</span><br><span class="line">~</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Gcc编译过程已经将其转化为汇编语言了</p>
+</blockquote>
+<h3 id="汇编"><a href="#汇编" class="headerlink" title="汇编"></a>汇编</h3><p><code>option1</code> 为<code>-c</code>，生成的目标文件为以<code>.o</code>为后缀的二进制目标代码文件，Gcc指令为：</p>
+<pre><code>tly@ubuntu ~&gt; gcc -c test.s -o test.o</code></pre><p>生成的汇编之后的目标文件内容为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">^?ELF^A^A^A^@^@^@^@^@^@^@^@^@^A^@^C^@^A^@^@^@^@^@^@^@^@^@^@^@^X^A^@^@^@^@^@^@4^@^@^@^@^@(^@^M^@</span><br><span class="line">^@U&lt;89&gt;å&lt;83&gt;äð&lt;83&gt;ì^PÇ^D$^@^@^@^@èüÿÿÿ&lt;90&gt;ÉÃhello world^@^@GCC: (Ubuntu 4.8.2-19ubuntu1) 4.8.2^@^@^@^@^T^@^@^@^@^@^@^@^AzR^@^A|^H^A^[^L^D^D&lt;88&gt;^A^@^@^\^@^@^@^\^@^@^@^@^@^@^@^X^@^@^@^@A^N^H&lt;85&gt;^BB^M^ETÅ^L^D^D^@^@^@.symtab^@.strtab^@.shstrtab^@.rel.text^@.data^@.bss^@.rodata^@.comment^@.note.GNU-stack^@.rel.eh_frame^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^_^@^@^@^A^@^@^@^F^@^@^@^@^@^@^@4^@^@^@^X^@^@^@^@^@^@^@^@^@^@^@^A^@^@^@^@^@^@^@^[^@^@^@  ^@^@^@^@^@^@^@^@^@^@^@ä^C^@^@^P^@^@^@^K^@^@^@^A^@^@^@^D^@^@^@^H^@^@^@%^@^@^@^A^@^@^@^C^@^@^@^@^@^@^@L^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^A^@^@^@^@^@^@^@+^@^@^@^H^@^@^@^C^@^@^@^@^@^@^@L^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^A^@^@^@^@^@^@^@0^@^@^@^A^@^@^@^B^@^@^@^@^@^@^@L^@^@^@^L^@^@^@^@^@^@^@^@^@^@^@^A^@^@^@^@^@^@^@8^@^@^@^A^@^@^@0^@^@^@^@^@^@^@X^@^@^@%^@^@^@^@^@^@^@^@^@^@^@^A^@^@^@^A^@^@^@A^@^@^@^A^@^@^@^@^@^@^@^@^@^@^@&#125;^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^A^@^@^@^@^@^@^@U^@^@^@^A^@^@^@^B^@^@^@^@^@^@^@&lt;80&gt;^@^@^@8^@^@^@^@^@^@^@^@^@^@^@^D^@^@^@^@^@^@^@Q^@^@^@        ^@^@^@^@^@^@^@^@^@^@^@ô^C^@^@^H^@^@^@^K^@^@^@^H^@^@^@^D^@^@^@^H^@^@^@^Q^@^@^@^C^@^@^@^@^@^@^@^@^@^@^@¸^@^@^@_^@^@^@^@^@^@^@^@^@^@^@^A^@^@^@^@^@^@^@^A^@^@^@^B^@^@^@^@^@^@^@^@^@^@^@ ^C^@^@°^@^@^@^L^@^@^@       ^@^@^@^D^@^@^@^P^@^@^@  ^@^@^@^C^@^@^@^@^@^@^@^@^@^@^@Ð^C^@^@^T^@^@^@^@^@^@^@^@^@^@^@^A^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^A^@^@^@^@^@^@^@^@^@^@^@^D^@ñÿ^@^@^@^@^@^@^@^@^@^@^@^@^C^@^A^@^@^@^@^@^@^@^@^@^@^@^@^@^C^@^C^@^@^@^@^@^@^@^@^@^@^@^@^@^C^@^D^@^@^@^@^@^@^@^@^@^@^@^@^@^C^@^E^@^@^@^@^@^@^@^@^@^@^@^@^@^C^@^G^@^@^@^@^@^@^@^@^@^@^@^@^@^C^@^H^@^@^@^@^@^@^@^@^@^@^@^@^@^C^@^F^@^H^@^@^@^@^@^@^@^X^@^@^@^R^@^A^@^M^@^@^@^@^@^@^@^@^@^@^@^P^@^@^@^@test.c^@main^@printf^@^L^@^@^@^A^E^@^@^Q^@^@^@^B</span><br><span class="line">^@^@ ^@^@^@^B^B^@^@</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Gcc汇编成的.o目标文件是乱码，不过可以通过nm命令查看其符号表：</p>
+</blockquote>
+<pre><code>tly@ubuntu ~&gt; nm test.o
+00000000 T main
+         U printf</code></pre><h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><p>在成功编译之后，就进入了链接阶段，这个<code>hello world</code>小程序的链接过程主要是查找包含的<code>stdio.h</code>头文件的<code>printf()</code>函数的实现（因为<code>stdio.h</code>头文件只包含函数声明)，这个函数实现是在<code>libc.so.6</code>的库文件中。在没有特别指定时，Gcc会到系统默认的搜索路径<code>/usr/lib</code>下进行查找，也就是链接到<code>libc.so.6</code>库函数中去，这样就能实现函数<code>printf()</code>了，而这也就是链接的作用。</p>
+<blockquote>
+<p>函数库一般分为<strong>静态库</strong>和<strong>动态库</strong>两种。<br><strong>静态库</strong>:是指编译链接时，把库文件的代码全部加入到可执行文件中，因此生成的文件比较大，但在运行时也就不再需要库文件了。其后缀名一般为<code>.a</code>(linux)或<code>.lib</code>(windows)。<br><strong>动态库</strong>: 与之相反，在编译链接时并没有把库文件的代码加入到可执行文件中，而是在程序执行时由<em>运行时链接文件加载库</em>，这样可以节省系统的开销。动态库一般为<code>.so</code>(linux)或<code>.dll</code>(windows)，如前面所述的libc.so.6就是动态库。<br>Gcc在编译时默认使用动态库</p>
+</blockquote>
+<p>当然，也可以一次性使用<code>-c</code>选项，直接生成目标文件<code>test.o</code>,Gcc指令为:</p>
+<pre><code>tly@ubuntu ~&gt; gcc -c test.c -o test.o</code></pre><p>完成了链接之后，Gcc就可以生成可执行文件<code>test</code>,Gcc指令为:</p>
+<pre><code>tly@ubuntu ~&gt; gcc test.o -o test</code></pre><p>运行该可执行文件<code>test</code>：</p>
+<pre><code>tly@ubuntu ~&gt; ./test
+hello world⏎      </code></pre><h3 id="Gcc编译选项分析"><a href="#Gcc编译选项分析" class="headerlink" title="Gcc编译选项分析"></a>Gcc编译选项分析</h3><p>Gcc有超过100个的可用选项，一般主要包括以下五种类型选项：</p>
+<ol>
+<li>总体选项</li>
+<li>告警和出错选项</li>
+<li>优化选项</li>
+<li>体系结构相关选项</li>
+</ol>
+<h4 id="总体选项"><a href="#总体选项" class="headerlink" title="总体选项"></a>总体选项</h4><hr>
+<table>
+<thead>
+<tr>
+<th align="center">选项名</th>
+<th align="center">选项意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">-E</td>
+<td align="center">只是编译不汇编，生成汇编代码.s</td>
+</tr>
+<tr>
+<td align="center">-S</td>
+<td align="center">只进行预编译生成.i，不做其他处理</td>
+</tr>
+<tr>
+<td align="center">-c</td>
+<td align="center">只是编译不链接，生成目标文件.o</td>
+</tr>
+<tr>
+<td align="center">-g</td>
+<td align="center">在可执行程序中包含标准调试信息</td>
+</tr>
+<tr>
+<td align="center">-o file</td>
+<td align="center">把输出文件输出到file里</td>
+</tr>
+<tr>
+<td align="center">-v</td>
+<td align="center">打印出编译器内部编译各过程的命令行信息和编译器的版本</td>
+</tr>
+<tr>
+<td align="center">-I dir</td>
+<td align="center">在头文件的搜索路径列表中添加dir目录</td>
+</tr>
+<tr>
+<td align="center">-L dir</td>
+<td align="center">在库文件的搜索路径列表中添加dir目录</td>
+</tr>
+<tr>
+<td align="center">-static</td>
+<td align="center">链接静态库</td>
+</tr>
+<tr>
+<td align="center">-llibrary</td>
+<td align="center">链接名为library的库文件库</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>对于<code>-I dir</code>选项可在头文件的搜索路径列表中添加dir目录。由于Linux中头文件都默认放到了<code>/usr/include/</code>目录下，因此，当用户希望添加放置在其他位置的头文件时，就可以通过<code>-I dir</code>选项来指定(<code>-L dir</code>类似)，这样，Gcc就会到相应的位置查找对应的目录<br><code>&lt;&gt;</code>表示在标准路径中搜索头文件，<code>“ ”</code>表示在本目录中搜索，如果把自定义的头文件<code>#include&lt;my.h&gt;改为</code>#include “my.h”<code>，就不需要加上“-I”选项了</code><br><code>-I dir</code>和<code>-L dir</code>都只是指定了路径，而没有指定文件，因此不能在路径中包含文件名</p>
+</blockquote>
+<blockquote>
+<p>对于<code>-llibrary</code>选项，省去了前缀<code>lib</code>,它实际上是指示Gcc去连接库文件liblibrary.so。由于在Linux下的库文件命名时有一个规定：必须以<code>lib</code>三个字母开头。因此在用<code>-l</code>选项指定链接的库文件名时可以省去<code>lib</code>三个字母。也就是说Gcc在对<code>-llibrary</code>进行处理时，会自动去链接名为<code>liblibrary.so</code>的文件</p>
+</blockquote>
+<h4 id="告警和出错选项"><a href="#告警和出错选项" class="headerlink" title="告警和出错选项"></a>告警和出错选项</h4><hr>
+<table>
+<thead>
+<tr>
+<th align="center">选项名</th>
+<th align="center">选项意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">-ansi</td>
+<td align="center">支持符合ANSI标准的C程序</td>
+</tr>
+<tr>
+<td align="center">-pedantic</td>
+<td align="center">允许发出ANSI C标准所列的全部警告信息</td>
+</tr>
+<tr>
+<td align="center">-pedantic-error</td>
+<td align="center">允许发出ANSI C标准所列的全部错误信息</td>
+</tr>
+<tr>
+<td align="center">-w</td>
+<td align="center">关闭所有告警</td>
+</tr>
+<tr>
+<td align="center">-Wall</td>
+<td align="center">允许发出Gcc提供的所有有用的报警信息</td>
+</tr>
+</tbody></table>
+<p>修改上述的<code>helloworld</code>测试程序为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">void main(int argc, char* argv[])</span><br><span class="line">&#123;</span><br><span class="line">  long long tmp; // 增加非ANSI-C类型long long 未使用的临时变量tmp</span><br><span class="line">  printf(&quot;hello world&quot;);</span><br><span class="line">  return 0; // 返回错误类型int</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>1.默认无告警和出错选项情况：</p>
+<pre><code>tly@ubuntu ~&gt; gcc -c test.c -o test.o
+test.c: In function ‘main’:
+test.c:6:3: warning: ‘return’ with a value, in function returning void [enabled by default]
+   return 0;
+   ^</code></pre><blockquote>
+<p>只识别了main的错误返回类型int</p>
+</blockquote>
+<p>2.增加<code>-ansi</code>选项情况：</p>
+<pre><code>tly@ubuntu ~&gt; gcc -c test.c -o test.o -ansi
+test.c: In function ‘main’:
+test.c:6:3: warning: ‘return’ with a value, in function returning void [enabled by default]
+   return 0;
+   ^</code></pre><blockquote>
+<p>只识别了main的错误返回类型int</p>
+</blockquote>
+<p>3.增加<code>-pedantic</code>选项情况：</p>
+<pre><code>tly@ubuntu ~&gt; gcc -c test.c -o test.o -pedantic
+test.c:2:6: warning: return type of ‘main’ is not ‘int’ [-Wmain]
+ void main(int argc, char* argv[])
+      ^
+test.c: In function ‘main’:
+test.c:4:8: warning: ISO C90 does not support ‘long long’ [-Wlong-long]
+   long long tmp;
+        ^
+test.c:6:3: warning: ‘return’ with a value, in function returning void [enabled by default]
+   return 0;
+   ^</code></pre><blockquote>
+<p>识别了main的错误返回类型int 和 long long 非 ISO C90 支持类型</p>
+</blockquote>
+<p>4.增加<code>-pedantic-errors</code>选项情况：</p>
+<pre><code>tly@ubuntu ~&gt; gcc -c test.c -o test.o -pedantic-errors 
+test.c:2:6: error: return type of ‘main’ is not ‘int’ [-Wmain]
+ void main(int argc, char* argv[])
+      ^
+test.c: In function ‘main’:
+test.c:4:8: error: ISO C90 does not support ‘long long’ [-Wlong-long]
+   long long tmp;
+        ^
+test.c:6:3: error: ‘return’ with a value, in function returning void
+   return 0;
+   ^</code></pre><blockquote>
+<p>识别了main的错误返回类型int 和 long long 非 ISO C90 支持类型</p>
+</blockquote>
+<p>5.增加<code>-w</code>选项情况：</p>
+<pre><code>tly@ubuntu ~&gt; gcc -c test.c -o test.o -w</code></pre><blockquote>
+<p>屏蔽了告警和出错信息</p>
+</blockquote>
+<p>6.增加<code>-Wall</code>选项情况： </p>
+<pre><code>tly@ubuntu ~&gt; gcc -c test.c -o test.o -Wall
+test.c:2:6: warning: return type of ‘main’ is not ‘int’ [-Wmain]
+ void main(int argc, char* argv[])
+      ^
+test.c: In function ‘main’:
+test.c:6:3: warning: ‘return’ with a value, in function returning void [enabled by default]
+   return 0;
+   ^
+test.c:4:13: warning: unused variable ‘tmp’ [-Wunused-variable]
+   long long tmp;
+             ^</code></pre><blockquote>
+<p>识别了main的错误返回类型int 和临时变量tmp未使用的告警信息</p>
+</blockquote>
+<h4 id="优化选项"><a href="#优化选项" class="headerlink" title="优化选项"></a>优化选项</h4><hr>
+<table>
+<thead>
+<tr>
+<th align="center">选项名</th>
+<th align="center">选项意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">-On</td>
+<td align="center">n是一个代表优化级别的整数,典型的范围是从0变化到2或3</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>不同的优化级别对应不同的优化处理工作。<br>-O 提供基础级别的优化<br>-O2 提供更加高级的代码优化,会占用更长的编译时间<br>-O3 提供最高级的代码优化<br>进行调试的时候，最好关闭编译优化，否则程序自动优化，执行的步骤可能有变化</p>
+</blockquote>
+<h4 id="体系结构相关选项"><a href="#体系结构相关选项" class="headerlink" title="体系结构相关选项"></a>体系结构相关选项</h4><hr>
+<table>
+<thead>
+<tr>
+<th align="center">选项名</th>
+<th align="center">选项意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">-mcpu=type</td>
+<td align="center">对不同的CPU使用相应的CPU指令。可选择的有i386、i486、pentium等</td>
+</tr>
+<tr>
+<td align="center">-mieee-fp</td>
+<td align="center">使用IEEE标准进行浮点数的比较</td>
+</tr>
+<tr>
+<td align="center">-mno-ieee-fp</td>
+<td align="center">不使用IEEE标准进行浮点数的比较</td>
+</tr>
+<tr>
+<td align="center">-msoft-float</td>
+<td align="center">输出包含浮点库调用的目标代码</td>
+</tr>
+<tr>
+<td align="center">-mshort</td>
+<td align="center">把int类型作为16位处理，相当于short int</td>
+</tr>
+<tr>
+<td align="center">-mrtd</td>
+<td align="center">将函数参数个数固定的函数用ret NUM返回，节省调用函数的一条指令</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Gcc/" rel="tag"># Gcc</a>
+          
+            <a href="/tags/编译/" rel="tag"># 编译</a>
+          
+            <a href="/tags/链接/" rel="tag"># 链接</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/03/VS2015 GitHub插件使用/" rel="next" title="VS2015 GitHub插件使用">
+                <i class="fa fa-chevron-left"></i> VS2015 GitHub插件使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/10/fork和vfork函数区别/" rel="prev" title="fork和vfork函数区别">
+                fork和vfork函数区别 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="uyan_frame"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/book.jpg" alt="Frank Tao">
+            
+              <p class="site-author-name" itemprop="name">Frank Tao</p>
+              <p class="site-description motion-element" itemprop="description">welcome to franktly’s blog -~-</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/franktly" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.zhihu.com/people/tao-ling-yang/activities" target="_blank" title="ZhiHu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>ZhiHu</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/2273442920/profile?topnav=1&wvr=6&is_all=1" target="_blank" title="WeiBo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>WeiBo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gcc编译链接流程"><span class="nav-number">2.</span> <span class="nav-text">Gcc编译链接流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#预处理过程"><span class="nav-number">2.1.</span> <span class="nav-text">预处理过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译"><span class="nav-number">2.2.</span> <span class="nav-text">编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#汇编"><span class="nav-number">2.3.</span> <span class="nav-text">汇编</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#链接"><span class="nav-number">2.4.</span> <span class="nav-text">链接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Gcc编译选项分析"><span class="nav-number">2.5.</span> <span class="nav-text">Gcc编译选项分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#总体选项"><span class="nav-number">2.5.1.</span> <span class="nav-text">总体选项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#告警和出错选项"><span class="nav-number">2.5.2.</span> <span class="nav-text">告警和出错选项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优化选项"><span class="nav-number">2.5.3.</span> <span class="nav-text">优化选项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#体系结构相关选项"><span class="nav-number">2.5.4.</span> <span class="nav-text">体系结构相关选项</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank Tao</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2136191"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
