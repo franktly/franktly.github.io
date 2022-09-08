@@ -16,11 +16,11 @@
 
 #### Hexo站点配置文件
 site_config.yml
->安装完`Hexo`后可以通过`Hexo`博客目录下`package.json`文件查看安装的`Hexo`版本
+>安装完`Hexo`后可以通过`Hexo`博客根目录下`package.json`文件查看安装的`Hexo`版本
 
 #### Next主题配置文件
 next_config.yml
->安装完Next后可以通过`theme/next/`目录下`package.json`文件查看安装的`Next`版本
+>安装完Next后可以通过`theme/next/`主题目录下`package.json`文件查看安装的`Next`版本
 
 #### 自动备份脚本
 1. run.sh（运行脚本包含清除，重新部署，自动备份并提交到博客`Hexo`分支操作）
@@ -52,7 +52,7 @@ echo "************* finish backup hexo source file ************* "
 
 ```
 
-#### 自动备份脚本使用方法
+#### 自动备份方法
 1. 建立备份文件夹blog_backup(首次备份需要的操作）
 2. 克隆`Hexo`分支到备份文件夹(首次备份需要的操作)
 ```
@@ -60,5 +60,6 @@ echo "************* finish backup hexo source file ************* "
 git clone -b hexo --single-branch https://github.com/franktly/franktly.github.io.git
 
 ```
-3. **在部署文章到`GitHub Page`时候执行`run.sh`脚本替代`hexo deploy`等命令(部署文章时候高频操作)**
+3. 将`run.sh`和`backup.sh`脚本拷贝到`Hexo`博客根目录(首次备份需要的操作)
+4. **在部署文章到`GitHub Page`时候执行`run.sh`脚本替代`hexo deploy`等命令(部署文章时候高频操作)**
 
