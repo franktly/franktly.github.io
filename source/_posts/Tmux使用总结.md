@@ -370,7 +370,7 @@ Pane交互主要包括创建，切换，交换位置，调整大小，罗列，�
 ---
 
 #### 安装TPM
-`Tmux`支持各种Plugin，增强其功能扩展性，其Plugin管理工具为`TPM`，全称Tmux Plugin Manager，`Tmux`之于`TPM`就如同`Vim`之于`Vundle`。
+`Tmux`支持各种Plugin，增强其功能扩展性，其Plugin管理工具为`TPM`，全称Tmux Plugin Manager，`TPM`之于`Tmux`就如同`Vundle`之于`Vim`。
 
 安装`TPM`以下几步骤：
 1. `git clone`到`Tmux`plugins 目录：
