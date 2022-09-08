@@ -146,6 +146,9 @@ Hexo博客由于文章和博客网站的一些配置主要在本地，因此对�
 #### 搜索SEO优化
 搜索SEO优化方法见让[Baidu和Google收录Hexo博客](/2016/07/06/Hexo博客搜索引擎搜索优化/index.html)
 
+#### 博客源文件和配置备份
+见个人Github主页博客仓库的`Hexo`分支[ReadMe](https://github.com/franktly/franktly.github.io/tree/hexo)
+
 ## 总结
 ***
 基本上通过以上几个步骤就可以在较短的时间内将Hexo博客迁移到一个新的系统环境上，这样不用每次重装系统或更换电脑都折腾配置和软件。
