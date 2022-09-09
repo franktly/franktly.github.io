@@ -28,13 +28,18 @@
 <meta property="og:site_name" content="Share Mind">
 <meta property="og:description" content="前言 之前都在是Linux环境下搭建Hexo博客，用Hexo new page [page name] 来新建文章，执行该命令时候，会同时生成一个文章名称相同文件夹，该文件夹用来存放与此篇博客相关的资源文件，常用的如图片等，在博客里面引用图片使用的是相对路径，这样方便每篇博客文章和相应的图片资源一起分类管理。但是切换到Windows环境下搭建Hexo博客写文章，用同样的方式却无法加载出图片。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://www.taolingyang.com/2019/09/09/Hexo-asset-image%E6%8F%92%E4%BB%B6%E7%94%9F%E6%88%90%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87%E8%B7%AF%E5%BE%84%E9%94%99%E8%AF%AF/load-picture-error.png">
+<meta property="og:image" content="http://www.taolingyang.com/2019/09/09/Hexo-asset-image%E6%8F%92%E4%BB%B6%E7%94%9F%E6%88%90%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87%E8%B7%AF%E5%BE%84%E9%94%99%E8%AF%AF/hexo-gen-abs-path.png">
+<meta property="og:image" content="http://www.taolingyang.com/2019/09/09/Hexo-asset-image%E6%8F%92%E4%BB%B6%E7%94%9F%E6%88%90%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87%E8%B7%AF%E5%BE%84%E9%94%99%E8%AF%AF/web-debug1.png">
+<meta property="og:image" content="http://www.taolingyang.com/2019/09/09/Hexo-asset-image%E6%8F%92%E4%BB%B6%E7%94%9F%E6%88%90%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87%E8%B7%AF%E5%BE%84%E9%94%99%E8%AF%AF/web-debug2.png">
 <meta property="article:published_time" content="2019-09-08T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-09-09T13:31:29.553Z">
+<meta property="article:modified_time" content="2022-09-09T13:42:18.831Z">
 <meta property="article:author" content="Frank Tao">
 <meta property="article:tag" content="Hexo">
 <meta property="article:tag" content="博客">
 <meta property="article:tag" content="Next">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.taolingyang.com/2019/09/09/Hexo-asset-image%E6%8F%92%E4%BB%B6%E7%94%9F%E6%88%90%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87%E8%B7%AF%E5%BE%84%E9%94%99%E8%AF%AF/load-picture-error.png">
 
 
 <link rel="canonical" href="http://www.taolingyang.com/2019/09/09/Hexo-asset-image%E6%8F%92%E4%BB%B6%E7%94%9F%E6%88%90%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87%E8%B7%AF%E5%BE%84%E9%94%99%E8%AF%AF/">
@@ -148,7 +153,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0"><span class="nav-number">2.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90"><span class="nav-number">3.</span> <span class="nav-text">问题分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3"><span class="nav-number">4.</span> <span class="nav-text">问题解决</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%83%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text">參考</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -288,7 +293,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>191</span>
+      <span>999</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -308,39 +313,34 @@
     <div class="post-body" itemprop="articleBody">
         <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
 <p>之前都在是Linux环境下搭建Hexo博客，用<code>Hexo new page [page name]</code> 来新建文章，执行该命令时候，会同时生成一个文章名称相同文件夹，该文件夹用来存放与此篇博客相关的资源文件，常用的如图片等，在博客里面引用图片使用的是相对路径，这样方便每篇博客文章和相应的图片资源一起分类管理。但是切换到Windows环境下搭建Hexo博客写文章，用同样的方式却无法加载出图片。</p>
-<!--more>
+<span id="more"></span>
 
-## 问题描述
----
-之前写的博客[Hexo博客保存与恢复](/2016/09/02/Hexo博客保存与恢复/index.html)文章中**博客图片相对路径配置问题**章节内总结了使用相对路径法存博客图片资源，分以下两步骤：
-首先安装`Hexo-asset-image`插件：
-    
-    npm install hexo-asset-image --save
-然后，修改站点配置文件_config.yml:
-
-    post_asset_folder: true
-
-此方法在Linux环境下工作正常，但是切换到Windows环境下写Hexo博客，出现如下无法加载出图片现象：
-![load-picture-error](load-picture-error.png)
-
-## 问题分析
----
-1. 在`Hexo s -g`本地生成部署或`Hexo d -g`服务器生成部署时候，都显示如下生成图片绝对路径的打印：
-![hexo-gen-abs-path](hexo-gen-abs-path.png)
-
-2.打开浏览器开发者模式，调试发现生成的绝对路径错误：
-![web-debug1](web-debug1.png)
-![web-debug2](web-debug2.png)
-
-## 问题解决
----
-1. 打开`hexo-asset-image`文件源代码处：
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cd</span> blog_root_dir</span><br><span class="line"><span class="keyword">cd</span> node_modules/hexo-asset-image/</span><br><span class="line"><span class="keyword">vim</span> <span class="built_in">index</span>.js</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>在<code>index.js</code>文件58行左右，修改如下，注释掉错误的两行，增加正确的绝对图片路径两行代码如下：<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">//</span> $(this).attr(<span class="string">&#x27;src&#x27;</span>, config.root + link + src);</span><br><span class="line"><span class="regexp">//</span> console.info&amp;&amp;console.info(<span class="string">&quot;update link as:--&gt;&quot;</span>+config.root + link + src);</span><br><span class="line"> $(this).attr(<span class="string">&#x27;src&#x27;</span>, data.permalink+ src);</span><br><span class="line"> console.info&amp;&amp;console.info(<span class="string">&quot;update link as:--&gt;&quot;</span>+data.permalink+ src);</span><br><span class="line"> </span><br></pre></td></tr></table></figure></li>
+<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><hr>
+<p>之前写的博客<a href="/2016/09/02/Hexo%E5%8D%9A%E5%AE%A2%E4%BF%9D%E5%AD%98%E4%B8%8E%E6%81%A2%E5%A4%8D/index.html">Hexo博客保存与恢复</a>文章中<strong>博客图片相对路径配置问题</strong>章节内总结了使用相对路径法存博客图片资源，分以下两步骤：<br>首先安装<code>Hexo-asset-image</code>插件：</p>
+<pre><code>npm install hexo-asset-image --save
+</code></pre>
+<p>然后，修改站点配置文件_config.yml:</p>
+<pre><code>post_asset_folder: true
+</code></pre>
+<p>此方法在Linux环境下工作正常，但是切换到Windows环境下写Hexo博客，出现如下无法加载出图片现象：<br><img src="http://www.taolingyang.com/2019/09/09/Hexo-asset-image%E6%8F%92%E4%BB%B6%E7%94%9F%E6%88%90%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87%E8%B7%AF%E5%BE%84%E9%94%99%E8%AF%AF/load-picture-error.png" alt="load-picture-error"></p>
+<h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><hr>
+<ol>
+<li>在<code>Hexo s -g</code>本地生成部署或<code>Hexo d -g</code>服务器生成部署时候，都显示如下生成图片绝对路径的打印：<br><img src="http://www.taolingyang.com/2019/09/09/Hexo-asset-image%E6%8F%92%E4%BB%B6%E7%94%9F%E6%88%90%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87%E8%B7%AF%E5%BE%84%E9%94%99%E8%AF%AF/hexo-gen-abs-path.png" alt="hexo-gen-abs-path"></li>
 </ol>
--->
+<p>2.打开浏览器开发者模式，调试发现生成的绝对路径错误：<br><img src="http://www.taolingyang.com/2019/09/09/Hexo-asset-image%E6%8F%92%E4%BB%B6%E7%94%9F%E6%88%90%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87%E8%B7%AF%E5%BE%84%E9%94%99%E8%AF%AF/web-debug1.png" alt="web-debug1"><br><img src="http://www.taolingyang.com/2019/09/09/Hexo-asset-image%E6%8F%92%E4%BB%B6%E7%94%9F%E6%88%90%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87%E8%B7%AF%E5%BE%84%E9%94%99%E8%AF%AF/web-debug2.png" alt="web-debug2"></p>
+<h2 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h2><hr>
+<ol>
+<li><p>打开<code>hexo-asset-image</code>文件源代码处：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cd</span> blog_root_dir</span><br><span class="line"><span class="keyword">cd</span> node_modules/hexo-asset-image/</span><br><span class="line"><span class="keyword">vim</span> <span class="built_in">index</span>.js</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在<code>index.js</code>文件58行左右，修改如下，注释掉错误的两行，增加正确的绝对图片路径两行代码如下：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">//</span> $(this).attr(<span class="string">&#x27;src&#x27;</span>, config.root + link + src);</span><br><span class="line"><span class="regexp">//</span> console.info&amp;&amp;console.info(<span class="string">&quot;update link as:--&gt;&quot;</span>+config.root + link + src);</span><br><span class="line"> $(this).attr(<span class="string">&#x27;src&#x27;</span>, data.permalink+ src);</span><br><span class="line"> console.info&amp;&amp;console.info(<span class="string">&quot;update link as:--&gt;&quot;</span>+data.permalink+ src);</span><br><span class="line"> </span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><p><a target="_blank" rel="noopener" href="https://github.com/xcodebuild/hexo-asset-image">xcodebuild-hexo-asset-image</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.npmjs.com/package/hexo-asset-image-for-hexo5">hexo-asset-image-for-hexo5</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.4k8k.xyz/article/qq_42009500/118788129">Hexo-asset-image踩坑</a></p>
+<p><a target="_blank" rel="noopener" href="https://hexo.io/docs/asset-folders.html">asset-folders</a></p>
+
     </div>
 
     
@@ -416,14 +416,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">412k</span>
+    <span title="站点总字数">413k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">6:15</span>
+    <span title="站点阅读时长">6:16</span>
   </span>
 </div>
 

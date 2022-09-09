@@ -38,7 +38,7 @@
   </url>
   
   <url>
-    <loc>http://www.taolingyang.com/categories/index.html</loc>
+    <loc>http://www.taolingyang.com/about/index.html</loc>
     
     <lastmod>2022-09-09</lastmod>
     
@@ -47,7 +47,7 @@
   </url>
   
   <url>
-    <loc>http://www.taolingyang.com/about/index.html</loc>
+    <loc>http://www.taolingyang.com/categories/index.html</loc>
     
     <lastmod>2022-09-09</lastmod>
     
@@ -92,7 +92,7 @@
   </url>
   
   <url>
-    <loc>http://www.taolingyang.com/2018/04/05/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/</loc>
+    <loc>http://www.taolingyang.com/2017/09/15/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%A6%82%E8%BF%B0/</loc>
     
     <lastmod>2022-09-09</lastmod>
     
@@ -101,7 +101,7 @@
   </url>
   
   <url>
-    <loc>http://www.taolingyang.com/2017/09/15/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%A6%82%E8%BF%B0/</loc>
+    <loc>http://www.taolingyang.com/2018/04/05/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/</loc>
     
     <lastmod>2022-09-09</lastmod>
     
@@ -398,7 +398,7 @@
   </url>
   
   <url>
-    <loc>http://www.taolingyang.com/2016/01/05/Hexo%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-1/</loc>
+    <loc>http://www.taolingyang.com/2016/01/09/Hexo%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-2/</loc>
     
     <lastmod>2022-09-09</lastmod>
     
@@ -407,7 +407,7 @@
   </url>
   
   <url>
-    <loc>http://www.taolingyang.com/2016/01/09/Hexo%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-2/</loc>
+    <loc>http://www.taolingyang.com/2016/01/05/Hexo%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-1/</loc>
     
     <lastmod>2022-09-09</lastmod>
     
@@ -511,6 +511,27 @@
   </url>
   
   <url>
+    <loc>http://www.taolingyang.com/tags/Hexo/</loc>
+    <lastmod>2022-09-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.taolingyang.com/tags/%E5%8D%9A%E5%AE%A2/</loc>
+    <lastmod>2022-09-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.taolingyang.com/tags/Next/</loc>
+    <lastmod>2022-09-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>http://www.taolingyang.com/tags/Git/</loc>
     <lastmod>2022-09-09</lastmod>
     <changefreq>weekly</changefreq>
@@ -539,27 +560,6 @@
   </url>
   
   <url>
-    <loc>http://www.taolingyang.com/tags/Hexo/</loc>
-    <lastmod>2022-09-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://www.taolingyang.com/tags/%E5%8D%9A%E5%AE%A2/</loc>
-    <lastmod>2022-09-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://www.taolingyang.com/tags/Next/</loc>
-    <lastmod>2022-09-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>http://www.taolingyang.com/tags/Node-js/</loc>
     <lastmod>2022-09-09</lastmod>
     <changefreq>weekly</changefreq>
@@ -568,6 +568,13 @@
   
   <url>
     <loc>http://www.taolingyang.com/tags/Linux/</loc>
+    <lastmod>2022-09-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.taolingyang.com/tags/exit/</loc>
     <lastmod>2022-09-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -589,13 +596,6 @@
   
   <url>
     <loc>http://www.taolingyang.com/tags/%E9%93%BE%E6%8E%A5/</loc>
-    <lastmod>2022-09-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://www.taolingyang.com/tags/exit/</loc>
     <lastmod>2022-09-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -737,14 +737,14 @@
   </url>
   
   <url>
-    <loc>http://www.taolingyang.com/categories/Tools/</loc>
+    <loc>http://www.taolingyang.com/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</loc>
     <lastmod>2022-09-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://www.taolingyang.com/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</loc>
+    <loc>http://www.taolingyang.com/categories/Tools/</loc>
     <lastmod>2022-09-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
