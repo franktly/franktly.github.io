@@ -28,14 +28,14 @@
 <meta property="og:site_name" content="Share Mind">
 <meta property="og:description" content="前言 在网站博客系统中，当我们对某个博主的博客空间比较感兴趣的时候，都会选择订阅该博客，这时候就使我们很方便的获取到博主博客的更新文章了，当我们订阅的博客有更新变化时，它们也自动推送相应的更新通知给所有订阅该博客的订阅者，同时，作为订阅者，可以订阅多个博主博客。像这种一对多的对象之间的依赖关系，一个对象的改变能够影响其他对象的行为，可以通过观察者模式来实现。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://www.taolingyang.com/.com//Observer.jpg">
+<meta property="og:image" content="http://www.taolingyang.com/2018/03/21/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/Observer.jpg">
 <meta property="article:published_time" content="2018-03-20T16:00:00.000Z">
 <meta property="article:modified_time" content="2022-09-09T01:52:18.454Z">
 <meta property="article:author" content="Frank Tao">
 <meta property="article:tag" content="Design Pattern">
 <meta property="article:tag" content="Behavior Pattern">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://www.taolingyang.com/.com//Observer.jpg">
+<meta name="twitter:image" content="http://www.taolingyang.com/2018/03/21/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/Observer.jpg">
 
 
 <link rel="canonical" href="http://www.taolingyang.com/2018/03/21/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/">
@@ -164,7 +164,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">50</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -327,7 +327,7 @@
 <blockquote>
 <p>当ConcreteSubject发生任何可能导致其观察者与其本身状态不一致的改变时，它将通知它的各个观察者ConcreteObserver<br>在得到一个具体目标的改变通知后, ConcreteObserver对象可向目标对象查询信息。<br>ConcreteObserver使用这些信息以使它的状态与目标对象的状态一致</p>
 </blockquote>
-<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="/.com//Observer.jpg" alt="observer"></p>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="http://www.taolingyang.com/2018/03/21/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/Observer.jpg" alt="observer"></p>
 <h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>1.首先定义抽象主题目标类<code>Subject</code>,并声明<code>Notify()</code>接口和增删观察者对象的接口：</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Abstract Subject</span></span><br><span class="line"><span class="keyword">class</span> <span class="title">Subject</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Attach</span>(<span class="params">Observer *pObserver</span>)</span> = <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Detach</span>(<span class="params">Observer *pObserver</span>)</span> = <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Notify</span>()</span> = <span class="number">0</span>;         <span class="comment">// 变化通知接口</span></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">SetState</span>(<span class="params"><span class="built_in">int</span> state</span>)</span> = <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="built_in">int</span> <span class="title">GetState</span>()</span> = <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 

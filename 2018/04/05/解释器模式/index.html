@@ -28,14 +28,14 @@
 <meta property="og:site_name" content="Share Mind">
 <meta property="og:description" content="前言 有时候，我们想用一些简单的语言来实现一些特点的操作，只要向计算机输入一个特定的句子，能够按照预定的文法规则对其进行解释。如一个简单的加减法解释器，只要输入一个加减法表达式，他就能计算出表达式的结果。像这种设计自定义的简单语言文法的功能可以采用解释器模式来实现。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://www.taolingyang.com/.com//Interpreter.jpg">
+<meta property="og:image" content="http://www.taolingyang.com/2018/04/05/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/Interpreter.jpg">
 <meta property="article:published_time" content="2018-04-04T16:00:00.000Z">
 <meta property="article:modified_time" content="2022-09-09T01:52:18.458Z">
 <meta property="article:author" content="Frank Tao">
 <meta property="article:tag" content="Design Pattern">
 <meta property="article:tag" content="Behavior Pattern">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://www.taolingyang.com/.com//Interpreter.jpg">
+<meta name="twitter:image" content="http://www.taolingyang.com/2018/04/05/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/Interpreter.jpg">
 
 
 <link rel="canonical" href="http://www.taolingyang.com/2018/04/05/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/">
@@ -164,7 +164,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">50</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -326,7 +326,7 @@
 <li><p>Context<br>环境类又称为上下文类，它用于存储解释器之外的一些全局信息，通常它临时存储了需要解释的语句<br>这个角色的任务一般是也用来存放文法中各个终结符所对应的具体值，比如R&#x3D;R1+R2，我们给R1赋值100，给R2赋值200。这些信息需要存放到环境角色中，很多情况下我们使用Map来充当环境角色就足够了</p>
 </li>
 </ul>
-<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="/.com//Interpreter.jpg" alt="interpreter"></p>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="http://www.taolingyang.com/2018/04/05/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/Interpreter.jpg" alt="interpreter"></p>
 <h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>1.首先定义抽象的表达式<code>AbstractExpression</code>,并提供<code>Interpreter()</code>接口：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Abstract Expression</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AbstractExpression</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">Interpreter</span><span class="params">(Context ctx)</span> </span>= <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 

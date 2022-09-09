@@ -28,14 +28,14 @@
 <meta property="og:site_name" content="Share Mind">
 <meta property="og:description" content="前言 在玩RPG之类游戏的时候，每次通过一次游戏关卡的时候，一般我们都会把游戏的角色状态保存一下，继续通下一关，如果下一关难度比较大很难通过失败后，又懒得从第一关开始重新。幸亏有关卡的保存功能，我们可以直接从上次保存的关卡中重新开始即可，提高了通关的效率。这里的游戏角色的保存和恢复功能就是本文将要介绍的备忘录模式。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://www.taolingyang.com/.com//Memento.jpg">
+<meta property="og:image" content="http://www.taolingyang.com/2018/04/25/%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F/Memento.jpg">
 <meta property="article:published_time" content="2018-04-24T16:00:00.000Z">
 <meta property="article:modified_time" content="2022-09-09T01:52:18.405Z">
 <meta property="article:author" content="Frank Tao">
 <meta property="article:tag" content="Design Pattern">
 <meta property="article:tag" content="Behavior Pattern">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://www.taolingyang.com/.com//Memento.jpg">
+<meta name="twitter:image" content="http://www.taolingyang.com/2018/04/25/%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F/Memento.jpg">
 
 
 <link rel="canonical" href="http://www.taolingyang.com/2018/04/25/%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F/">
@@ -164,7 +164,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">50</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -328,7 +328,7 @@
 <blockquote>
 <p>管理器向原发器请求一个备忘录, 保留一段时间后,将其送回给原发器<br>备忘录是被动的。只有创建备忘录的原发器会对它的状态进行赋值和检索</p>
 </blockquote>
-<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="/.com//Memento.jpg" alt="memento"></p>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="http://www.taolingyang.com/2018/04/25/%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F/Memento.jpg" alt="memento"></p>
 <h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>1.首先定义备忘录类<code>Memento</code>,备忘录类内部状态成员是私有的为了保证封装性,只有原发器能看到,声明原发器类为<code>friend</code>：</p>
 <figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//状态信息类</span></span><br><span class="line"><span class="keyword">struct</span> MementoState</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">string</span> m_stateinformation;</span><br><span class="line">public:</span><br><span class="line">    <span class="constructor">MementoState(<span class="params">string</span> <span class="params">state</span>)</span>: m<span class="constructor">_stateinformation(<span class="params">state</span>)</span> &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    <span class="built_in">string</span> <span class="constructor">GetStateInform()</span></span><br><span class="line">    &#123;</span><br><span class="line">        return m_stateinformation;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 备忘录</span></span><br><span class="line"><span class="keyword">class</span> Originator;</span><br><span class="line"><span class="keyword">class</span> Memento</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    MementoState m_state;</span><br><span class="line">public:</span><br><span class="line">    <span class="constructor">Memento(MementoState <span class="params">state</span>)</span> : m<span class="constructor">_state(<span class="params">state</span>)</span> &#123;&#125;;</span><br><span class="line">    friend <span class="keyword">class</span> Originator; <span class="comment">// Originator为友元类，只有Originator才能访问Memento成员</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 

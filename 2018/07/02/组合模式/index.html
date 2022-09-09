@@ -28,14 +28,14 @@
 <meta property="og:site_name" content="Share Mind">
 <meta property="og:description" content="前言 在稍微大一些的公司组织结构体系中，会有不同的功能部门，如HR Department、Financial Department等等。而有时候为了方便异地管理,又设置不同的子公司，子公司内部又有上述不同的功能部门组成，对于这种类似于文件系统的树形结构，可以考虑使用组合模式去实现。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://www.taolingyang.com/.com//Composite.jpg">
+<meta property="og:image" content="http://www.taolingyang.com/2018/07/02/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/Composite.jpg">
 <meta property="article:published_time" content="2018-07-01T16:00:00.000Z">
 <meta property="article:modified_time" content="2022-09-09T01:52:18.436Z">
 <meta property="article:author" content="Frank Tao">
 <meta property="article:tag" content="Design Pattern">
 <meta property="article:tag" content="Structural Pattern">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://www.taolingyang.com/.com//Composite.jpg">
+<meta name="twitter:image" content="http://www.taolingyang.com/2018/07/02/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/Composite.jpg">
 
 
 <link rel="canonical" href="http://www.taolingyang.com/2018/07/02/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/">
@@ -164,7 +164,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">50</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -324,7 +324,7 @@
 <li><p>Client<br>通过Component接口操纵组合部件的对象</p>
 </li>
 </ul>
-<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="/.com//Composite.jpg" alt="component"></p>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="http://www.taolingyang.com/2018/07/02/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/Composite.jpg" alt="component"></p>
 <h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><ol>
 <li><p>首先定义一个实现类接口<code>AbstractComponent</code>,及操作接口<code>Operator()</code>和访问部件的接口:</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 抽象的组件类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AbstractComponent</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">AbstractComponent</span>() &#123;&#125;;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Operator</span><span class="params">()</span> </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Add</span><span class="params">(shared_ptr&lt;AbstractComponent&gt; &amp;pAC)</span> </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Remove</span><span class="params">(shared_ptr&lt;AbstractComponent&gt; &amp;pAC)</span> </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> shared_ptr&lt;AbstractComponent&gt;&amp; <span class="title">GetChild</span><span class="params">(<span class="type">int</span> n)</span> </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Show</span><span class="params">(<span class="type">int</span> nDepth)</span> </span>= <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>

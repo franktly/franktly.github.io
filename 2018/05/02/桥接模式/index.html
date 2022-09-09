@@ -28,14 +28,14 @@
 <meta property="og:site_name" content="Share Mind">
 <meta property="og:description" content="前言 在绘图时候，会用到各种各样的画笔，画笔按照型号大小，可以分为大中小三种型号，而对于三种不同的型号的画笔又包含多种颜色，对于M种型号的N种颜色的画笔，需要涉及到M*N种画笔对象;但如果把画笔的型号和颜色这两个属性分开来处理，即提供三种型号的画笔，不同颜色通过另外的单独的不同的颜料来搭配之，此时，对于M种不同型号的N种颜色的画笔，仅需要涉及到M + N种对象。而且增加一种类型的画笔，对于前者来说">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://www.taolingyang.com/.com//Bridge.jpg">
+<meta property="og:image" content="http://www.taolingyang.com/2018/05/02/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/Bridge.jpg">
 <meta property="article:published_time" content="2018-05-01T16:00:00.000Z">
 <meta property="article:modified_time" content="2022-09-09T01:52:18.419Z">
 <meta property="article:author" content="Frank Tao">
 <meta property="article:tag" content="Design Pattern">
 <meta property="article:tag" content="Structural Pattern">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://www.taolingyang.com/.com//Bridge.jpg">
+<meta name="twitter:image" content="http://www.taolingyang.com/2018/05/02/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/Bridge.jpg">
 
 
 <link rel="canonical" href="http://www.taolingyang.com/2018/05/02/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/">
@@ -164,7 +164,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">50</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -324,7 +324,7 @@
 <li><p>ConcreteImplementor<br>实现Implementor接口并定义它的具体实现</p>
 </li>
 </ul>
-<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="/.com//Bridge.jpg" alt="bridge"></p>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="http://www.taolingyang.com/2018/05/02/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/Bridge.jpg" alt="bridge"></p>
 <h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><ol>
 <li><p>首先定义一个实现类接口<code>Implementor</code>,及接口<code>OperatorImp()</code>:</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 实现类抽象接口</span></span><br><span class="line"><span class="keyword">class</span> <span class="title">Implementor</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">OperatorImp</span>()</span> = <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>

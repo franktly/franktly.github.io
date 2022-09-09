@@ -28,14 +28,14 @@
 <meta property="og:site_name" content="Share Mind">
 <meta property="og:description" content="前言 一般的文档编辑器都会提供一个主菜单(Menu),主菜单中包含一些菜单项(MenuItem),每个菜单项包含很多的命令操作，包括打开命令，创建命令，编辑命令等等，要设计这样的文档编辑系统，可以考虑使用命令模式。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://www.taolingyang.com/.com//Command.jpg">
+<meta property="og:image" content="http://www.taolingyang.com/2017/12/21/%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F/Command.jpg">
 <meta property="article:published_time" content="2017-12-20T16:00:00.000Z">
 <meta property="article:modified_time" content="2022-09-09T01:52:18.402Z">
 <meta property="article:author" content="Frank Tao">
 <meta property="article:tag" content="Design Pattern">
 <meta property="article:tag" content="Behavior Pattern">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://www.taolingyang.com/.com//Command.jpg">
+<meta name="twitter:image" content="http://www.taolingyang.com/2017/12/21/%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F/Command.jpg">
 
 
 <link rel="canonical" href="http://www.taolingyang.com/2017/12/21/%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F/">
@@ -164,7 +164,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">50</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -328,7 +328,7 @@
 <li><p>Client<br>创建一个ConcreteCommand命令对象，并指定它的Receiver对象</p>
 </li>
 </ul>
-<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="/.com//Command.jpg" alt="command"></p>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="http://www.taolingyang.com/2017/12/21/%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F/Command.jpg" alt="command"></p>
 <h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>1.首先定义接收者<code>Receiver</code>,并提供<code>Action()</code>接口：</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Receiver 接收者 ：具体命令内容的实现</span></span><br><span class="line"><span class="keyword">class</span> <span class="title">Receiver</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Action</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Receiver: Action!&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 

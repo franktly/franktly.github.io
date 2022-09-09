@@ -28,14 +28,14 @@
 <meta property="og:site_name" content="Share Mind">
 <meta property="og:description" content="前言 在C++ STL标准库里面有各种容器对象，如vector,list,map等等，对这些容器对象的遍历操作时候,都是首先获取相应容器的迭代器，再通过迭代器的begin方法,++操作符,end方法来遍历整个容器对象内的各个元素，使得容器对象的元素存储操作和遍历操作分离了，这样的好处是对于同一个类型的容器对象可以通过不同的遍历方法来遍历，同样的，不同的类型的容器对象也可以通过相同的遍历方法来进行。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://www.taolingyang.com/.com//Iterator.jpg">
+<meta property="og:image" content="http://www.taolingyang.com/2018/02/01/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/Iterator.jpg">
 <meta property="article:published_time" content="2018-01-31T16:00:00.000Z">
 <meta property="article:modified_time" content="2022-09-09T01:52:18.467Z">
 <meta property="article:author" content="Frank Tao">
 <meta property="article:tag" content="Design Pattern">
 <meta property="article:tag" content="Behavior Pattern">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://www.taolingyang.com/.com//Iterator.jpg">
+<meta name="twitter:image" content="http://www.taolingyang.com/2018/02/01/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/Iterator.jpg">
 
 
 <link rel="canonical" href="http://www.taolingyang.com/2018/02/01/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/">
@@ -164,7 +164,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">50</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -327,7 +327,7 @@
 <li><p>ConcreteAggregate<br>具体的聚合类，实现了抽象聚合类的<code>createIterator()</code>方法，该方法返回一个具体聚合类对象的具体迭代器对象实例</p>
 </li>
 </ul>
-<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="/.com//Iterator.jpg" alt="iterator"></p>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="http://www.taolingyang.com/2018/02/01/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/Iterator.jpg" alt="iterator"></p>
 <h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>1.首先定义抽象的迭代器类<code>Iterator</code>,并提供几个常用的聚合元素遍历操作接口：<code>First()</code> ,<code>Next()</code>,<code>Current()</code>, <code>IsDone()</code>等：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Abstract Iterator</span></span><br><span class="line"><span class="comment">// 模板类Iterator定义, 使用方法：template &lt;typename(class) T&gt;</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;                        </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Iterator</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">First</span><span class="params">()</span>  </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Next</span><span class="params">()</span>   </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> T* <span class="title">Current</span><span class="params">()</span>  </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">bool</span> <span class="title">IsDone</span><span class="params">()</span> </span>= <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 

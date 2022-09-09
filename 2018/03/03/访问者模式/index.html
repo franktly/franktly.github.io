@@ -28,14 +28,14 @@
 <meta property="og:site_name" content="Share Mind">
 <meta property="og:description" content="前言 在大型体育馆中有各种体育项目，如羽毛球室，乒乓球室，篮球室等等，每种运动项目场地里面会有各种职业背景的体育爱好者，如学生，职工，老师；同时对于同一种职业背景的体育爱好者，可以访问多种运动项目。在软件开发中，有时候我们也需要处理像体育馆这样的不同的运动场所集合对象结构，在该对象结构中存储了多个不同类型的对象信息，而且对同一对象结构中的元素的操作方式并不唯一，可能需要提供多种不同的处理方式，还有">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://www.taolingyang.com/.com//visitor.png">
+<meta property="og:image" content="http://www.taolingyang.com/2018/03/03/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/visitor.png">
 <meta property="article:published_time" content="2018-03-02T16:00:00.000Z">
 <meta property="article:modified_time" content="2022-09-09T01:52:18.461Z">
 <meta property="article:author" content="Frank Tao">
 <meta property="article:tag" content="Design Pattern">
 <meta property="article:tag" content="Behavior Pattern">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://www.taolingyang.com/.com//visitor.png">
+<meta name="twitter:image" content="http://www.taolingyang.com/2018/03/03/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/visitor.png">
 
 
 <link rel="canonical" href="http://www.taolingyang.com/2018/03/03/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/">
@@ -164,7 +164,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">50</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -329,7 +329,7 @@
 <li><p>ObjectStructure<br>能枚举它的元素<br>可以提供一个高层的接口以允许该访问者访问它的元素<br>可以是一个复合或是一个集合，如一个列表或一个无序集合</p>
 </li>
 </ul>
-<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="/.com//visitor.png" alt="visitor"></p>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="http://www.taolingyang.com/2018/03/03/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/visitor.png" alt="visitor"></p>
 <h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>1.首先定义抽象元素类<code>Element</code>,并声明<code>Accept()</code>方法:</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Element</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Accept</span><span class="params">(Visitor *pv)</span> </span>= <span class="number">0</span>; <span class="comment">// 该方法传入一个抽象的访问者对象指针</span></span><br><span class="line"><span class="comment">//  virtual void Operation()  = 0; 每个元素各种有自己的操作</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 

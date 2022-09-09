@@ -28,14 +28,14 @@
 <meta property="og:site_name" content="Share Mind">
 <meta property="og:description" content="前言 在公司上班时候，每周都需要写工作周报，而写周报的时候，每次的格式都差不多，有时候想偷懒，就想自己弄个周报的模板，然后每次填充模板的内容，这样既提高了工作效率，又保证了格式的一致性，上级领导每次浏览周报的时候也一目了然了，真是一石二鸟–)，这种可以看成原型模式的应用，即每次周报对象内容都大概相同，仅需要复制粘贴，然后修改下每周的差异内容即可。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://www.taolingyang.com/.com//Prototype.png">
+<meta property="og:image" content="http://www.taolingyang.com/2017/10/20/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/Prototype.png">
 <meta property="article:published_time" content="2017-10-19T16:00:00.000Z">
 <meta property="article:modified_time" content="2022-09-09T01:52:18.400Z">
 <meta property="article:author" content="Frank Tao">
 <meta property="article:tag" content="Design Pattern">
 <meta property="article:tag" content="Construction Pattern">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://www.taolingyang.com/.com//Prototype.png">
+<meta name="twitter:image" content="http://www.taolingyang.com/2017/10/20/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/Prototype.png">
 
 
 <link rel="canonical" href="http://www.taolingyang.com/2017/10/20/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/">
@@ -164,7 +164,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">50</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -322,7 +322,7 @@
 <li><p>Client<br>让一个原型克隆自身从而创建一个新的对象</p>
 </li>
 </ul>
-<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="/.com//Prototype.png" alt="prototype"></p>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="http://www.taolingyang.com/2017/10/20/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/Prototype.png" alt="prototype"></p>
 <h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><ol>
 <li><p>首先声明一个抽象的原型类<code>AbstractPrototype</code>，原型类中必须有<code>clone()</code>接口(虚函数):</p>
 <figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> AbstractPrototype</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    <span class="constructor">AbstractPrototype()</span> &#123;&#125;;</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="constructor">AbstractPrototype()</span> &#123;&#125;;</span><br><span class="line">    <span class="keyword">virtual</span> AbstractPrototype* <span class="constructor">Clone()</span> = <span class="number">0</span>; <span class="comment">// 克隆接口,返回自身的类型</span></span><br><span class="line">&#125;; </span><br></pre></td></tr></table></figure>

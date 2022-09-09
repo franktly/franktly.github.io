@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Share Mind">
 <meta property="og:description" content="前言 在公司请年假的时候，需要首先在TMS系统提出申请，在提出申请的时候，发现申请不同的时间长短，审批的领导不一样，如不超过但是包括1天由科长(Section Chief)审批，超过1天但是不超过3天由部长(Minister)审批，超过3天以上由主任(Director)审批。在这个审批流程中，我们的年假请求沿着一条链在传递，每个请求处理者都根据请求的具体情况在自己的处理范围内进行审批，有一种专门用">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://www.taolingyang.com/.com//Response.jpg">
+<meta property="og:image" content="http://www.taolingyang.com/2018/02/15/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/Response.jpg">
 <meta property="og:image" content="http://7xq8f9.com1.z0.glb.clouddn.com/pic%2FReponse_Abstract.PNG">
 <meta property="article:published_time" content="2018-02-14T16:00:00.000Z">
 <meta property="article:modified_time" content="2022-09-09T01:52:18.463Z">
@@ -36,7 +36,7 @@
 <meta property="article:tag" content="Design Pattern">
 <meta property="article:tag" content="Behavior Pattern">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://www.taolingyang.com/.com//Response.jpg">
+<meta name="twitter:image" content="http://www.taolingyang.com/2018/02/15/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/Response.jpg">
 
 
 <link rel="canonical" href="http://www.taolingyang.com/2018/02/15/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/">
@@ -165,7 +165,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">50</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -325,7 +325,7 @@
 <li><p>Client<br>客户端，负责创建职责链，向链上的具体处理者(ConcreteHandler)对象提交请求</p>
 </li>
 </ul>
-<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="/.com//Response.jpg" alt="chainofresponsibility"></p>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="http://www.taolingyang.com/2018/02/15/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/Response.jpg" alt="chainofresponsibility"></p>
 <h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>1.首先定义抽象的<code>Handler</code>,并提供<code>HandlerRequest()</code>接口：</p>
 <figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Abstract Handler</span></span><br><span class="line"><span class="keyword">class</span> Handler</span><br><span class="line">&#123;</span><br><span class="line">protected: <span class="comment">// protected,子类继承能访问和使用</span></span><br><span class="line">    Handler *m_pHandler; <span class="comment">// 请求的下个抽象处理者</span></span><br><span class="line">    <span class="built_in">int</span>     m_nState; <span class="comment">// 请求的参数</span></span><br><span class="line">public:</span><br><span class="line">    <span class="constructor">Handler(Handler <span class="operator">*</span><span class="params">pHandler</span>)</span> : m<span class="constructor">_pHandler(<span class="params">pHandler</span>)</span> &#123;&#125;; </span><br><span class="line">    <span class="comment">//在构造函数中传入下一个处理者</span></span><br><span class="line">    <span class="comment">//也可以通过提供一个setHandler方法，传入Handler，动态设置传入下一个处理者</span></span><br><span class="line">public:</span><br><span class="line">    <span class="keyword">virtual</span> void <span class="constructor">HandlerRequest(<span class="params">int</span> <span class="params">nState</span>)</span> = <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 

@@ -28,16 +28,16 @@
 <meta property="og:site_name" content="Share Mind">
 <meta property="og:description" content="前言 上一篇简要介绍了OOD的设计原则及设计模式的基本概念，从本篇开始介绍包括创建型(5)&amp;结构型(7)&amp;行为型(11)总共23种基本的设计模式和简单的C++代码实现。本篇介绍工厂模式，包括以下三种模式：  简单工厂模式 工厂方法模式 抽象工厂模式">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://www.taolingyang.com/.com//SimpleFactory.jpg">
-<meta property="og:image" content="http://www.taolingyang.com/.com//FactoryMethod.jpg">
-<meta property="og:image" content="http://www.taolingyang.com/.com//AbstractFactory.jpg">
+<meta property="og:image" content="http://www.taolingyang.com/2017/09/30/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/SimpleFactory.jpg">
+<meta property="og:image" content="http://www.taolingyang.com/2017/09/30/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/FactoryMethod.jpg">
+<meta property="og:image" content="http://www.taolingyang.com/2017/09/30/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/AbstractFactory.jpg">
 <meta property="article:published_time" content="2017-09-29T16:00:00.000Z">
 <meta property="article:modified_time" content="2022-09-09T01:52:18.413Z">
 <meta property="article:author" content="Frank Tao">
 <meta property="article:tag" content="Design Pattern">
 <meta property="article:tag" content="Construction Pattern">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://www.taolingyang.com/.com//SimpleFactory.jpg">
+<meta name="twitter:image" content="http://www.taolingyang.com/2017/09/30/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/SimpleFactory.jpg">
 
 
 <link rel="canonical" href="http://www.taolingyang.com/2017/09/30/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/">
@@ -166,7 +166,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">50</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -329,7 +329,7 @@
 <li><p>Concrete Product<br>具体产品类</p>
 </li>
 </ul>
-<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="/.com//SimpleFactory.jpg" alt="simple_factory"></p>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="http://www.taolingyang.com/2017/09/30/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/SimpleFactory.jpg" alt="simple_factory"></p>
 <h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><ol>
 <li><p>首先定义一个抽象产品类，只提供一个简单的<code>Show()</code>接口显示不同产品类型的打印:</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title">AbstractProduct</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Show</span>()</span> = <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
@@ -365,7 +365,7 @@ I am Product B
 <li><p>Concrete Product<br>具体产品类</p>
 </li>
 </ul>
-<h3 id="模式结构-1"><a href="#模式结构-1" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="/.com//FactoryMethod.jpg" alt="factory_method"></p>
+<h3 id="模式结构-1"><a href="#模式结构-1" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="http://www.taolingyang.com/2017/09/30/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/FactoryMethod.jpg" alt="factory_method"></p>
 <h3 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h3><ol>
 <li><p>抽象产品和具体的产品代码见上节的<strong>简单工厂模式</strong>的<em>代码实现</em>部分</p>
 </li>
@@ -413,7 +413,7 @@ I am Product B
 <li><p>Concrete Product<br>具体产品类</p>
 </li>
 </ul>
-<h3 id="模式结构-2"><a href="#模式结构-2" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="/.com//AbstractFactory.jpg" alt="abstract_factory"></p>
+<h3 id="模式结构-2"><a href="#模式结构-2" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="http://www.taolingyang.com/2017/09/30/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/AbstractFactory.jpg" alt="abstract_factory"></p>
 <h3 id="代码实现-2"><a href="#代码实现-2" class="headerlink" title="代码实现"></a>代码实现</h3><p>1.抽象产品A(对应一个产品结构)</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title">AbstractProductA</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">ShowA</span>()</span> = <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 

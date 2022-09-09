@@ -2,6 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.taolingyang.com/2019/09/09/Hexo-asset-image%E6%8F%92%E4%BB%B6%E7%94%9F%E6%88%90%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87%E8%B7%AF%E5%BE%84%E9%94%99%E8%AF%AF/</loc>
+    
+    <lastmod>2022-09-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.taolingyang.com/2016/09/02/Hexo%E5%8D%9A%E5%AE%A2%E4%BF%9D%E5%AD%98%E4%B8%8E%E6%81%A2%E5%A4%8D/</loc>
+    
+    <lastmod>2022-09-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://www.taolingyang.com/2019/07/08/Windows%E4%B8%8BGVim%E4%BD%BF%E7%94%A8/</loc>
     
     <lastmod>2022-09-09</lastmod>
@@ -20,7 +38,7 @@
   </url>
   
   <url>
-    <loc>http://www.taolingyang.com/about/index.html</loc>
+    <loc>http://www.taolingyang.com/categories/index.html</loc>
     
     <lastmod>2022-09-09</lastmod>
     
@@ -29,7 +47,7 @@
   </url>
   
   <url>
-    <loc>http://www.taolingyang.com/categories/index.html</loc>
+    <loc>http://www.taolingyang.com/about/index.html</loc>
     
     <lastmod>2022-09-09</lastmod>
     
@@ -74,7 +92,7 @@
   </url>
   
   <url>
-    <loc>http://www.taolingyang.com/2017/09/15/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%A6%82%E8%BF%B0/</loc>
+    <loc>http://www.taolingyang.com/2018/04/05/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/</loc>
     
     <lastmod>2022-09-09</lastmod>
     
@@ -83,7 +101,7 @@
   </url>
   
   <url>
-    <loc>http://www.taolingyang.com/2018/04/05/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/</loc>
+    <loc>http://www.taolingyang.com/2017/09/15/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%A6%82%E8%BF%B0/</loc>
     
     <lastmod>2022-09-09</lastmod>
     
@@ -326,6 +344,15 @@
   </url>
   
   <url>
+    <loc>http://www.taolingyang.com/2016/06/11/Linux-exit%E5%92%8C_exit%E5%87%BD%E6%95%B0%E5%8C%BA%E5%88%AB/</loc>
+    
+    <lastmod>2022-09-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://www.taolingyang.com/2016/06/10/Linux-fork%E5%92%8Cvfork%E5%87%BD%E6%95%B0%E5%8C%BA%E5%88%AB/</loc>
     
     <lastmod>2022-09-09</lastmod>
@@ -344,15 +371,6 @@
   </url>
   
   <url>
-    <loc>http://www.taolingyang.com/2016/06/11/Linux-exit%E5%92%8C_exit%E5%87%BD%E6%95%B0%E5%8C%BA%E5%88%AB/</loc>
-    
-    <lastmod>2022-09-09</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://www.taolingyang.com/2016/06/08/Linux-Gcc%E7%BC%96%E8%AF%91%E9%93%BE%E6%8E%A5%E5%8F%8A%E5%B8%B8%E7%94%A8%E9%80%89%E9%A1%B9%E6%80%BB%E7%BB%93/</loc>
     
     <lastmod>2022-09-09</lastmod>
@@ -363,15 +381,6 @@
   
   <url>
     <loc>http://www.taolingyang.com/2016/01/10/Hexo%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-3/</loc>
-    
-    <lastmod>2022-09-09</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://www.taolingyang.com/2016/09/02/Hexo%E5%8D%9A%E5%AE%A2%E4%BF%9D%E5%AD%98%E4%B8%8E%E6%81%A2%E5%A4%8D/</loc>
     
     <lastmod>2022-09-09</lastmod>
     
@@ -502,41 +511,6 @@
   </url>
   
   <url>
-    <loc>http://www.taolingyang.com/tags/Hexo/</loc>
-    <lastmod>2022-09-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://www.taolingyang.com/tags/GitHub/</loc>
-    <lastmod>2022-09-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://www.taolingyang.com/tags/Next/</loc>
-    <lastmod>2022-09-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://www.taolingyang.com/tags/%E5%8D%9A%E5%AE%A2/</loc>
-    <lastmod>2022-09-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://www.taolingyang.com/tags/Node-js/</loc>
-    <lastmod>2022-09-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>http://www.taolingyang.com/tags/Git/</loc>
     <lastmod>2022-09-09</lastmod>
     <changefreq>weekly</changefreq>
@@ -552,6 +526,41 @@
   
   <url>
     <loc>http://www.taolingyang.com/tags/SVN/</loc>
+    <lastmod>2022-09-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.taolingyang.com/tags/GitHub/</loc>
+    <lastmod>2022-09-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.taolingyang.com/tags/Hexo/</loc>
+    <lastmod>2022-09-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.taolingyang.com/tags/%E5%8D%9A%E5%AE%A2/</loc>
+    <lastmod>2022-09-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.taolingyang.com/tags/Next/</loc>
+    <lastmod>2022-09-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.taolingyang.com/tags/Node-js/</loc>
     <lastmod>2022-09-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -586,6 +595,13 @@
   </url>
   
   <url>
+    <loc>http://www.taolingyang.com/tags/exit/</loc>
+    <lastmod>2022-09-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>http://www.taolingyang.com/tags/fork/</loc>
     <lastmod>2022-09-09</lastmod>
     <changefreq>weekly</changefreq>
@@ -594,13 +610,6 @@
   
   <url>
     <loc>http://www.taolingyang.com/tags/signal/</loc>
-    <lastmod>2022-09-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://www.taolingyang.com/tags/exit/</loc>
     <lastmod>2022-09-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -728,14 +737,14 @@
   </url>
   
   <url>
-    <loc>http://www.taolingyang.com/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</loc>
+    <loc>http://www.taolingyang.com/categories/Tools/</loc>
     <lastmod>2022-09-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://www.taolingyang.com/categories/Tools/</loc>
+    <loc>http://www.taolingyang.com/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</loc>
     <lastmod>2022-09-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

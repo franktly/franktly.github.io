@@ -28,14 +28,14 @@
 <meta property="og:site_name" content="Share Mind">
 <meta property="og:description" content="前言 在互联网通信高度发达的今天，大家在过节的时候都是通过QQ或微信来发祝福短信，有时候，由于朋友太多，一个一个的发送消息比较麻烦。幸亏QQ和微信有群发的功能，你只需要选择发送的对象，编辑发送一次信息，其他的所有群里的朋友都可以收到祝福了。通过引入群的机制，将极大减少系统中用户之间的两两通信，用户与用户之间的联系可以通过群来实现。这样的类似“群”一样的中间类来协调这些类&#x2F;对象之间的复杂关">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://www.taolingyang.com/.com//Mediator_Abstract.jpg">
+<meta property="og:image" content="http://www.taolingyang.com/2017/11/20/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/Mediator_Abstract.jpg">
 <meta property="article:published_time" content="2017-11-19T16:00:00.000Z">
 <meta property="article:modified_time" content="2022-09-09T01:52:18.387Z">
 <meta property="article:author" content="Frank Tao">
 <meta property="article:tag" content="Design Pattern">
 <meta property="article:tag" content="Behavior Pattern">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://www.taolingyang.com/.com//Mediator_Abstract.jpg">
+<meta name="twitter:image" content="http://www.taolingyang.com/2017/11/20/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/Mediator_Abstract.jpg">
 
 
 <link rel="canonical" href="http://www.taolingyang.com/2017/11/20/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/">
@@ -164,7 +164,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">50</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -334,7 +334,7 @@
 <li>协调作用（行为性）：中介者可以更进一步的对同事之间的关系进行封装，同事可以一致的和中介者进行交互，而不需要指明中介者需要具体怎么做，中介者根据封装在自身内部的协调逻辑，对同事的请求进行进一步处理，将同事成员之间的关系行为进行分离和封装</li>
 </ol>
 </blockquote>
-<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="/.com//Mediator_Abstract.jpg" alt="mediator_common"></p>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="http://www.taolingyang.com/2017/11/20/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/Mediator_Abstract.jpg" alt="mediator_common"></p>
 <h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>1.首先定义抽象的中介这类<code>Mediator</code>,并提供<code>Notify()</code>接口用于各个同事之间进行通信：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Abstract Mediator </span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Colleague</span>;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Mediator</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    list&lt;Colleague*&gt; m_listColleague;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">AttachColleague</span><span class="params">(Colleague* pColleague)</span>     </span>= <span class="number">0</span>; </span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Notify</span><span class="params">(Colleague *pColleague, string msg)</span>  </span>= <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 

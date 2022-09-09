@@ -28,14 +28,14 @@
 <meta property="og:site_name" content="Share Mind">
 <meta property="og:description" content="前言 有些小伙伴喜欢去像美国、加拿大，包括中国台湾等国家或地区旅游时候，准备不充分的时候出现这样尴尬的情况:当手机没电的时候，想用自己从国内带的充电器充电时候发现充电器罢工不能用了，这是因为上述这些国家的插座使用的不是国内50Hz的220V电压，而是60Hz的110V电压供电的，电压低了1倍，自然是不能用了。有经验的童鞋会准备一个电源插座转换器，将110V电压转为国内标准的220V电压。这里所说的">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://www.taolingyang.com/.com//Adapter.jpg">
+<meta property="og:image" content="http://www.taolingyang.com/2018/08/03/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/Adapter.jpg">
 <meta property="article:published_time" content="2018-08-02T16:00:00.000Z">
 <meta property="article:modified_time" content="2022-09-09T01:52:18.470Z">
 <meta property="article:author" content="Frank Tao">
 <meta property="article:tag" content="Design Pattern">
 <meta property="article:tag" content="Structural Pattern">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://www.taolingyang.com/.com//Adapter.jpg">
+<meta name="twitter:image" content="http://www.taolingyang.com/2018/08/03/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/Adapter.jpg">
 
 
 <link rel="canonical" href="http://www.taolingyang.com/2018/08/03/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/">
@@ -164,7 +164,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">50</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -336,7 +336,7 @@
 <li><p>Client<br>与符合Target接口的对象协同</p>
 </li>
 </ul>
-<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="/.com//Adapter.jpg" alt="adapter"></p>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="http://www.taolingyang.com/2018/08/03/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/Adapter.jpg" alt="adapter"></p>
 <h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><h4 id="类适配器"><a href="#类适配器" class="headerlink" title="类适配器"></a>类适配器</h4><ol>
 <li><p>首先定义一个要适配的目标类<code>Target</code>,及接口<code>Request()</code>:</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title">Target</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Request</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Target Request&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>

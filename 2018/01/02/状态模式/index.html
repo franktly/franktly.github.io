@@ -28,14 +28,14 @@
 <meta property="og:site_name" content="Share Mind">
 <meta property="og:description" content="前言 在dota即时对战中，不同的时期，战争的行为是不一样的。如在游戏战争前期，主要是辅助英雄包鸡包眼游走gank，后期英雄发育为主，一般不会参与团战，这时候主要以前期辅助英雄为主角；在游戏战争中期，后期英雄发育经过前期的发育，开始与辅助英雄抱团推塔，参加团战，辅助作用慢慢减弱，后期英雄慢慢变强；而在游戏战争的后期，经过前期的发育，中期团战金钱的积累，后期英雄成为了战场的主角，开始带领辅助英雄推高">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://www.taolingyang.com/.com//State.jpg">
+<meta property="og:image" content="http://www.taolingyang.com/2018/01/02/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/State.jpg">
 <meta property="article:published_time" content="2018-01-01T16:00:00.000Z">
 <meta property="article:modified_time" content="2022-09-09T01:52:18.428Z">
 <meta property="article:author" content="Frank Tao">
 <meta property="article:tag" content="Design Pattern">
 <meta property="article:tag" content="Behavior Pattern">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://www.taolingyang.com/.com//State.jpg">
+<meta name="twitter:image" content="http://www.taolingyang.com/2018/01/02/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/State.jpg">
 
 
 <link rel="canonical" href="http://www.taolingyang.com/2018/01/02/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/">
@@ -164,7 +164,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">50</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -325,7 +325,7 @@
 <li><p>ConcreteState<br>具体状态类，抽象状态类的子类，每一个子类实现一个与环境类的一个状态相关的行为，每一个具体状态类对应环境的一个具体状态，不同的具体状态类其行为有所不同</p>
 </li>
 </ul>
-<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="/.com//State.jpg" alt="state"></p>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="http://www.taolingyang.com/2018/01/02/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/State.jpg" alt="state"></p>
 <h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>1.首先定义状态上下类<code>StateContext</code>，维护了一个<code>State</code>类引用：</p>
 <figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// State Context</span></span><br><span class="line"><span class="keyword">class</span> StateContext</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    State *m_pState; <span class="comment">// 上下文的State引用</span></span><br><span class="line">    <span class="built_in">int</span>  m_value; <span class="comment">//  上下文的信息</span></span><br><span class="line">public:</span><br><span class="line">    <span class="constructor">StateContext(State <span class="operator">*</span><span class="params">pState</span>, <span class="params">int</span> <span class="params">value</span>)</span> : m<span class="constructor">_pState(<span class="params">pState</span>)</span>, m<span class="constructor">_value(<span class="params">value</span>)</span> &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    void <span class="constructor">Request()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="constructor">NULL_POINTER(<span class="params">m_pState</span>)</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            m_pState-&gt;<span class="constructor">Handle(<span class="params">this</span>)</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    void <span class="constructor">SetState(State <span class="operator">*</span><span class="params">pState</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        m_pState = pState;</span><br><span class="line">    &#125;</span><br><span class="line">    State* <span class="constructor">GetState(<span class="params">void</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        return m_pState;</span><br><span class="line">    &#125;</span><br><span class="line">public:</span><br><span class="line">    <span class="built_in">int</span> <span class="constructor">GetValue(<span class="params">void</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        return m_value;</span><br><span class="line">    &#125;</span><br><span class="line">    void <span class="constructor">SetValue(<span class="params">int</span> <span class="params">value</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        m_value = value;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 

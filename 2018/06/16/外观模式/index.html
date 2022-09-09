@@ -28,14 +28,14 @@
 <meta property="og:site_name" content="Share Mind">
 <meta property="og:description" content="前言 在使用Visual Studio开发应用程序时候，在完成代码后，大家都习惯的点击Build按钮完成代码的编译链接过程，其实在IDE内部进行了一系列的操作：先Scanner扫描，后Parser解析，而后MidcodeGenerator产生中间代码，最后MachcodeGenerator产生最终的机器码。IDE的好处就是界面对客户来说非常简洁，内部的各个子系统对客户来说是隐藏的，客户也没必要知道">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://www.taolingyang.com/.com//Facade.jpg">
+<meta property="og:image" content="http://www.taolingyang.com/2018/06/16/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/Facade.jpg">
 <meta property="article:published_time" content="2018-06-15T16:00:00.000Z">
 <meta property="article:modified_time" content="2022-09-09T01:52:18.410Z">
 <meta property="article:author" content="Frank Tao">
 <meta property="article:tag" content="Design Pattern">
 <meta property="article:tag" content="Structural Pattern">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://www.taolingyang.com/.com//Facade.jpg">
+<meta name="twitter:image" content="http://www.taolingyang.com/2018/06/16/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/Facade.jpg">
 
 
 <link rel="canonical" href="http://www.taolingyang.com/2018/06/16/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/">
@@ -164,7 +164,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">50</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -323,7 +323,7 @@
 <li><p>Subsystem<br>实现子系统的功能<br>处理由Facade对象指派的任务<br>没有Facade的任何相关信息；即没有指向facade的指针</p>
 </li>
 </ul>
-<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="/.com//Facade.jpg" alt="facade"></p>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="http://www.taolingyang.com/2018/06/16/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/Facade.jpg" alt="facade"></p>
 <h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><ol>
 <li><p>首先定义两个子系统类,及操作接口：</p>
 <figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SubsystemA</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">operateA</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Subsytem A operate&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SubsystemB</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">operateB</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Subsytem B operate&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>

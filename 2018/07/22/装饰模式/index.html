@@ -28,14 +28,14 @@
 <meta property="og:site_name" content="Share Mind">
 <meta property="og:description" content="前言 在平时的生活中，手机几乎无处不在，有些比较细心的机友可能会给手机增加各种一些额外扩展的功能，如屏保防止手机碎屏，添加些小挂件增加美观等等。同时市面上有各种类型的手机，如Iphone,Nokia等等,，这样就会组合成带有装饰功能的各种手机了，如带屏保的iphone手机,带屏保又带挂件的Nokia手机等。对于此种现象的描述，可以考虑使用装饰模式。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://www.taolingyang.com/.com//Decorator.jpg">
+<meta property="og:image" content="http://www.taolingyang.com/2018/07/22/%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F/Decorator.jpg">
 <meta property="article:published_time" content="2018-07-21T16:00:00.000Z">
 <meta property="article:modified_time" content="2022-09-09T01:52:18.448Z">
 <meta property="article:author" content="Frank Tao">
 <meta property="article:tag" content="Design Pattern">
 <meta property="article:tag" content="Structural Pattern">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://www.taolingyang.com/.com//Decorator.jpg">
+<meta name="twitter:image" content="http://www.taolingyang.com/2018/07/22/%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F/Decorator.jpg">
 
 
 <link rel="canonical" href="http://www.taolingyang.com/2018/07/22/%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F/">
@@ -164,7 +164,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">50</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -330,7 +330,7 @@
 <li><p>ConcreteDecorator<br>具体装饰类， 抽象装饰类的子类<br>它可以调用在抽象装饰类中定义的方法,并可以增加新的方法用以扩充对象的行为</p>
 </li>
 </ul>
-<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="/.com//Decorator.jpg" alt="decorator"></p>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="http://www.taolingyang.com/2018/07/22/%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F/Decorator.jpg" alt="decorator"></p>
 <h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><ol>
 <li><p>首先定义一个抽象构件类<code>Component</code>,及操作接口<code>Operator()</code>:</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 抽象构件类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title">Component</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Component() &#123;&#125;;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Operator</span>()</span> = <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
