@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.taolingyang.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.13.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言 在稍微大一些的公司组织结构体系中，会有不同的功能部门，如HR Department、Financial Department等等。而有时候为了方便异地管理,又设置不同的子公司，子公司内部又有上述不同的功能部门组成，对于这种类似于文件系统的树形结构，可以考虑使用组合模式去实现。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="组合模式(结构型)">
+<meta property="og:url" content="http://www.taolingyang.com/2018/07/02/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="Share Mind">
+<meta property="og:description" content="前言 在稍微大一些的公司组织结构体系中，会有不同的功能部门，如HR Department、Financial Department等等。而有时候为了方便异地管理,又设置不同的子公司，子公司内部又有上述不同的功能部门组成，对于这种类似于文件系统的树形结构，可以考虑使用组合模式去实现。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://www.taolingyang.com/.com//Composite.jpg">
+<meta property="article:published_time" content="2018-07-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-09-09T01:52:18.436Z">
+<meta property="article:author" content="Frank Tao">
+<meta property="article:tag" content="Design Pattern">
+<meta property="article:tag" content="Structural Pattern">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.taolingyang.com/.com//Composite.jpg">
+
+
+<link rel="canonical" href="http://www.taolingyang.com/2018/07/02/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://www.taolingyang.com/2018/07/02/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/","path":"2018/07/02/组合模式/","title":"组合模式(结构型)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>组合模式(结构型) | Share Mind</title>
+  
+
+
+
+
+
+<link rel="dns-prefetch" href="https://railway-starter-production-f6c1.up.railway.app">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Share Mind</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Love Reading | Film | Climbing | Snooker</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">组合模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%84%8F%E5%9B%BE"><span class="nav-number">2.1.</span> <span class="nav-text">意图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E4%B8%8E%E8%80%85"><span class="nav-number">2.2.</span> <span class="nav-text">参与者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="nav-number">2.3.</span> <span class="nav-text">模式结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.4.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E4%BA%8E%E5%8F%B6%E5%AD%90%E8%8A%82%E7%82%B9%E6%94%B9%E8%BF%9B"><span class="nav-number">2.5.</span> <span class="nav-text">对于叶子节点改进</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%8F%E6%98%8E%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.5.1.</span> <span class="nav-text">透明组合模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.5.2.</span> <span class="nav-text">安全组合模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A2%9E%E5%8A%A0%E4%B8%80%E4%B8%AA%E8%8E%B7%E5%8F%96Composite%E7%9A%84%E6%8E%A5%E5%8F%A3%E6%9D%A5%E5%8C%BA%E5%88%86"><span class="nav-number">2.5.3.</span> <span class="nav-text">增加一个获取Composite的接口来区分</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">2.6.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">2.7.</span> <span class="nav-text">优缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F%E5%85%B7%E4%BD%93%E5%AE%9E%E4%BE%8B"><span class="nav-number">3.</span> <span class="nav-text">组合模式具体实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%AC%E5%8F%B8%E7%BB%84%E7%BB%87%E7%BB%93%E6%9E%84"><span class="nav-number">3.1.</span> <span class="nav-text">公司组织结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-1"><span class="nav-number">3.1.1.</span> <span class="nav-text">代码实现</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Frank Tao"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Frank Tao</p>
+  <div class="site-description" itemprop="description">welcome to taolingyang’s blog -~-</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/franktly" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;franktly" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/tao-ling-yang" title="ZhiHu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;tao-ling-yang" rel="noopener" target="_blank"><i class="fa fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/2273442920" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;2273442920" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+  <a href="https://github.com/franktly" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.taolingyang.com/2018/07/02/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Frank Tao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Share Mind">
+      <meta itemprop="description" content="welcome to taolingyang’s blog -~-">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="组合模式(结构型) | Share Mind">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          组合模式(结构型)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-07-02 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-02T00:00:00+08:00">2018-07-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Design-Pattern/" itemprop="url" rel="index"><span itemprop="name">Design Pattern</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/2018/07/02/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2018/07/02/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>11k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>10 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>在稍微大一些的公司组织结构体系中，会有不同的功能部门，如HR Department、Financial Department等等。而有时候为了方便异地管理,又设置不同的子公司，子公司内部又有上述不同的功能部门组成，对于这种类似于文件系统的树形结构，可以考虑使用组合模式去实现。</p>
+<span id="more"></span>
+
+<h2 id="组合模式"><a href="#组合模式" class="headerlink" title="组合模式"></a>组合模式</h2><hr>
+<p>组合模式，该模式通过一种巧妙的设计方案使得用户可以一致性地处理整个树形结构或者树形结构的一部分，也可以一致性地处理树形结构中的叶子节点(不包含子节点的节点)和组合节点(包含子节点的节点)。</p>
+<h3 id="意图"><a href="#意图" class="headerlink" title="意图"></a>意图</h3><p>将对象组合成树形结构以表示“部分、整体”的层次结构。组合模式使得用户对单个对象和组合对象的使用具有一致性</p>
+<h3 id="参与者"><a href="#参与者" class="headerlink" title="参与者"></a>参与者</h3><ul>
+<li><p>Component<br>为组合中的对象声明接口；<br>在适当的情况下,实现所有类共有接口的缺省行为；<br>声明的一个接口用于访问和管理Component的子组件;<br>(可选)在递归结构中定义一个接口，用于访问一个父部件，并在合适的情况下实现它;</p>
+</li>
+<li><p>Leaf<br>在组合中表示叶节点对象(叶节点没有子节点);<br>在组合中定义对象的行为;</p>
+</li>
+<li><p>Composite<br>定义有子部件的那些部件的行为;<br>存储子部件;<br>在Component接口中实现与子部件有关的操作</p>
+</li>
+<li><p>Client<br>通过Component接口操纵组合部件的对象</p>
+</li>
+</ul>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="/.com//Composite.jpg" alt="component"></p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><ol>
+<li><p>首先定义一个实现类接口<code>AbstractComponent</code>,及操作接口<code>Operator()</code>和访问部件的接口:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 抽象的组件类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AbstractComponent</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">AbstractComponent</span>() &#123;&#125;;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Operator</span><span class="params">()</span> </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Add</span><span class="params">(shared_ptr&lt;AbstractComponent&gt; &amp;pAC)</span> </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Remove</span><span class="params">(shared_ptr&lt;AbstractComponent&gt; &amp;pAC)</span> </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> shared_ptr&lt;AbstractComponent&gt;&amp; <span class="title">GetChild</span><span class="params">(<span class="type">int</span> n)</span> </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Show</span><span class="params">(<span class="type">int</span> nDepth)</span> </span>= <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义叶子组件类<code>Leaf</code>继承与<code>AbstractComponent</code>,并实现其相应接口<code>Operator()</code>,对于<code>Add()</code>、<code>Remove()</code>、<code>GetChild()</code>,实现为空或进行异常处理:</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> Leaf : public AbstractComponent</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">string</span> m_strName;</span><br><span class="line">public:</span><br><span class="line">    <span class="constructor">Leaf(<span class="params">string</span> <span class="params">strName</span>)</span> : m<span class="constructor">_strName(<span class="params">strName</span>)</span> &#123;&#125;;</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="constructor">Leaf()</span> &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    void <span class="constructor">Operator()</span></span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot; I am Named&quot;</span> &lt;&lt; m_strName &lt;&lt; <span class="string">&quot;Leaf Operator&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Leaf组件对象内部没有子对象，故Add,Removew为空,必须去实现AbstractComponent的Virtual接口，即使为空</span></span><br><span class="line">    void <span class="constructor">Add(<span class="params">shared_ptr</span>&lt;AbstractComponent&gt; &amp;<span class="params">pAC</span>)</span> &#123;&#125;;</span><br><span class="line">    void <span class="constructor">Remove(<span class="params">shared_ptr</span>&lt;AbstractComponent&gt; &amp;<span class="params">pAC</span>)</span> &#123;&#125;;</span><br><span class="line">    shared_ptr&lt;AbstractComponent&gt;&amp; <span class="constructor">GetChild(<span class="params">int</span> <span class="params">n</span>)</span> &#123;return shared_ptr&lt;AbstractComponent&gt;(<span class="number">0</span>);&#125;</span><br><span class="line">    void <span class="constructor">Show(<span class="params">int</span> <span class="params">nDepth</span>)</span> </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; nDepth; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;--&quot;</span> &lt;&lt; flush; <span class="comment">// 清除缓存区 不换行，endl 是清除缓冲区 + 换行</span></span><br><span class="line">        &#125;</span><br><span class="line">        cout &lt;&lt; m_strName &lt;&lt; endl;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>再定义一个组合组件类<code>Composite</code>继承与<code>AbstractComponent</code>,并实现其相应接口<code>Operator()</code>、<code>Add()</code>及<code>Remove()</code>、<code>GetChild()</code>：</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 组合组件类，里面包含其他组件对象</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Composite</span> : <span class="keyword">public</span> AbstractComponent</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    string m_strName;</span><br><span class="line">    vector&lt;shared_ptr&lt;AbstractComponent&gt;&gt; m_VecComponent;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Composite</span>(string strName): <span class="built_in">m_strName</span>(strName) &#123;&#125;;</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">Composite</span>() &#123;&#125;;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Operator</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot; I am Named&quot;</span> &lt;&lt; m_strName &lt;&lt; <span class="string">&quot;Composite Operator&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Add</span><span class="params">(shared_ptr&lt;AbstractComponent&gt; &amp;pAC)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        m_VecComponent.<span class="built_in">push_back</span>(pAC);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Remove</span><span class="params">(shared_ptr&lt;AbstractComponent&gt; &amp;pAC)</span> <span class="comment">// 删除与指定组件对象名字一样的</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (vector&lt;shared_ptr&lt;AbstractComponent&gt;&gt;::iterator it = m_VecComponent.<span class="built_in">begin</span>();</span><br><span class="line">             it !=m_VecComponent.<span class="built_in">end</span>();</span><br><span class="line">             ++it)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> ((*it) == pAC)</span><br><span class="line">            &#123;</span><br><span class="line">                m_VecComponent.<span class="built_in">erase</span>(it);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">shared_ptr&lt;AbstractComponent&gt;&amp; <span class="title">GetChild</span><span class="params">(<span class="type">int</span> n)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (n &gt; m_VecComponent.<span class="built_in">size</span>())</span><br><span class="line">        &#123;</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;n is out of range&quot;</span> &lt;&lt; endl;</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">shared_ptr</span>&lt;AbstractComponent&gt;(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> m_VecComponent[n];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Show</span><span class="params">(<span class="type">int</span> nDepth)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 显示当前组合对象自己的名字信息</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i&lt; nDepth; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;--&quot;</span> &lt;&lt; flush;</span><br><span class="line">        &#125;</span><br><span class="line">        cout &lt;&lt; m_strName &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 显示当前组合对象容器内部包含的子对象的名字信息</span></span><br><span class="line">        <span class="keyword">for</span> (vector&lt;shared_ptr&lt;AbstractComponent&gt;&gt;::iterator it = m_VecComponent.<span class="built_in">begin</span>();</span><br><span class="line">             it != m_VecComponent.<span class="built_in">end</span>();</span><br><span class="line">             ++it)</span><br><span class="line">        &#123;</span><br><span class="line">            (*it)-&gt;<span class="built_in">Show</span>(nDepth + <span class="number">2</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试组合模式：</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">void <span class="constructor">CompositeTest_General()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 创建根节点</span></span><br><span class="line">    shared_ptr&lt;AbstractComponent&gt;p<span class="constructor">AC_Root(<span class="params">new</span> Composite(<span class="string">&quot;Root&quot;</span>)</span>);</span><br><span class="line">    <span class="comment">//创建并添加两个根节点的叶子节点A，B</span></span><br><span class="line">    shared_ptr&lt;AbstractComponent&gt;p<span class="constructor">AC_Leaf_Root_A(<span class="params">new</span> Leaf(<span class="string">&quot;Leaf A&quot;</span>)</span>);</span><br><span class="line">    pAC_Root-&gt;<span class="constructor">Add(<span class="params">pAC_Leaf_Root_A</span>)</span>;</span><br><span class="line"></span><br><span class="line">    shared_ptr&lt;AbstractComponent&gt;p<span class="constructor">AC_Leaf_Root_B(<span class="params">new</span> Leaf(<span class="string">&quot;Leaf B&quot;</span>)</span>);</span><br><span class="line">    pAC_Root-&gt;<span class="constructor">Add(<span class="params">pAC_Leaf_Root_B</span>)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//创建并添加一个根节点的组合节点A,该组合节点内包含两个Leaf节点A,B</span></span><br><span class="line">    shared_ptr&lt;AbstractComponent&gt;p<span class="constructor">AC_Sub_Composite(<span class="params">new</span> Composite(<span class="string">&quot;Sub Composite A&quot;</span>)</span>);</span><br><span class="line">    pAC_Root-&gt;<span class="constructor">Add(<span class="params">pAC_Sub_Composite</span>)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建并添加该组合节点内部包含的两个Leaf节点</span></span><br><span class="line">    shared_ptr&lt;AbstractComponent&gt;p<span class="constructor">AC_Leaf_Sub_A(<span class="params">new</span> Leaf(<span class="string">&quot;Sub Composite Leaf A&quot;</span>)</span>);</span><br><span class="line">    pAC_Sub_Composite-&gt;<span class="constructor">Add(<span class="params">pAC_Leaf_Sub_A</span>)</span>;</span><br><span class="line"></span><br><span class="line">    shared_ptr&lt;AbstractComponent&gt;p<span class="constructor">AC_Leaf_Sub_B(<span class="params">new</span> Leaf(<span class="string">&quot;Sub Composite Leaf B&quot;</span>)</span>);</span><br><span class="line">    pAC_Sub_Composite-&gt;<span class="constructor">Add(<span class="params">pAC_Leaf_Sub_B</span>)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//创建并添加根节点的另一个组合节点A2,该组合节点内包含两个Leaf节点A2,B2</span></span><br><span class="line">    shared_ptr&lt;AbstractComponent&gt;p<span class="constructor">AC_Sub_Composite2(<span class="params">new</span> Composite(<span class="string">&quot;Sub Composite A2&quot;</span>)</span>);</span><br><span class="line">    pAC_Root-&gt;<span class="constructor">Add(<span class="params">pAC_Sub_Composite2</span>)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建并添加该组合节点内部包含的两个Leaf节点</span></span><br><span class="line">    shared_ptr&lt;AbstractComponent&gt;p<span class="constructor">AC_Leaf_Sub_A2(<span class="params">new</span> Leaf(<span class="string">&quot;Sub Composite Leaf A2&quot;</span>)</span>);</span><br><span class="line">    pAC_Sub_Composite2-&gt;<span class="constructor">Add(<span class="params">pAC_Leaf_Sub_A2</span>)</span>;</span><br><span class="line"></span><br><span class="line">    shared_ptr&lt;AbstractComponent&gt;p<span class="constructor">AC_Leaf_Sub_B2(<span class="params">new</span> Leaf(<span class="string">&quot;Sub Composite Leaf B2&quot;</span>)</span>);</span><br><span class="line">    pAC_Sub_Composite2-&gt;<span class="constructor">Add(<span class="params">pAC_Leaf_Sub_B2</span>)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 显示Root下所有组合节点和Leaf节点</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Before Remove pAC_Leaf_Sub_B2:&quot;</span> &lt;&lt; endl &lt;&lt;endl;</span><br><span class="line">    pAC_Root-&gt;<span class="constructor">Show(0)</span>; </span><br><span class="line"></span><br><span class="line">    <span class="comment">// 删除组合节点A2</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;After Remove pAC_Leaf_Sub_B2:&quot;</span> &lt;&lt; endl &lt;&lt; endl;</span><br><span class="line">    pAC_Sub_Composite2-&gt;<span class="constructor">Remove(<span class="params">pAC_Leaf_Sub_B2</span>)</span>;</span><br><span class="line">    pAC_Root-&gt;<span class="constructor">Show(0)</span>;</span><br><span class="line">    <span class="comment">//只需要释放根节点，其他节点在根节点的析构函数内释放掉了</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>运行结果：</p>
+<pre><code>Before Remove pAC_Leaf_Sub_B2:
+Root
+----Leaf A
+----Leaf B
+----Sub Composite A
+--------Sub Composite Leaf A
+--------Sub Composite Leaf B
+----Sub Composite A2
+--------Sub Composite Leaf A2
+--------Sub Composite Leaf B2
+After Remove pAC_Leaf_Sub_B2:
+Root
+----Leaf A
+----Leaf B
+----Sub Composite A
+--------Sub Composite Leaf A
+--------Sub Composite Leaf B
+----Sub Composite A2
+--------Sub Composite Leaf A2
+</code></pre>
+<h3 id="对于叶子节点改进"><a href="#对于叶子节点改进" class="headerlink" title="对于叶子节点改进"></a>对于叶子节点改进</h3><p>在增加新的组合类型时,无须修改现有类库代码,只需增加一个新的组合类作为<code>AbstractComponent</code>类的子类即可,但是由于在<code>AbstractComponent</code>中声明了大量用于管理和访问成员构件的方法,例如<code>add()</code>、<code>remove()</code>等方法,我们不得不在新增的类中实现这些方法,或者提供对应的错误提示和异常处理。为了简化代码,可以考虑下面两种解决方案：</p>
+<h4 id="透明组合模式"><a href="#透明组合模式" class="headerlink" title="透明组合模式"></a>透明组合模式</h4><p>将叶子构件的<code>add()</code>、<code>remove()</code>等方法的实现代码移至<code>AbstractComponent</code>父类中，由父类提供一个默认实现。</p>
+<blockquote>
+<p>透明组合模式的缺点是不够安全，因为叶子对象和容器对象在本质上是有区别的。叶子对象不可能有下一个层次的对象，因此为其提供add()、remove()以及getChild()等方法是没有意义的，这在编译阶段不会出错，但在运行阶段如果调用这些方法可能会出错（如果没有提供相应的错误处理代码）</p>
+</blockquote>
+<h4 id="安全组合模式"><a href="#安全组合模式" class="headerlink" title="安全组合模式"></a>安全组合模式</h4><p>安全组合模式中，在抽象构件<code>Component</code>中没有声明任何用于管理成员对象的方法，而是在<code>Composite</code>类中声明并实现这些方法。这种做法是安全的，因为根本不向叶子对象提供这些管理成员对象的方法，对于叶子对象，客户端不可能调用到这些方法。</p>
+<blockquote>
+<p>安全组合模式的缺点是不够透明，因为叶子构件和容器构件具有不同的方法，且容器构件中那些用于管理成员对象的方法没有在抽象构件类中定义，因此客户端不能完全针对抽象编程，必须有区别地对待叶子构件和容器构件</p>
+</blockquote>
+<h4 id="增加一个获取Composite的接口来区分"><a href="#增加一个获取Composite的接口来区分" class="headerlink" title="增加一个获取Composite的接口来区分"></a>增加一个获取Composite的接口来区分</h4><p>一种办法是在<code>Component</code>类中声明一个操作<code>Composite* GetComposite()</code>。<code>Component</code>提供提供了一个返回空指针的缺省操作。<code>Composite</code>类重新定义这个操作并通过<code>this</code>指针来返回对象本身：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Composite</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Component</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    virtual Composite* GetComposite() &#123;<span class="keyword">return</span> <span class="number">0</span>;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Composite</span>: <span class="type">public</span> <span class="title">Component</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    virtual Composite* GetComposite() &#123;<span class="keyword">return</span> <span class="keyword">this</span>;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Leaf</span> : <span class="type">public</span> <span class="title">Component</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用的时候，通过判断对象类型来进行相应调用：</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Composite *composite <span class="operator">=</span> new Composite<span class="comment">;</span></span><br><span class="line">Leaf* leaf <span class="operator">=</span> new Leaf<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">Component *component<span class="comment">;</span></span><br><span class="line">Composite *test<span class="comment">;</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">component</span> <span class="operator">=</span> composite<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">if(test <span class="operator">=</span> component-&gt;GetComposite())</span><br><span class="line">&#123;</span><br><span class="line">    test-&gt;Add(new Leaf)<span class="comment">; // willl add leaf</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="attribute">component</span> <span class="operator">=</span> leaf<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">if(test <span class="operator">=</span> component-&gt;GetComposite())</span><br><span class="line">&#123;</span><br><span class="line">    test-&gt;Add(new Leaf)<span class="comment">; // will not add leaf</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>想表示对象的部分-整体层次结构</li>
+<li>希望用户忽略组合对象与单个对象的不同，用户将统一地使用组合结构中的所有对象</li>
+<li>在一个使用面向对象语言开发的系统中需要处理一个树形结构</li>
+<li>一个对象有多个变化因素的时候，通过抽象这些变化因素，将依赖具体实现，修改为依赖抽象</li>
+<li>在一个系统中能够分离出叶子对象和容器对象，而且它们的类型不固定，需要增加一些新的类型</li>
+</ul>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><ul>
+<li>优点<ul>
+<li>组合模式可以清楚地定义分层次的复杂对象，表示对象的全部或部分层次，它让客户端忽略了层次的差异，方便对整个层次结构进行控制</li>
+<li>客户端可以一致地使用一个组合结构或其中单个对象，不必关心处理的是单个对象还是整个组合结构，简化了客户端代码</li>
+<li>在组合模式中增加新的容器构件和叶子构件都很方便，无须对现有类库进行任何修改，符合“开闭原则”</li>
+<li>组合模式为树形结构的面向对象实现提供了一种灵活的解决方案，通过叶子对象和容器对象的递归组合，可以形成复杂的树形结构，但对树形结构的控制却非常简单</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>在增加新构件时很难对容器中的构件类型进行限制,有时候我们希望一个容器中只能有某些特定类型的对象，例如在某个文件夹中只能包含文本文件，使用组合模式时，不能依赖类型系统来施加这些约束，因为它们都来自于相同的抽象层</li>
+</ul>
+</li>
+</ul>
+<h2 id="组合模式具体实例"><a href="#组合模式具体实例" class="headerlink" title="组合模式具体实例"></a>组合模式具体实例</h2><hr>
+<h3 id="公司组织结构"><a href="#公司组织结构" class="headerlink" title="公司组织结构"></a>公司组织结构</h3><p><strong>实现前言所描述的公司组织结构</strong></p>
+<h4 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h4><ol>
+<li><p>抽象公司类:</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 抽象公司类</span></span><br><span class="line"><span class="keyword">class</span> Company</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">string</span> m_strName;</span><br><span class="line">public:</span><br><span class="line">    <span class="constructor">Company(<span class="params">string</span> <span class="params">strName</span>)</span> : m<span class="constructor">_strName(<span class="params">strName</span>)</span> &#123;&#125;;</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="constructor">Company()</span> &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    <span class="keyword">virtual</span> void <span class="constructor">Add(Company <span class="operator">*</span><span class="params">pC</span>)</span> = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">virtual</span> void <span class="constructor">Remove(Company <span class="operator">*</span><span class="params">pC</span>)</span> = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">virtual</span> <span class="built_in">string</span> <span class="constructor">GetName()</span></span><br><span class="line">    &#123;</span><br><span class="line">        return m_strName;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">virtual</span> void <span class="constructor">Show(<span class="params">int</span> <span class="params">nDepth</span>)</span> = <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>公司的两个部门(叶子节点):</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 叶子节点1---金融部门</span></span><br><span class="line"><span class="keyword">class</span> FinanceDepartment : public Company</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    <span class="constructor">FinanceDepartment(<span class="params">string</span> <span class="params">strName</span>)</span> : <span class="constructor">Company(<span class="params">strName</span>)</span> &#123;&#125;;</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="constructor">FinanceDepartment()</span> &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    void <span class="constructor">Add(Company <span class="operator">*</span><span class="params">pC</span>)</span> &#123;&#125;;</span><br><span class="line">    void <span class="constructor">Remove(Company <span class="operator">*</span><span class="params">pC</span>)</span> &#123;&#125;;</span><br><span class="line">    void <span class="constructor">Show(<span class="params">int</span> <span class="params">nDepth</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; nDepth; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;---&quot;</span> &lt;&lt; flush;</span><br><span class="line">        &#125;</span><br><span class="line">        cout &lt;&lt; <span class="constructor">GetName()</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 叶子节点2-- HR部门</span></span><br><span class="line"><span class="keyword">class</span> HRDepartment : public Company</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    <span class="constructor">HRDepartment(<span class="params">string</span> <span class="params">strName</span>)</span> : <span class="constructor">Company(<span class="params">strName</span>)</span> &#123;&#125;;</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="constructor">HRDepartment()</span> &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    void <span class="constructor">Add(Company <span class="operator">*</span><span class="params">pC</span>)</span> &#123;&#125;;</span><br><span class="line">    void <span class="constructor">Remove(Company <span class="operator">*</span><span class="params">pC</span>)</span> &#123;&#125;;</span><br><span class="line">    void <span class="constructor">Show(<span class="params">int</span> <span class="params">nDepth</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; nDepth; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;---&quot;</span> &lt;&lt; flush;</span><br><span class="line">        &#125;</span><br><span class="line">        cout &lt;&lt; <span class="constructor">GetName()</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>组合公司(组合节点)：</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 组合公司</span></span><br><span class="line"><span class="keyword">class</span> CompositeCompany : public Company</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">list</span>&lt;Company*&gt; m__ListCompany;</span><br><span class="line">public:</span><br><span class="line">    <span class="constructor">CompositeCompany(<span class="params">string</span> <span class="params">strName</span>)</span> : <span class="constructor">Company(<span class="params">strName</span>)</span> &#123;&#125;;</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="constructor">CompositeCompany()</span> </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">list</span>&lt;Company*&gt;::iterator it = m__ListCompany.<span class="keyword">begin</span><span class="literal">()</span>;</span><br><span class="line">            it != m__ListCompany.<span class="keyword">end</span><span class="literal">()</span>;</span><br><span class="line">            ++it)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (NULL != (*it))</span><br><span class="line">            &#123;</span><br><span class="line">                delete *it;</span><br><span class="line">                *it = NULL;</span><br><span class="line">            &#125;</span><br><span class="line">            m__ListCompany.erase(it);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">public:</span><br><span class="line">    void <span class="constructor">Add(Company <span class="operator">*</span><span class="params">pC</span>)</span> </span><br><span class="line">    &#123;</span><br><span class="line">        m__ListCompany.push<span class="constructor">_back(<span class="params">pC</span>)</span>;</span><br><span class="line">    &#125;;</span><br><span class="line">    void <span class="constructor">Remove(Company <span class="operator">*</span><span class="params">pC</span>)</span> </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">list</span>&lt;Company*&gt;::iterator it = m__ListCompany.<span class="keyword">begin</span><span class="literal">()</span>;</span><br><span class="line">             it != m__ListCompany.<span class="keyword">end</span><span class="literal">()</span>;</span><br><span class="line">             ++it) <span class="comment">//  ++it 不是it++</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> ((*it)-&gt;<span class="constructor">GetName()</span><span class="operator"> == </span>pC-&gt;<span class="constructor">GetName()</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                delete *it;</span><br><span class="line">                *it = NULL;</span><br><span class="line">                m__ListCompany.erase(it); <span class="comment">// 防止erase之后迭代器失效</span></span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    void <span class="constructor">Show(<span class="params">int</span> <span class="params">nDepth</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; nDepth; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;---&quot;</span> &lt;&lt; flush;</span><br><span class="line">        &#125;</span><br><span class="line">        cout &lt;&lt; <span class="constructor">GetName()</span> &lt;&lt; endl;</span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">list</span>&lt;Company*&gt;::iterator it = m__ListCompany.<span class="keyword">begin</span><span class="literal">()</span>;</span><br><span class="line">             it != m__ListCompany.<span class="keyword">end</span><span class="literal">()</span>;</span><br><span class="line">             ++it)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (NULL != (*it))</span><br><span class="line">            &#123;</span><br><span class="line">                (*it)-&gt;<span class="constructor">Show(<span class="params">nDepth</span> + 2)</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+</li>
+<li><p>测试Computer桥接模式：</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">void <span class="constructor">CompositeTest_Company()</span></span><br><span class="line">&#123;</span><br><span class="line">    Company *pC_TopCpy = <span class="keyword">new</span> <span class="constructor">CompositeCompany(<span class="string">&quot;Top Company&quot;</span>)</span>; </span><br><span class="line">    Company *pC_Finance = <span class="keyword">new</span> <span class="constructor">FinanceDepartment(<span class="string">&quot;Company Finance Dept&quot;</span>)</span>;</span><br><span class="line">    Company *pC_HR      = <span class="keyword">new</span> <span class="constructor">HRDepartment(<span class="string">&quot;Company HR Dept&quot;</span>)</span>;</span><br><span class="line"></span><br><span class="line">    pC_TopCpy-&gt;<span class="constructor">Add(<span class="params">pC_Finance</span>)</span>;</span><br><span class="line">    pC_TopCpy-&gt;<span class="constructor">Add(<span class="params">pC_HR</span>)</span>;</span><br><span class="line"></span><br><span class="line">    Company *pC_SubCpy = <span class="keyword">new</span> <span class="constructor">CompositeCompany(<span class="string">&quot;Sub Company&quot;</span>)</span>;</span><br><span class="line">    Company *pC_Sub_HR = <span class="keyword">new</span> <span class="constructor">HRDepartment(<span class="string">&quot;Sub Company HR Dept&quot;</span>)</span>;</span><br><span class="line">    pC_SubCpy-&gt;<span class="constructor">Add(<span class="params">pC_Finance</span>)</span>;</span><br><span class="line">    pC_SubCpy-&gt;<span class="constructor">Add(<span class="params">pC_HR</span>)</span>;</span><br><span class="line">    pC_SubCpy-&gt;<span class="constructor">Add(<span class="params">pC_Sub_HR</span>)</span>;</span><br><span class="line"></span><br><span class="line">    pC_TopCpy-&gt;<span class="constructor">Add(<span class="params">pC_SubCpy</span>)</span>;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Before Remove Sub Company HR Dept&quot;</span> &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    pC_TopCpy-&gt;<span class="constructor">Show(0)</span>;</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;After Remove Sub Company HR Dept&quot;</span> &lt;&lt; endl;</span><br><span class="line">    pC_SubCpy-&gt;<span class="constructor">Remove(<span class="params">pC_Sub_HR</span>)</span>;</span><br><span class="line">    pC_TopCpy-&gt;<span class="constructor">Show(0)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行结果：</p>
+<p> Before Remove Sub Company HR Dept<br> Top Company<br> ——Company Finance Dept<br> ——Company HR Dept<br> ——Sub Company<br> ————Company Finance Dept<br> ————Company HR Dept<br> ————Sub Company HR Dept<br> After Remove Sub Company HR Dept<br> Top Company<br> ——Company Finance Dept<br> ——Company HR Dept<br> ——Sub Company<br> ————Company Finance Dept<br> ————Company HR Dept</p>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Frank Tao
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://www.taolingyang.com/2018/07/02/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" title="组合模式(结构型)">http://www.taolingyang.com/2018/07/02/组合模式/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Design-Pattern/" rel="tag"># Design Pattern</a>
+              <a href="/tags/Structural-Pattern/" rel="tag"># Structural Pattern</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/06/16/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/" rel="prev" title="外观模式(结构型)">
+                  <i class="fa fa-chevron-left"></i> 外观模式(结构型)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/07/22/%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F/" rel="next" title="装饰模式(结构型)">
+                  装饰模式(结构型) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank Tao</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">412k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">6:15</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://railway-starter-production-f6c1.up.railway.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"请文明评论呀","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":false,"comment_count":true,"requiredFields":["nick"],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/2018/07/02/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+  <script>
+	  (function(){
+		  var bp = document.createElement('script');
+		  var curProtocol = window.location.protocol.split(':')[0];
+		  if (curProtocol === 'https') {
+			  bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		  }
+		  else {
+			  bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		  }
+		  var s = document.getElementsByTagName("script")[0];
+		  s.parentNode.insertBefore(bp, s);
+	  })();
+  </script>
+</body>
+</html>

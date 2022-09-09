@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.taolingyang.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.13.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言 写个人Blog大部分情况下是在使用现有的网站提供的博客系统，使用比较多的有sina博客、网易博客、CSDN等，如果想DIY个人的博客，可以选择静态网站的方式，使用的比较多的静态博客框架有:  Jekyll:Jekyll是一种基于Ruby开发的、适用于博客的静态网站生成引擎。使用一个模板目录作为网站布局的基础框架，提供了模板、变量、插件等功能，最终生成一个完整的静态Web站点。即只要安装Jek">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Hexo搭建个人博客(1)">
+<meta property="og:url" content="http://www.taolingyang.com/2016/01/05/Hexo%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-1/index.html">
+<meta property="og:site_name" content="Share Mind">
+<meta property="og:description" content="前言 写个人Blog大部分情况下是在使用现有的网站提供的博客系统，使用比较多的有sina博客、网易博客、CSDN等，如果想DIY个人的博客，可以选择静态网站的方式，使用的比较多的静态博客框架有:  Jekyll:Jekyll是一种基于Ruby开发的、适用于博客的静态网站生成引擎。使用一个模板目录作为网站布局的基础框架，提供了模板、变量、插件等功能，最终生成一个完整的静态Web站点。即只要安装Jek">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-01-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-09-09T01:52:18.342Z">
+<meta property="article:author" content="Frank Tao">
+<meta property="article:tag" content="Hexo">
+<meta property="article:tag" content="GitHub">
+<meta property="article:tag" content="Next">
+<meta property="article:tag" content="博客">
+<meta property="article:tag" content="Node.js">
+<meta property="article:tag" content="Git">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://www.taolingyang.com/2016/01/05/Hexo%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://www.taolingyang.com/2016/01/05/Hexo%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-1/","path":"2016/01/05/Hexo创建个人博客-1/","title":"使用Hexo搭建个人博客(1)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>使用Hexo搭建个人博客(1) | Share Mind</title>
+  
+
+
+
+
+
+<link rel="dns-prefetch" href="https://railway-starter-production-f6c1.up.railway.app">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Share Mind</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Love Reading | Film | Climbing | Snooker</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hexo%E7%AE%80%E4%BB%8B"><span class="nav-number">2.</span> <span class="nav-text">Hexo简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hexo%E5%AE%89%E8%A3%85"><span class="nav-number">3.</span> <span class="nav-text">Hexo安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Hexo%E5%89%8D%E9%9C%80%E8%A6%81%E7%9A%84%E5%87%86%E5%A4%87"><span class="nav-number">3.1.</span> <span class="nav-text">安装Hexo前需要的准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Hexo"><span class="nav-number">3.2.</span> <span class="nav-text">安装Hexo</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hexo%E6%9C%AC%E5%9C%B0%E5%BB%BA%E7%AB%99"><span class="nav-number">4.</span> <span class="nav-text">Hexo本地建站</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96Blog%E7%BD%91%E7%AB%99%E6%A1%86%E6%9E%B6"><span class="nav-number">4.1.</span> <span class="nav-text">初始化Blog网站框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9Blog%E7%BD%91%E7%AB%99%E9%85%8D%E7%BD%AE"><span class="nav-number">4.2.</span> <span class="nav-text">修改Blog网站配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%99Blog%E6%96%87%E7%AB%A0"><span class="nav-number">4.3.</span> <span class="nav-text">写Blog文章</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E7%BD%91%E7%AB%99"><span class="nav-number">4.4.</span> <span class="nav-text">生成网站</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8Hexo%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">4.5.</span> <span class="nav-text">启动Hexo服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">4.6.</span> <span class="nav-text">小结</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Frank Tao"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Frank Tao</p>
+  <div class="site-description" itemprop="description">welcome to taolingyang’s blog -~-</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/franktly" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;franktly" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/tao-ling-yang" title="ZhiHu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;tao-ling-yang" rel="noopener" target="_blank"><i class="fa fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/2273442920" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;2273442920" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+  <a href="https://github.com/franktly" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.taolingyang.com/2016/01/05/Hexo%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Frank Tao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Share Mind">
+      <meta itemprop="description" content="welcome to taolingyang’s blog -~-">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="使用Hexo搭建个人博客(1) | Share Mind">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用Hexo搭建个人博客(1)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2016-01-05 00:00:00" itemprop="dateCreated datePublished" datetime="2016-01-05T00:00:00+08:00">2016-01-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/" itemprop="url" rel="index"><span itemprop="name">博客搭建</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/2016/01/05/Hexo%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-1/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2016/01/05/Hexo%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-1/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.8k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>写个人Blog大部分情况下是在使用现有的网站提供的博客系统，使用比较多的有sina博客、网易博客、CSDN等，如果想DIY个人的博客，可以选择静态网站的方式，使用的比较多的静态博客框架有:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://jekyll.bootcss.com/">Jekyll</a>:<br>Jekyll是一种基于Ruby开发的、适用于博客的静态网站生成引擎。使用一个模板目录作为网站布局的基础框架，提供了模板、变量、插件等功能，最终生成一个完整的静态Web站点。即只要安装Jekyll的规范和结构，不需写html，便可生成网站</li>
+<li><a target="_blank" rel="noopener" href="http://octopress.org/">Octopress</a>:<br>Octopress是一款基于Ruby开发的静态化、本地化的博客系统。其最大的优势就是静态化，不依赖脚本程序，没有MysqL等数据库，因此它可在一些性能差的服务器或者虚拟空间上运行，同等条件下打开页面的速度会比较快 </li>
+<li><a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>:<br>Hexo是一款基于node.js开发的博客程序，拥有简单的服务器，可用作简单的动态博客使用。也有生成器，生成的静态文件可以一键部署到Github Pages上，也可以部署到任意静态文件服务器上。它相当简约，并且可使用Markdown来编写文章<br>考虑到简单易用，生成效率问题，选用Hexo作为搭建个人博客的框架</li>
+</ul>
+<span id="more"></span>
+
+<h2 id="Hexo简介"><a href="#Hexo简介" class="headerlink" title="Hexo简介"></a>Hexo简介</h2><hr>
+<p>Hexo是一个快速、简单且高效的博客框架,使用Markown(或其他渲染引擎)解析文章，可以高效的利用各种主题插件生成自定义的静态页面，使用Hexo时候，一般是在本地编辑文章，转化为生成HTML文件，然后上传到部署的服务器上</p>
+<h2 id="Hexo安装"><a href="#Hexo安装" class="headerlink" title="Hexo安装"></a>Hexo安装</h2><hr>
+<h3 id="安装Hexo前需要的准备"><a href="#安装Hexo前需要的准备" class="headerlink" title="安装Hexo前需要的准备"></a>安装Hexo前需要的准备</h3><ul>
+<li>Node.js:<br>[Node.js下载地址]（<a target="_blank" rel="noopener" href="https://nodejs.org/en/%EF%BC%89">https://nodejs.org/en/）</a><br>笔者安装的是Window版本的node-v5.3.0-x64.msi，安装完成后，在cmd输入<code>node -v</code>可以查看安装的版本和是否正确</li>
+<li>Git：<br>[git下载地址]（<a target="_blank" rel="noopener" href="http://git-scm.com/download/%EF%BC%89">http://git-scm.com/download/）</a><br>笔者安装的是Windows版本的git version 1.9.5.msysgit.0,安装完成后，<code>git --version</code>可以查看安装的版本和是否正确</li>
+</ul>
+<h3 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h3><p>使用npm（npm是node.js的模块管理和发布工具,安装node的时候会自动安装此工具）安装Hexo，shell中输入下面命令：</p>
+<pre><code>$ npm install -g hexo-cli
+</code></pre>
+<p>安装完成后，shell中输入<code>hexo -v</code>或<code>hexo version</code>查看安装的版本</p>
+<blockquote>
+<p><code>-g</code>: 表示全局安装，未带此参数表示本地安装</p>
+</blockquote>
+<ul>
+<li>全局安装：模块将被安装到<strong>全局目录</strong>中，全局目录可以通过<code>npm config set prefix &quot;目录路径&quot;</code>来设置，通过<code>npm config get prefix</code> 来获取</li>
+<li>本地安装：模块将被安装到<strong>当前命令行所在目录中</strong><br>一般采用全局安装方式统一安装到一个目录中去，方便管理、结构清晰、可以重复利用</li>
+</ul>
+<h2 id="Hexo本地建站"><a href="#Hexo本地建站" class="headerlink" title="Hexo本地建站"></a>Hexo本地建站</h2><hr>
+<h3 id="初始化Blog网站框架"><a href="#初始化Blog网站框架" class="headerlink" title="初始化Blog网站框架"></a>初始化Blog网站框架</h3><p>在本地电脑上建立一个Blog目录，并在shell中进行下面命令，初始化框架:</p>
+<pre><code>$ hexo init &lt;your blog folder&gt;
+$ cd folder
+$ npm install
+</code></pre>
+<blockquote>
+<p>或者直接进入Blog目录中，执行<code>hexo init</code>和<code>npm install</code></p>
+</blockquote>
+<h3 id="修改Blog网站配置"><a href="#修改Blog网站配置" class="headerlink" title="修改Blog网站配置"></a>修改Blog网站配置</h3><p>初始化完成后，该Blog目录就会出现下面几个文件夹：</p>
+<pre><code>|—— _config.yml
+|—— package.json
+|—— scanffolds
+|—— source
+|    |—— _posts
+|—— themes
+</code></pre>
+<blockquote>
+<ul>
+<li>_config.yml:<br>整个站点的<strong>配置</strong>信息：可以配置网站的title、author、language、目录、文章、日期、分页、扩展（主题名称、部署）信息</li>
+</ul>
+</blockquote>
+<ul>
+<li>package.json: 应用程序信息</li>
+<li>scanffolds: 模板文件夹,创建新文章时,Hexo会根据此建立文件</li>
+<li>source: 资源文件夹,存放用户资源</li>
+<li>themes: 主题文件夹，Hexo会根据此来生成静态页面，默认是官方的<em>landscape</em>主题</li>
+</ul>
+<h3 id="写Blog文章"><a href="#写Blog文章" class="headerlink" title="写Blog文章"></a>写Blog文章</h3><p>执行下面的命令创建一篇新的文章:</p>
+<pre><code>$ hexo new [layout] &lt;title&gt;
+</code></pre>
+<p>建立的文章后，在&#x2F;source&#x2F;_post里会出现该title的文章，之后的文章均保持在此目录</p>
+<blockquote>
+<p>可选参数：文章布局layout，默认是post,可以修改_config.yml中的default_layout来修改默认布局<br>文章的默认布局有3种： post、page、draft，分别对应不同的路径：</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Layout</th>
+<th>Path</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>post</td>
+<td>source&#x2F;_posts</td>
+</tr>
+<tr>
+<td>page</td>
+<td>source</td>
+</tr>
+<tr>
+<td>draft</td>
+<td>source&#x2F;_drafts</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>将草稿发布,执行下面publish命令， 将草稿移动到source&#x2F;_post文件夹下：<br><code>$ hexo publish [layout] &lt;title&gt;</code><br>草稿默认不会显示在页面中，执行时候加上–draft参数或render_drafts参数设置为true来预览草稿</p>
+</blockquote>
+<h3 id="生成网站"><a href="#生成网站" class="headerlink" title="生成网站"></a>生成网站</h3><p>写完文章后，在cmd中执行下面命令生成静态文件，生成网站：</p>
+<pre><code>$ hexo generate
+</code></pre>
+<p>生成网站后，会在Blog的根目录下生成一个pulic临时文件，存放生成的网站结果，可以通过<code>hexo clean</code>命令清除生成结果，然后再执行<code>hexo generate</code>重新生成</p>
+<h3 id="启动Hexo服务器"><a href="#启动Hexo服务器" class="headerlink" title="启动Hexo服务器"></a>启动Hexo服务器</h3><p><strong>Hexo3.0之后的版本把服务器独立成了单独的模块，必须先安装hexo-sever才能使用</strong>:</p>
+<pre><code>$ npm install hexo-server --save
+</code></pre>
+<blockquote>
+<p><code>--save</code>:安装的同时将信息写入package.json中项目路径中如果有package.json文件时，使用<code>npm install</code>方法就可以根据dependencies配置安装所有的依赖包，这样代码提交到github时，就不用提交node_modules这个文件夹了</p>
+</blockquote>
+<p>安装hexo-server后，执行下面命令启动服务器,启动服务器之后，Hexo会自动监视文件变动并自动更新，无需重启服务器：</p>
+<pre><code>$ hexo server
+</code></pre>
+<blockquote>
+<p>如果想更改服务器的端口(默认是4000)，或启动时遇到EADDRINUSE 错误可以加-p选项指定其他端口:<br><code>$ hexo server -p 3000</code><br>服务器默认运行在0.0.0.0，可以覆盖默认的IP:<br><code>$ hexo server -i 192.168.0.1</code></p>
+</blockquote>
+<p>启动服务之后，本地的Blog网站系统搭建完成，可以在输入以下网址查看Blog的搭建效果：<a target="_blank" rel="noopener" href="http://localhost:4000/">http://localhost:4000</a> 或 <a target="_blank" rel="noopener" href="http://127.0.0.1:4000/">http://127.0.0.1:4000</a></p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><hr>
+<p>这样一个本地的Blog网站建立完成，每次需要写Blog时候，只需要<code>hexo new</code> (hexo n for short)一篇文章，再使用markdown编辑文章，然后<code>hexo generarte</code>(hexo g for short)即可，但是这样Blog只能在本地的机器上访问，要想让别人也可以通过网址访问，需要将Blog deploy部署到服务器上，具体方法见下篇</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Frank Tao
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://www.taolingyang.com/2016/01/05/Hexo%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-1/" title="使用Hexo搭建个人博客(1)">http://www.taolingyang.com/2016/01/05/Hexo创建个人博客-1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Hexo/" rel="tag"># Hexo</a>
+              <a href="/tags/GitHub/" rel="tag"># GitHub</a>
+              <a href="/tags/Next/" rel="tag"># Next</a>
+              <a href="/tags/%E5%8D%9A%E5%AE%A2/" rel="tag"># 博客</a>
+              <a href="/tags/Node-js/" rel="tag"># Node.js</a>
+              <a href="/tags/Git/" rel="tag"># Git</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/2016/01/09/Hexo%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-2/" rel="next" title="使用Hexo搭建个人博客(2)">
+                  使用Hexo搭建个人博客(2) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank Tao</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">412k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">6:15</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://railway-starter-production-f6c1.up.railway.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"请文明评论呀","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":false,"comment_count":true,"requiredFields":["nick"],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/2016/01/05/Hexo%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-1/"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+  <script>
+	  (function(){
+		  var bp = document.createElement('script');
+		  var curProtocol = window.location.protocol.split(':')[0];
+		  if (curProtocol === 'https') {
+			  bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		  }
+		  else {
+			  bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		  }
+		  var s = document.getElementsByTagName("script")[0];
+		  s.parentNode.insertBefore(bp, s);
+	  })();
+  </script>
+</body>
+</html>

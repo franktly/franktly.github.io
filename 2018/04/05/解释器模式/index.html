@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.taolingyang.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.13.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言 有时候，我们想用一些简单的语言来实现一些特点的操作，只要向计算机输入一个特定的句子，能够按照预定的文法规则对其进行解释。如一个简单的加减法解释器，只要输入一个加减法表达式，他就能计算出表达式的结果。像这种设计自定义的简单语言文法的功能可以采用解释器模式来实现。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="解释器模式(行为型)">
+<meta property="og:url" content="http://www.taolingyang.com/2018/04/05/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="Share Mind">
+<meta property="og:description" content="前言 有时候，我们想用一些简单的语言来实现一些特点的操作，只要向计算机输入一个特定的句子，能够按照预定的文法规则对其进行解释。如一个简单的加减法解释器，只要输入一个加减法表达式，他就能计算出表达式的结果。像这种设计自定义的简单语言文法的功能可以采用解释器模式来实现。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://www.taolingyang.com/.com//Interpreter.jpg">
+<meta property="article:published_time" content="2018-04-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-09-09T01:52:18.458Z">
+<meta property="article:author" content="Frank Tao">
+<meta property="article:tag" content="Design Pattern">
+<meta property="article:tag" content="Behavior Pattern">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.taolingyang.com/.com//Interpreter.jpg">
+
+
+<link rel="canonical" href="http://www.taolingyang.com/2018/04/05/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://www.taolingyang.com/2018/04/05/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/","path":"2018/04/05/解释器模式/","title":"解释器模式(行为型)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>解释器模式(行为型) | Share Mind</title>
+  
+
+
+
+
+
+<link rel="dns-prefetch" href="https://railway-starter-production-f6c1.up.railway.app">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Share Mind</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Love Reading | Film | Climbing | Snooker</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">解释器模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%84%8F%E5%9B%BE"><span class="nav-number">2.1.</span> <span class="nav-text">意图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E4%B8%8E%E8%80%85"><span class="nav-number">2.2.</span> <span class="nav-text">参与者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="nav-number">2.3.</span> <span class="nav-text">模式结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.4.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">2.5.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">2.6.</span> <span class="nav-text">优缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F%E5%85%B7%E4%BD%93%E5%AE%9E%E4%BE%8B"><span class="nav-number">3.</span> <span class="nav-text">解释器模式具体实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%BA%E5%99%A8%E4%BA%BA%E6%8E%A7%E5%88%B6%E9%97%AE%E9%A2%98"><span class="nav-number">3.1.</span> <span class="nav-text">机器人控制问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-1"><span class="nav-number">3.1.1.</span> <span class="nav-text">代码实现</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Frank Tao"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Frank Tao</p>
+  <div class="site-description" itemprop="description">welcome to taolingyang’s blog -~-</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/franktly" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;franktly" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/tao-ling-yang" title="ZhiHu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;tao-ling-yang" rel="noopener" target="_blank"><i class="fa fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/2273442920" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;2273442920" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+  <a href="https://github.com/franktly" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.taolingyang.com/2018/04/05/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Frank Tao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Share Mind">
+      <meta itemprop="description" content="welcome to taolingyang’s blog -~-">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="解释器模式(行为型) | Share Mind">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          解释器模式(行为型)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-04-05 00:00:00" itemprop="dateCreated datePublished" datetime="2018-04-05T00:00:00+08:00">2018-04-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Design-Pattern/" itemprop="url" rel="index"><span itemprop="name">Design Pattern</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/2018/04/05/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2018/04/05/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>8.9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>有时候，我们想用一些简单的语言来实现一些特点的操作，只要向计算机输入一个特定的句子，能够按照预定的文法规则对其进行解释。如一个简单的加减法解释器，只要输入一个加减法表达式，他就能计算出表达式的结果。像这种设计自定义的简单语言文法的功能可以采用解释器模式来实现。</p>
+<span id="more"></span>
+
+<h2 id="解释器模式"><a href="#解释器模式" class="headerlink" title="解释器模式"></a>解释器模式</h2><hr>
+<h3 id="意图"><a href="#意图" class="headerlink" title="意图"></a>意图</h3><p>给定一个语言，定义它的文法的一种表示，并定义一个解释器，这个解释器使用该表示来解释语言中的句子</p>
+<blockquote>
+<p>解释器模式描述了如何为简单的语言定义一个文法，如何在该语言中表示一个句子，以及如何解释这些句子<br>在解释器模式中还可以通过一种称之为抽象语法树(AST)的图形方式来直观地表示语言的构成，每一颗抽象语法树对应一个语言实例。通常，终结符表达式类的实例作为树的叶子节点，而非终结符表达式类的实例作为非叶子节点，它们可以将终结符表达式类的实例以及包含终结符和非终结符实例的子表达式作为其子节点<br><strong>非终结符表达式</strong>:它的组成元素仍然可以是表达式，可以进一步分解<br><strong>终结符表达式</strong>:它的组成元素是最基本的语言单位，不能再进行分解</p>
+</blockquote>
+<h3 id="参与者"><a href="#参与者" class="headerlink" title="参与者"></a>参与者</h3><ul>
+<li><p>AbstractExpression<br>抽象表达式，声明了抽象的解释操作，他是所有终结符表达式和非终结符表达式的公共父类</p>
+</li>
+<li><p>TerminalExpression<br>抽象表达式的子类，实现了与文法中的终结符相关联的解释操作，在句子中的每一个终结符都是该类的一个实例<br>通常在一个解释器模式中只有少数几个终结符表达式类，它们的实例可以通过非终结符表达式组成较为复杂的句子</p>
+</li>
+<li><p>NonterminalExpression<br>非终结符表达式也是抽象表达式的子类，它实现了文法中非终结符的解释操作<br>由于在非终结符表达式中可以包含终结符表达式，也可以继续包含非终结符表达式，因此其解释操作一般通过递归的方式来完成</p>
+</li>
+<li><p>Context<br>环境类又称为上下文类，它用于存储解释器之外的一些全局信息，通常它临时存储了需要解释的语句<br>这个角色的任务一般是也用来存放文法中各个终结符所对应的具体值，比如R&#x3D;R1+R2，我们给R1赋值100，给R2赋值200。这些信息需要存放到环境角色中，很多情况下我们使用Map来充当环境角色就足够了</p>
+</li>
+</ul>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="/.com//Interpreter.jpg" alt="interpreter"></p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>1.首先定义抽象的表达式<code>AbstractExpression</code>,并提供<code>Interpreter()</code>接口：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Abstract Expression</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AbstractExpression</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">Interpreter</span><span class="params">(Context ctx)</span> </span>= <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>2.再定义<code>AbstractExpression</code>类的一个具体终结符表达式子类<code>TerminalExpression</code>，并实现其中的<code>Interpreter()</code>接口，该接口主要作用是返回一个操作数：</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Terminal Expression</span></span><br><span class="line"><span class="keyword">class</span> TerminalExpression : public AbstractExpression</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">int</span> m_Value;</span><br><span class="line">public:</span><br><span class="line">    <span class="constructor">TerminalExpression(<span class="params">int</span> <span class="params">value</span>)</span> : m<span class="constructor">_Value(<span class="params">value</span>)</span> &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    <span class="keyword">virtual</span> <span class="built_in">int</span> <span class="constructor">Interpreter(Context <span class="params">ctx</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        return m_Value;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>3.分别在定义两个具体的<code>+</code>和<code>-</code>操作符非终结符表达式类<code>PlusNonterminalExpression</code>和<code>SubNonterminalExpression</code>类，并分别实现其<code>Interpreter()</code>接口，主要通过递归调用来实现：</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// NonTerminal Expression 2: Plus (&#x27;+&#x27;)</span></span><br><span class="line"><span class="keyword">class</span> PlusNonterminalExpression : public AbstractExpression </span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    AbstractExpression *m_pLeftExpr;</span><br><span class="line">    AbstractExpression *m_pRightExpr;</span><br><span class="line">public:</span><br><span class="line">    <span class="constructor">PlusNonterminalExpression(AbstractExpression <span class="operator">*</span><span class="params">pLeft</span>, AbstractExpression <span class="operator">*</span><span class="params">pRight</span>)</span> : m<span class="constructor">_pLeftExpr(<span class="params">pLeft</span>)</span>, m<span class="constructor">_pRightExpr(<span class="params">pRight</span>)</span> &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    <span class="keyword">virtual</span> <span class="built_in">int</span> <span class="constructor">Interpreter(Context <span class="params">ctx</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        return m_pLeftExpr-&gt;<span class="constructor">Interpreter(<span class="params">ctx</span>)</span> + m_pRightExpr-&gt;<span class="constructor">Interpreter(<span class="params">ctx</span>)</span>;</span><br><span class="line">        <span class="comment">//调用两个操作数的Interpreter接口</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// NonTerminal Expression 1: Sub (&#x27;-&#x27;)</span></span><br><span class="line"><span class="keyword">class</span> SubNonterminalExpression : public AbstractExpression <span class="comment">// 默认是私有继承</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    AbstractExpression *m_pLeftExpr;</span><br><span class="line">    AbstractExpression *m_pRightExpr;</span><br><span class="line">public:</span><br><span class="line">    <span class="constructor">SubNonterminalExpression(AbstractExpression <span class="operator">*</span><span class="params">pLeft</span>, AbstractExpression <span class="operator">*</span><span class="params">pRight</span>)</span> : m<span class="constructor">_pLeftExpr(<span class="params">pLeft</span>)</span>, m<span class="constructor">_pRightExpr(<span class="params">pRight</span>)</span> &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    <span class="keyword">virtual</span> <span class="built_in">int</span> <span class="constructor">Interpreter(Context <span class="params">ctx</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        return m_pLeftExpr-&gt;<span class="constructor">Interpreter(<span class="params">ctx</span>)</span> - m_pRightExpr-&gt;<span class="constructor">Interpreter(<span class="params">ctx</span>)</span>; <span class="comment">//调用两个操作数的Interpreter接口</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>4.上下文环境类<code>Context</code>,主要是存储解释器之外的一些全局信息：</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Context，一般使用map或list实现</span></span><br><span class="line"><span class="keyword">class</span> Context</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    map&lt;<span class="built_in">string</span>, <span class="built_in">int</span>&gt; m_mapValue;</span><br><span class="line">public:</span><br><span class="line">    void <span class="constructor">AddValue(<span class="params">string</span> <span class="params">key</span>, <span class="params">int</span> <span class="params">value</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        m_mapValue.insert(make<span class="constructor">_pair(<span class="params">key</span>, <span class="params">value</span>)</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">int</span> <span class="constructor">GetValue(<span class="params">string</span> <span class="params">key</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        return m_mapValue<span class="literal">[<span class="identifier">key</span>]</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>5.测试解释器模式：</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">void <span class="constructor">InterpreterTest_Computaion()</span></span><br><span class="line">&#123;</span><br><span class="line">    Context ctx;</span><br><span class="line">    ctx.<span class="constructor">AddValue(<span class="string">&quot;x&quot;</span>, 5)</span>;</span><br><span class="line">    ctx.<span class="constructor">AddValue(<span class="string">&quot;y&quot;</span>, 8)</span>;</span><br><span class="line">    ctx.<span class="constructor">AddValue(<span class="string">&quot;z&quot;</span>, 7)</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Create Terminal Expression </span></span><br><span class="line">    AbstractExpression *pTE1 = <span class="keyword">new</span> <span class="constructor">TerminalExpression(<span class="params">ctx</span>.GetValue(<span class="string">&quot;x&quot;</span>)</span>);</span><br><span class="line">    AbstractExpression *pTE2 = <span class="keyword">new</span> <span class="constructor">TerminalExpression(<span class="params">ctx</span>.GetValue(<span class="string">&quot;y&quot;</span>)</span>);</span><br><span class="line">    AbstractExpression *pTE3 = <span class="keyword">new</span> <span class="constructor">TerminalExpression(<span class="params">ctx</span>.GetValue(<span class="string">&quot;z&quot;</span>)</span>);</span><br><span class="line"></span><br><span class="line">    AbstractExpression *pPNE = <span class="keyword">new</span> <span class="constructor">PlusNonterminalExpression(<span class="params">pTE1</span>, <span class="params">pTE2</span>)</span>; <span class="comment">//pPNE： PTE1-&gt;Interpreter() + pTE2-&gt;Intepreter()</span></span><br><span class="line">    AbstractExpression *pSNE = <span class="keyword">new</span> <span class="constructor">SubNonterminalExpression(<span class="params">pPNE</span>, <span class="params">pTE3</span>)</span>; <span class="comment">// pSNE： PNE-&gt;Interpreter() - pTE3-&gt;Intepreter()</span></span><br><span class="line">    AbstractExpression *pPNE2 = <span class="keyword">new</span> <span class="constructor">PlusNonterminalExpression(<span class="params">pSNE</span>, <span class="params">pPNE</span>)</span>; <span class="comment">//pPNE2: PSNE-&gt;Interpreter() + pPNE-&gt;Intepreter()</span></span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;The Final Result of Express : x(5) + y(8) is &quot;</span> &lt;&lt; pPNE-&gt;<span class="constructor">Interpreter(<span class="params">ctx</span>)</span> &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;The Final Result of Express : x(5) + y(8) - z(7)  is &quot;</span> &lt;&lt; pSNE-&gt;<span class="constructor">Interpreter(<span class="params">ctx</span>)</span> &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;The Final Result of Express : x(5) + y(8) - z(7) + x(5) + y(8) is &quot;</span> &lt;&lt; pPNE2-&gt;<span class="constructor">Interpreter(<span class="params">ctx</span>)</span> &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    <span class="constructor">SAFE_RELASE_POINTER(<span class="params">pTE1</span>)</span>;</span><br><span class="line">    <span class="constructor">SAFE_RELASE_POINTER(<span class="params">pTE2</span>)</span>;</span><br><span class="line">    <span class="constructor">SAFE_RELASE_POINTER(<span class="params">pTE3</span>)</span>;</span><br><span class="line">    <span class="constructor">SAFE_RELASE_POINTER(<span class="params">pPNE</span>)</span>;</span><br><span class="line">    <span class="constructor">SAFE_RELASE_POINTER(<span class="params">pSNE</span>)</span>;</span><br><span class="line">    <span class="constructor">SAFE_RELASE_POINTER(<span class="params">pPNE2</span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>6.运行结果：</p>
+<pre><code>The Final Result of Express : x(5) + y(8) is 13
+The Final Result of Express : x(5) + y(8) - z(7)  is 6
+The Final Result of Express : x(5) + y(8) - z(7) + x(5) + y(8) is 19
+</code></pre>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>有一个简单的语法规则，比如一个sql语句，如果我们需要根据sql语句进行rm转换，就可以使用解释器模式来对语句进行解释</li>
+<li>一些重复发生的问题，比如加减乘除四则运算，但是公式每次都不同，有时是a+b-c<em>d，有时是a</em>b+c-d，等等等等个，公式千变万化，但是都是由加减乘除四个非终结符来连接的，这时我们就可以使用解释器模式</li>
+</ul>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><ul>
+<li>优点<ul>
+<li>解释器是一个简单的语法分析工具，它最显著的优点就是扩展性，修改语法规则只需要修改相应的非终结符就可以了，若扩展语法，只需要增加非终结符类就可以了</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>解释器模式会引起类的膨胀，每个语法都需要产生一个非终结符表达式，语法规则比较复杂时，就可能产生大量的类文件，为维护带来非常多的麻烦</li>
+<li>由于采用递归调用方法，每个非终结符表达式只关心与自己相关的表达式，每个表达式需要知道最终的结果，必须通过递归方式，无论是面向对象的语言还是面向过程的语言，递归都是一个不推荐的方式。由于使用了大量的循环和递归，效率是一个不容忽视的问题</li>
+</ul>
+</li>
+</ul>
+<h2 id="解释器模式具体实例"><a href="#解释器模式具体实例" class="headerlink" title="解释器模式具体实例"></a>解释器模式具体实例</h2><hr>
+<h3 id="机器人控制问题"><a href="#机器人控制问题" class="headerlink" title="机器人控制问题"></a>机器人控制问题</h3><p>该机器人控制程序中包含一些简单的英文控制指令，如”down  run 10 and left move 20”表示快速向下移动10cm，并向左移动20cm,具体文法如下：</p>
+<ul>
+<li>每一个指令对应一个表达式(expression)，该表达式可以是简单表达式也可以是复合表达式，</li>
+<li>每一个简单表达式由方向(direction)，移动方式(action)和移动距离(distance)三部分组成</li>
+<li>其中移动方向包括上(up)、下(down)、左(left)、右(right)；</li>
+<li>移动方式包括移动(move)和快速移动(run)；</li>
+<li>移动距离为一个正整数</li>
+<li>两个表达式之间可以通过与(and)连接，形成复合(composite)表达式</li>
+</ul>
+<h4 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h4><p>1.定义抽象的<code>AbstractControlExpression</code>类，并提供<code>interpreter</code>接口:</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// abstract expr</span></span><br><span class="line"><span class="keyword">class</span> <span class="symbol">AbstractControlExpression</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    virtual <span class="built_in">string</span> <span class="built_in">int</span>erpreter(<span class="built_in">void</span>) = <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>2.分别定义抽象表达式<code>AbstractControlExpression</code>的终结表达式子类<code>DirectionExpression</code>和<code>ActionExpression</code>及<code>DistanceExpression</code>:</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 方向终结符表达式：把英文的方向解释为中文</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DirectionExpression</span> : <span class="keyword">public</span> <span class="title class_">AbstractControlExpression</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="attr">public</span>:</span><br><span class="line">    <span class="title class_">DirectionExpression</span>(<span class="built_in">string</span> direction) : <span class="title function_">_direction</span>(<span class="params">direction</span>) &#123;&#125;;</span><br><span class="line">    <span class="built_in">string</span> <span class="title function_">interpreter</span>(<span class="params"><span class="built_in">void</span></span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (_direction.<span class="title function_">compare</span>(<span class="string">&quot;up&quot;</span>))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;向上&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (_direction.<span class="title function_">compare</span>(<span class="string">&quot;down&quot;</span>))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;向下&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (_direction.<span class="title function_">compare</span>(<span class="string">&quot;left&quot;</span>))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;向左&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (_direction.<span class="title function_">compare</span>(<span class="string">&quot;right&quot;</span>))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;向右&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;无效的命令&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="attr">private</span>:</span><br><span class="line">    <span class="built_in">string</span> _direction;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 动作终结符表达式：把英文的动作解释为中文</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ActionExpression</span> : <span class="keyword">public</span> <span class="title class_">AbstractControlExpression</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="attr">public</span>:</span><br><span class="line">    <span class="title class_">ActionExpression</span>(<span class="built_in">string</span> action) : <span class="title function_">_action</span>(<span class="params">action</span>) &#123;&#125;;</span><br><span class="line">    <span class="built_in">string</span> <span class="title function_">interpreter</span>(<span class="params"><span class="built_in">void</span></span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (_action.<span class="title function_">compare</span>(<span class="string">&quot;run&quot;</span>))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;快速移动&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (_action.<span class="title function_">compare</span>(<span class="string">&quot;move&quot;</span>))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;移动&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;无效的命令&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="attr">private</span>:</span><br><span class="line">    <span class="built_in">string</span> _action;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 距离终结符表达式</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DistanceExpression</span> : <span class="keyword">public</span> <span class="title class_">AbstractControlExpression</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="attr">public</span>:</span><br><span class="line">    <span class="title class_">DistanceExpression</span>(<span class="built_in">string</span> distance) : <span class="title function_">_distance</span>(<span class="params">distance</span>) &#123;&#125;;</span><br><span class="line">    <span class="built_in">string</span> <span class="title function_">interpreter</span>(<span class="params"><span class="built_in">void</span></span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> _distance + <span class="string">&quot;厘米&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="attr">private</span>:</span><br><span class="line">    <span class="built_in">string</span> _distance;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>3.分别定义抽象表达式<code>AbstractControlExpression</code>的非终结表达式子类<code>SimpleSentenceExpression</code>和<code>AndSentenceExpression</code>:</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 简单句子非终结符表达式</span></span><br><span class="line"><span class="keyword">class</span> <span class="symbol">SimpleSentenceExpression</span> : <span class="symbol">public</span> <span class="symbol">AbstractControlExpression</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    SimpleSentenceExpression(AbstractControlExpression *direction, AbstractControlExpression *action, AbstractControlExpression *distance):</span><br><span class="line">        _direction(direction), _action(action), _distance(distance) &#123;&#125;;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">string</span> <span class="built_in">int</span>erpreter(<span class="built_in">void</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> (_direction-&gt;<span class="built_in">int</span>erpreter() + _action-&gt;<span class="built_in">int</span>erpreter() + _distance-&gt;<span class="built_in">int</span>erpreter()); <span class="comment">//调用终结符的interpreter</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    AbstractControlExpression *_direction;</span><br><span class="line">    AbstractControlExpression *_action;</span><br><span class="line">    AbstractControlExpression *_distance;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// And句子非终结符表达式</span></span><br><span class="line"><span class="keyword">class</span> <span class="symbol">AndSentenceExpression</span> : <span class="symbol">public</span> <span class="symbol">AbstractControlExpression</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    AndSentenceExpression(AbstractControlExpression *leftSentence, AbstractControlExpression* rightSentence):</span><br><span class="line">        _leftSentence(leftSentence), _rightSentence(rightSentence) &#123;&#125;;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">string</span> <span class="built_in">int</span>erpreter(<span class="built_in">void</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> (_leftSentence-&gt;<span class="built_in">int</span>erpreter() + <span class="string">&quot;并且&quot;</span> + _rightSentence-&gt;<span class="built_in">int</span>erpreter());</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    AbstractControlExpression *_leftSentence;</span><br><span class="line">    AbstractControlExpression *_rightSentence;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>4.测试解释器模式:</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Robot Control Test</span></span><br><span class="line">void <span class="constructor">InterpreterTest_RobotControl(<span class="params">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">string</span> finalRes;</span><br><span class="line">    AbstractControlExpression *direction = <span class="keyword">new</span> <span class="constructor">DirectionExpression(<span class="string">&quot;down&quot;</span>)</span>;</span><br><span class="line">    AbstractControlExpression *action = <span class="keyword">new</span> <span class="constructor">ActionExpression(<span class="string">&quot;move&quot;</span>)</span>;</span><br><span class="line">    AbstractControlExpression *distance = <span class="keyword">new</span> <span class="constructor">DistanceExpression(<span class="string">&quot;100&quot;</span>)</span>;</span><br><span class="line"></span><br><span class="line">    AbstractControlExpression *simple_sentence = <span class="keyword">new</span> <span class="constructor">SimpleSentenceExpression(<span class="params">direction</span>, <span class="params">action</span>, <span class="params">distance</span>)</span>;</span><br><span class="line"></span><br><span class="line">    AbstractControlExpression *direction2 = <span class="keyword">new</span> <span class="constructor">DirectionExpression(<span class="string">&quot;up&quot;</span>)</span>;</span><br><span class="line">    AbstractControlExpression *action2 = <span class="keyword">new</span> <span class="constructor">ActionExpression(<span class="string">&quot;run&quot;</span>)</span>;</span><br><span class="line">    AbstractControlExpression *simple_sentence2 = <span class="keyword">new</span> <span class="constructor">SimpleSentenceExpression(<span class="params">direction2</span>, <span class="params">action2</span>, <span class="params">distance</span>)</span>;</span><br><span class="line"></span><br><span class="line">    AbstractControlExpression *complex_sentence = <span class="keyword">new</span> <span class="constructor">AndSentenceExpression(<span class="params">simple_sentence</span>, <span class="params">simple_sentence2</span>)</span>;</span><br><span class="line">    finalRes = complex_sentence-&gt;interpreter<span class="literal">()</span>;</span><br><span class="line">    cout &lt;&lt; finalRes &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    <span class="constructor">SAFE_RELASE_POINTER(<span class="params">direction</span>)</span>;</span><br><span class="line">    <span class="constructor">SAFE_RELASE_POINTER(<span class="params">action</span>)</span>;</span><br><span class="line">    <span class="constructor">SAFE_RELASE_POINTER(<span class="params">distance</span>)</span>;</span><br><span class="line">    <span class="constructor">SAFE_RELASE_POINTER(<span class="params">simple_sentence</span>)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="constructor">SAFE_RELASE_POINTER(<span class="params">direction2</span>)</span>;</span><br><span class="line">    <span class="constructor">SAFE_RELASE_POINTER(<span class="params">action2</span>)</span>;</span><br><span class="line">    <span class="constructor">SAFE_RELASE_POINTER(<span class="params">simple_sentence2</span>)</span>;</span><br><span class="line">    <span class="constructor">SAFE_RELASE_POINTER(<span class="params">complex_sentence</span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>5.运行结果:</p>
+<pre><code>向上快速移动100厘米并且向下移动100厘米
+</code></pre>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Frank Tao
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://www.taolingyang.com/2018/04/05/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/" title="解释器模式(行为型)">http://www.taolingyang.com/2018/04/05/解释器模式/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Design-Pattern/" rel="tag"># Design Pattern</a>
+              <a href="/tags/Behavior-Pattern/" rel="tag"># Behavior Pattern</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/03/21/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/" rel="prev" title="观察者模式(行为型)">
+                  <i class="fa fa-chevron-left"></i> 观察者模式(行为型)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/04/25/%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F/" rel="next" title="备忘录模式(行为型)">
+                  备忘录模式(行为型) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank Tao</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">412k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">6:15</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://railway-starter-production-f6c1.up.railway.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"请文明评论呀","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":false,"comment_count":true,"requiredFields":["nick"],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/2018/04/05/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+  <script>
+	  (function(){
+		  var bp = document.createElement('script');
+		  var curProtocol = window.location.protocol.split(':')[0];
+		  if (curProtocol === 'https') {
+			  bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		  }
+		  else {
+			  bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		  }
+		  var s = document.getElementsByTagName("script")[0];
+		  s.parentNode.insertBefore(bp, s);
+	  })();
+  </script>
+</body>
+</html>

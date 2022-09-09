@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.taolingyang.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.13.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言 上一篇介绍了使用Hexo在本地搭建的过程，本篇将本地搭建的博客网站部署到服务器去，常见的服务器有:  GitHub Heroku …  本文选用使用比较多的GitHub作为目标服务器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Hexo搭建个人博客(2)">
+<meta property="og:url" content="http://www.taolingyang.com/2016/01/09/Hexo%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-2/index.html">
+<meta property="og:site_name" content="Share Mind">
+<meta property="og:description" content="前言 上一篇介绍了使用Hexo在本地搭建的过程，本篇将本地搭建的博客网站部署到服务器去，常见的服务器有:  GitHub Heroku …  本文选用使用比较多的GitHub作为目标服务器">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://www.taolingyang.com/.com//SSH-Key.PNG">
+<meta property="og:image" content="http://www.taolingyang.com/.com//godaddy1.png">
+<meta property="og:image" content="http://www.taolingyang.com/.com//godday2.png">
+<meta property="og:image" content="http://www.taolingyang.com/.com//godaddy3.png">
+<meta property="og:image" content="http://www.taolingyang.com/.com//godaddy4.png">
+<meta property="og:image" content="http://www.taolingyang.com/.com//goddady6.png">
+<meta property="og:image" content="http://www.taolingyang.com/.com//godaddy5.png">
+<meta property="og:image" content="http://www.taolingyang.com/.com//dnspod1.png">
+<meta property="og:image" content="http://www.taolingyang.com/.com//dnspod2.png">
+<meta property="og:image" content="http://www.taolingyang.com/.com//dnspod3.png">
+<meta property="og:image" content="http://www.taolingyang.com/.com//dnspod4.png">
+<meta property="og:image" content="http://www.taolingyang.com/.com//dnspod5.png">
+<meta property="article:published_time" content="2016-01-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-09-09T01:52:18.342Z">
+<meta property="article:author" content="Frank Tao">
+<meta property="article:tag" content="Hexo">
+<meta property="article:tag" content="GitHub">
+<meta property="article:tag" content="Next">
+<meta property="article:tag" content="博客">
+<meta property="article:tag" content="Node.js">
+<meta property="article:tag" content="Git">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.taolingyang.com/.com//SSH-Key.PNG">
+
+
+<link rel="canonical" href="http://www.taolingyang.com/2016/01/09/Hexo%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-2/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://www.taolingyang.com/2016/01/09/Hexo%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-2/","path":"2016/01/09/Hexo创建个人博客-2/","title":"使用Hexo搭建个人博客(2)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>使用Hexo搭建个人博客(2) | Share Mind</title>
+  
+
+
+
+
+
+<link rel="dns-prefetch" href="https://railway-starter-production-f6c1.up.railway.app">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Share Mind</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Love Reading | Film | Climbing | Snooker</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GitHub%E7%AE%80%E4%BB%8B"><span class="nav-number">2.</span> <span class="nav-text">GitHub简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GitHub%E6%B3%A8%E5%86%8C"><span class="nav-number">3.</span> <span class="nav-text">GitHub注册</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E5%86%8CGitHub%E8%B4%A6%E5%8F%B7"><span class="nav-number">3.1.</span> <span class="nav-text">注册GitHub账号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8BGitHub-Pages"><span class="nav-number">3.2.</span> <span class="nav-text">建立GitHub Pages</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AEGitHub-SSH-Key"><span class="nav-number">3.3.</span> <span class="nav-text">设置GitHub SSH Key</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E8%AE%BE%E7%BD%AEgit%E9%82%AE%E7%AE%B1%E3%80%81%E7%94%A8%E6%88%B7%E5%90%8D%E5%92%8C%E5%AF%86%E7%A0%81"><span class="nav-number">3.3.1.</span> <span class="nav-text">本地设置git邮箱、用户名和密码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E5%88%9B%E5%BB%BASSH-Key"><span class="nav-number">3.3.2.</span> <span class="nav-text">本地创建SSH Key</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E7%94%9F%E6%88%90%E7%9A%84SSH-Key%E5%88%B0GitHub%E8%B4%A6%E6%88%B7"><span class="nav-number">3.3.3.</span> <span class="nav-text">添加生成的SSH Key到GitHub账户</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81%E4%B8%8BSSH%E6%98%AF%E5%90%A6%E8%AE%BE%E7%BD%AE%E6%88%90%E5%8A%9F"><span class="nav-number">3.3.4.</span> <span class="nav-text">验证下SSH是否设置成功</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GitHub%E9%83%A8%E7%BD%B2"><span class="nav-number">4.</span> <span class="nav-text">GitHub部署</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E7%AB%99%E7%82%B9-config-yml%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">4.1.</span> <span class="nav-text">修改站点_config.yml配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C%E9%83%A8%E7%BD%B2%E5%91%BD%E4%BB%A4"><span class="nav-number">4.2.</span> <span class="nav-text">执行部署命令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%9F%E5%90%8D%E7%BB%91%E5%AE%9A"><span class="nav-number">5.</span> <span class="nav-text">域名绑定</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Godaddy%E5%9F%9F%E5%90%8D%E7%94%B3%E8%AF%B7"><span class="nav-number">5.1.</span> <span class="nav-text">Godaddy域名申请</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Godaddy%E5%9F%9F%E5%90%8D%E8%AE%BE%E7%BD%AE"><span class="nav-number">5.2.</span> <span class="nav-text">Godaddy域名设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GitHub%E5%9F%9F%E5%90%8D%E8%AE%BE%E7%BD%AE"><span class="nav-number">5.3.</span> <span class="nav-text">GitHub域名设置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GitHub-Page%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D%E6%B7%BB%E5%8A%A0"><span class="nav-number">5.3.1.</span> <span class="nav-text">GitHub Page自定义域名添加</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Hexo-CNAME%E6%96%87%E4%BB%B6%E6%B7%BB%E5%8A%A0"><span class="nav-number">5.3.2.</span> <span class="nav-text">Hexo CNAME文件添加</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DNSPod%E5%9F%9F%E5%90%8D%E7%AE%A1%E7%90%86"><span class="nav-number">6.</span> <span class="nav-text">DNSPod域名管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">7.</span> <span class="nav-text">小结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Frank Tao"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Frank Tao</p>
+  <div class="site-description" itemprop="description">welcome to taolingyang’s blog -~-</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/franktly" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;franktly" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/tao-ling-yang" title="ZhiHu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;tao-ling-yang" rel="noopener" target="_blank"><i class="fa fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/2273442920" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;2273442920" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+  <a href="https://github.com/franktly" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.taolingyang.com/2016/01/09/Hexo%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Frank Tao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Share Mind">
+      <meta itemprop="description" content="welcome to taolingyang’s blog -~-">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="使用Hexo搭建个人博客(2) | Share Mind">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用Hexo搭建个人博客(2)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2016-01-09 00:00:00" itemprop="dateCreated datePublished" datetime="2016-01-09T00:00:00+08:00">2016-01-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/" itemprop="url" rel="index"><span itemprop="name">博客搭建</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/2016/01/09/Hexo%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-2/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2016/01/09/Hexo%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-2/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>上一篇介绍了使用Hexo在本地搭建的过程，本篇将本地搭建的博客网站部署到服务器去，常见的服务器有:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/">GitHub</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.heroku.com/">Heroku</a></li>
+<li>…</li>
+</ul>
+<p>本文选用使用比较多的GitHub作为目标服务器</p>
+<span id="more"></span>
+
+<h2 id="GitHub简介"><a href="#GitHub简介" class="headerlink" title="GitHub简介"></a>GitHub简介</h2><hr>
+<p><a target="_blank" rel="noopener" href="https://github.com/">GitHub</a>是Git工具的远程库，托管各种Git库，并提供Web界面。GitHub为一个项目贡献代码非常简单：首先点击项目站点的“fork”的按钮，然后将代码检出并将修改加入到刚才分出的代码库中，最后通过内建的“pull request”机制向项目负责人申请代码合并，GitHub是软件开发人员的Facebook</p>
+<h2 id="GitHub注册"><a href="#GitHub注册" class="headerlink" title="GitHub注册"></a>GitHub注册</h2><hr>
+<blockquote>
+<p>已有账户的忽略此步</p>
+</blockquote>
+<h3 id="注册GitHub账号"><a href="#注册GitHub账号" class="headerlink" title="注册GitHub账号"></a>注册GitHub账号</h3><h3 id="建立GitHub-Pages"><a href="#建立GitHub-Pages" class="headerlink" title="建立GitHub Pages"></a>建立GitHub Pages</h3><p>对于<a target="_blank" rel="noopener" href="https://pages.github.com/">GitHub Pages</a>分两种：</p>
+<ul>
+<li>用户&amp;组织页：根据GitHub用户名建立的<code>username.github.io</code>的repository,如笔者的仓库名为<code>franktly.github.io</code>,此时网页使用的是该仓库的master分支</li>
+<li>项目页: 比前者稍微麻烦些，需要在新的或已有的repository上新建一个gh-pages分支，具体方法见<a target="_blank" rel="noopener" href="https://pages.github.com/">GitHub Pages 官网</a></li>
+</ul>
+<p>这次我们选择第一种<strong>用户&amp;组织页</strong>类型的GitHub Pages</p>
+<h3 id="设置GitHub-SSH-Key"><a href="#设置GitHub-SSH-Key" class="headerlink" title="设置GitHub SSH Key"></a>设置GitHub SSH Key</h3><h4 id="本地设置git邮箱、用户名和密码"><a href="#本地设置git邮箱、用户名和密码" class="headerlink" title="本地设置git邮箱、用户名和密码"></a>本地设置git邮箱、用户名和密码</h4><pre><code>git config --global user.email &quot;your_email_addr&quot;
+git config --global user.name  &quot;user_name&quot;
+</code></pre>
+<h4 id="本地创建SSH-Key"><a href="#本地创建SSH-Key" class="headerlink" title="本地创建SSH Key"></a>本地创建SSH Key</h4><pre><code>ssh-keygen -t rsa -C &quot;your_email@your_email.com&quot;
+</code></pre>
+<blockquote>
+<p>首先打开用户根目录（用户根目录一般为为C:\Users\username）查看是否已经有了SSH Key的文件夹<code>.ssh</code>,若有了先备份下，</p>
+</blockquote>
+<h4 id="添加生成的SSH-Key到GitHub账户"><a href="#添加生成的SSH-Key到GitHub账户" class="headerlink" title="添加生成的SSH Key到GitHub账户"></a>添加生成的SSH Key到GitHub账户</h4><p>打开在当前用户的根目录下生成的<code>.ssh</code>文件里面的ssh.pub（ssh 公钥）,拷贝其内容到[Account setting -&gt; SSH Keys -&gt; Add SSH Key]</p>
+<h4 id="验证下SSH是否设置成功"><a href="#验证下SSH是否设置成功" class="headerlink" title="验证下SSH是否设置成功"></a>验证下SSH是否设置成功</h4><pre><code>ssh -T git@github.com
+</code></pre>
+<p>第一次提示不能连接，直接输入yes即可</p>
+<p><img src="/.com//SSH-Key.PNG" alt="SSH_SET"></p>
+<h2 id="GitHub部署"><a href="#GitHub部署" class="headerlink" title="GitHub部署"></a>GitHub部署</h2><hr>
+<p>建立GitHub Pages之后，即可以将本地搭建的Hexo网站部署到GitHub上去</p>
+<h3 id="修改站点-config-yml配置文件"><a href="#修改站点-config-yml配置文件" class="headerlink" title="修改站点_config.yml配置文件"></a>修改站点_config.yml配置文件</h3><p>如下面所示：类型配置为git，仓库地址为建立的GitHub Pages仓库地址，分支为master</p>
+<pre><code>deploy:
+type: git
+repo: https://github.com/username/username.github.io.git
+branch: master
+</code></pre>
+<h3 id="执行部署命令"><a href="#执行部署命令" class="headerlink" title="执行部署命令"></a>执行部署命令</h3><pre><code>$ hexo deploy
+</code></pre>
+<blockquote>
+<p>可以使用<code>-g，--generate</code>可选参数部署之前预先生成静态文件</p>
+</blockquote>
+<p>在GitHub上部署完成之后，以后别人也可以通过<a target="_blank" rel="noopener" href="http://username.github.io网站访问你的个人博客网站了/">http://username.github.io网站访问你的个人博客网站了</a></p>
+<h2 id="域名绑定"><a href="#域名绑定" class="headerlink" title="域名绑定"></a>域名绑定</h2><hr>
+<h3 id="Godaddy域名申请"><a href="#Godaddy域名申请" class="headerlink" title="Godaddy域名申请"></a>Godaddy域名申请</h3><p>如果想使用自己申请的域名来访问GitHub上部署的个人博客，可以先到<a target="_blank" rel="noopener" href="https://www.godaddy.com/">Godaddy</a>上申请域名,笔者申请的域名为<a href="http://www.taolingyang.com/">http://www.taolingyang.com</a></p>
+<p>Godaddy的域名申请一般分为：</p>
+<ol>
+<li>Search Domain： 查找自己想要申请的域名，若未被别人申请才行</li>
+<li>Select Extensions: 选择域名的扩展名，有.com、.net等等可以选择</li>
+<li>Continue To Chart: 选择提供的相应的服务去付款，支持支付宝支付</li>
+</ol>
+<h3 id="Godaddy域名设置"><a href="#Godaddy域名设置" class="headerlink" title="Godaddy域名设置"></a>Godaddy域名设置</h3><p>申请成功后，需要设置Godaddy的域名，将申请到的域名关联到username.github.io网址上,具体步骤如下：</p>
+<ol>
+<li>打开个人Godday主页查看购买的Products:</li>
+</ol>
+<p><img src="/.com//godaddy1.png" alt="gd-product"></p>
+<ol start="2">
+<li>选择管理DNS，在DNS Records中选择Add:</li>
+</ol>
+<p><img src="/.com//godday2.png" alt="gd-add"></p>
+<ol start="3">
+<li>在新建的Record中增加A记录类型，主机记录类型为<code>@</code>:IP地址为GitHub Page Docs中的第5项列的A记录IP地址，四个地址全部依次添加,总共添加4条IP记录:</li>
+</ol>
+<p><img src="/.com//godaddy3.png" alt="gd-ip1"></p>
+<p><img src="/.com//godaddy4.png" alt="gd-ip2"></p>
+<ol start="4">
+<li>最后新建一条CNAME记录类型，主机记录类型为<code>www</code>,值为github pages地址,如username.github.io形式,TTL默认:</li>
+</ol>
+<p><img src="/.com//goddady6.png" alt="gd-cname"></p>
+<h3 id="GitHub域名设置"><a href="#GitHub域名设置" class="headerlink" title="GitHub域名设置"></a>GitHub域名设置</h3><h4 id="GitHub-Page自定义域名添加"><a href="#GitHub-Page自定义域名添加" class="headerlink" title="GitHub Page自定义域名添加"></a>GitHub Page自定义域名添加</h4><p>在GitHub Page配置中的Custom domain中填入Godday申请的域名，如本人的为<code>www.taolingyang.com</code>:</p>
+<p><img src="/.com//godaddy5.png" alt="gd-domain"></p>
+<blockquote>
+<p>输入完成后GitHub Page会自动Check DNS，若Check Success说明设置成功</p>
+</blockquote>
+<h4 id="Hexo-CNAME文件添加"><a href="#Hexo-CNAME文件添加" class="headerlink" title="Hexo CNAME文件添加"></a>Hexo CNAME文件添加</h4><p>在GitHub端也相应的设置下域名，只需在本地博客的根目录下source文件夹下增加一个CNAME文件，文件内容为你申请的域名地址，如本人的是：<code>www.taolingyang.com</code>.</p>
+<blockquote>
+<p>本地根目录下的source文件夹下的增加CNAME文件后，需要重新执行下<code>hexo deploy</code>命令将CNAME文件部署到GitHub服务器才能生效，成功后，一般需要等十几分钟左右才能通过新申请的域名访问你的博客<br>放到博客根目录的source文件夹下面比直接通过Git客户端将本地CNAME文件push到GitHub上好些，这样可以避免每次<code>hexo deploy</code>后，hexo自动将 CNAME文件删除掉</p>
+</blockquote>
+<h2 id="DNSPod域名管理"><a href="#DNSPod域名管理" class="headerlink" title="DNSPod域名管理"></a>DNSPod域名管理</h2><hr>
+<p>为了方便国内网络访问个人博客，可以通过腾讯平台的DNSPod进行DNS域名解析管理,主要分为以下几步:</p>
+<ol>
+<li>DNS 域名添加，打开<code>www.dnspod.cn</code>主页，登录个人账号，选择DNS- DNS管理-添加域名：</li>
+</ol>
+<p><img src="/.com//dnspod1.png" alt="dnspod mag"></p>
+<ol start="2">
+<li>DNS 域名解析服务器地址生成，DNSPod生成的服务器地址在右边的两项：</li>
+</ol>
+<p><img src="/.com//dnspod2.png" alt="dnspod addr"></p>
+<ol start="3">
+<li>同步DNSPod域名解析服务器到Godday，将上述生成的两项DNSPod服务器地址添加到Godaddy自定义域名服务器当中:</li>
+</ol>
+<p><img src="/.com//dnspod3.png" alt="dnspod godaddy"></p>
+<p>DNSPod域名设置完成后，Godaddy的域名设置被DNSPod托管：</p>
+<p><img src="/.com//dnspod4.png" alt="dnspod godaddy-records"></p>
+<p><img src="/.com//dnspod5.png" alt="dnspod display"></p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><hr>
+<p>本篇主要介绍了将本地Hexo搭建的个人博客网站部署到GitHub服务器上的方法，并且简要的介绍了在Godaddy上域名的申请方法和设置和方便国内网络使用DNSPod进行域名地址解析，至此，就可以使用域名在网络上访问自己的博客了，如果觉得博客的主题不是自己喜欢的还可以更改Hexo的默认主题，下篇将会简介Hexo中怎么使用Next主题来使Blog更好看</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Frank Tao
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://www.taolingyang.com/2016/01/09/Hexo%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-2/" title="使用Hexo搭建个人博客(2)">http://www.taolingyang.com/2016/01/09/Hexo创建个人博客-2/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Hexo/" rel="tag"># Hexo</a>
+              <a href="/tags/GitHub/" rel="tag"># GitHub</a>
+              <a href="/tags/Next/" rel="tag"># Next</a>
+              <a href="/tags/%E5%8D%9A%E5%AE%A2/" rel="tag"># 博客</a>
+              <a href="/tags/Node-js/" rel="tag"># Node.js</a>
+              <a href="/tags/Git/" rel="tag"># Git</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2016/01/05/Hexo%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-1/" rel="prev" title="使用Hexo搭建个人博客(1)">
+                  <i class="fa fa-chevron-left"></i> 使用Hexo搭建个人博客(1)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2016/01/10/Hexo%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-3/" rel="next" title="使用Hexo搭建个人博客(3)">
+                  使用Hexo搭建个人博客(3) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank Tao</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">412k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">6:15</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://railway-starter-production-f6c1.up.railway.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"请文明评论呀","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":false,"comment_count":true,"requiredFields":["nick"],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/2016/01/09/Hexo%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-2/"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+  <script>
+	  (function(){
+		  var bp = document.createElement('script');
+		  var curProtocol = window.location.protocol.split(':')[0];
+		  if (curProtocol === 'https') {
+			  bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		  }
+		  else {
+			  bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		  }
+		  var s = document.getElementsByTagName("script")[0];
+		  s.parentNode.insertBefore(bp, s);
+	  })();
+  </script>
+</body>
+</html>

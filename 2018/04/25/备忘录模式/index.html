@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.taolingyang.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.13.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言 在玩RPG之类游戏的时候，每次通过一次游戏关卡的时候，一般我们都会把游戏的角色状态保存一下，继续通下一关，如果下一关难度比较大很难通过失败后，又懒得从第一关开始重新。幸亏有关卡的保存功能，我们可以直接从上次保存的关卡中重新开始即可，提高了通关的效率。这里的游戏角色的保存和恢复功能就是本文将要介绍的备忘录模式。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="备忘录模式(行为型)">
+<meta property="og:url" content="http://www.taolingyang.com/2018/04/25/%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="Share Mind">
+<meta property="og:description" content="前言 在玩RPG之类游戏的时候，每次通过一次游戏关卡的时候，一般我们都会把游戏的角色状态保存一下，继续通下一关，如果下一关难度比较大很难通过失败后，又懒得从第一关开始重新。幸亏有关卡的保存功能，我们可以直接从上次保存的关卡中重新开始即可，提高了通关的效率。这里的游戏角色的保存和恢复功能就是本文将要介绍的备忘录模式。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://www.taolingyang.com/.com//Memento.jpg">
+<meta property="article:published_time" content="2018-04-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-09-09T01:52:18.405Z">
+<meta property="article:author" content="Frank Tao">
+<meta property="article:tag" content="Design Pattern">
+<meta property="article:tag" content="Behavior Pattern">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.taolingyang.com/.com//Memento.jpg">
+
+
+<link rel="canonical" href="http://www.taolingyang.com/2018/04/25/%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://www.taolingyang.com/2018/04/25/%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F/","path":"2018/04/25/备忘录模式/","title":"备忘录模式(行为型)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>备忘录模式(行为型) | Share Mind</title>
+  
+
+
+
+
+
+<link rel="dns-prefetch" href="https://railway-starter-production-f6c1.up.railway.app">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Share Mind</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Love Reading | Film | Climbing | Snooker</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">备忘录模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%84%8F%E5%9B%BE"><span class="nav-number">2.1.</span> <span class="nav-text">意图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E4%B8%8E%E8%80%85"><span class="nav-number">2.2.</span> <span class="nav-text">参与者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="nav-number">2.3.</span> <span class="nav-text">模式结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.4.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">2.5.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">2.6.</span> <span class="nav-text">优缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F%E5%85%B7%E4%BD%93%E5%AE%9E%E4%BE%8B"><span class="nav-number">3.</span> <span class="nav-text">备忘录模式具体实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%B8%E6%88%8F%E8%A7%92%E8%89%B2%E7%8A%B6%E6%80%81%E4%BF%9D%E5%AD%98%E6%81%A2%E5%A4%8D%E9%97%AE%E9%A2%98"><span class="nav-number">3.1.</span> <span class="nav-text">游戏角色状态保存恢复问题</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Frank Tao"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Frank Tao</p>
+  <div class="site-description" itemprop="description">welcome to taolingyang’s blog -~-</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/franktly" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;franktly" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/tao-ling-yang" title="ZhiHu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;tao-ling-yang" rel="noopener" target="_blank"><i class="fa fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/2273442920" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;2273442920" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+  <a href="https://github.com/franktly" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.taolingyang.com/2018/04/25/%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Frank Tao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Share Mind">
+      <meta itemprop="description" content="welcome to taolingyang’s blog -~-">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="备忘录模式(行为型) | Share Mind">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          备忘录模式(行为型)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-04-25 00:00:00" itemprop="dateCreated datePublished" datetime="2018-04-25T00:00:00+08:00">2018-04-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Design-Pattern/" itemprop="url" rel="index"><span itemprop="name">Design Pattern</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/2018/04/25/%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2018/04/25/%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>7.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>在玩RPG之类游戏的时候，每次通过一次游戏关卡的时候，一般我们都会把游戏的角色状态保存一下，继续通下一关，如果下一关难度比较大很难通过失败后，又懒得从第一关开始重新。幸亏有关卡的保存功能，我们可以直接从上次保存的关卡中重新开始即可，提高了通关的效率。这里的游戏角色的保存和恢复功能就是本文将要介绍的备忘录模式。</p>
+<span id="more"></span>
+
+<h2 id="备忘录模式"><a href="#备忘录模式" class="headerlink" title="备忘录模式"></a>备忘录模式</h2><hr>
+<p>备忘录模式提供了一种状态恢复的实现机制，使得用户可以方便地回到一个特定的历史步骤，当新的状态无效或者存在问题时，可以使用暂时存储起来的备忘录将状态复原，很多软件用到的撤销功能就是基于此模式的</p>
+<blockquote>
+<p>一个备忘录是一个对象，它存储另一个对象在某个瞬间的内部状态，而后者称为备忘录的原发器(Originator)。当需要设置原发器的检查点时, 取消操作机制会向原发器请求一个备忘录。原发器用描述当前状态的信息初始化该备忘录。只有原发器可以向备忘录中存取信息，备忘录对其他的对象“不可见”</p>
+</blockquote>
+<h3 id="意图"><a href="#意图" class="headerlink" title="意图"></a>意图</h3><p>在不破坏封装性的前提下,捕获一个对象的内部状态,并在该对象之外保存这个状态。这样以后就可以将该对象恢复到原先保存的状态</p>
+<h3 id="参与者"><a href="#参与者" class="headerlink" title="参与者"></a>参与者</h3><ul>
+<li><p>Memento<br>备忘录，存储原发器对象的内部状态。原发器根据需要决定备忘录存储原发器的哪些内部状态<br>防止原发器以外的其他对象访问备忘录。备忘录实际上有两个接口:<br>1.管理者(Caretaker)只能看到备忘录的窄接口—它只能将备忘录传递给其他对象;<br>2.相反,原发器能够看到一个宽接口,允许它访问返回到先前状态所需的所有数据。理想的情况是只允许生成本备忘录的那个原发器访问本备忘录的内部状态</p>
+</li>
+<li><p>Originator<br>原发器，创建一个备忘录,用以记录当前时刻它的内部状态<br>使用备忘录恢复内部状态</p>
+</li>
+<li><p>Caretaker<br>负责人，负责保存好备忘录<br>不能对备忘录的内容进行操作或检查</p>
+</li>
+</ul>
+<blockquote>
+<p>管理器向原发器请求一个备忘录, 保留一段时间后,将其送回给原发器<br>备忘录是被动的。只有创建备忘录的原发器会对它的状态进行赋值和检索</p>
+</blockquote>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="/.com//Memento.jpg" alt="memento"></p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>1.首先定义备忘录类<code>Memento</code>,备忘录类内部状态成员是私有的为了保证封装性,只有原发器能看到,声明原发器类为<code>friend</code>：</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//状态信息类</span></span><br><span class="line"><span class="keyword">struct</span> MementoState</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">string</span> m_stateinformation;</span><br><span class="line">public:</span><br><span class="line">    <span class="constructor">MementoState(<span class="params">string</span> <span class="params">state</span>)</span>: m<span class="constructor">_stateinformation(<span class="params">state</span>)</span> &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    <span class="built_in">string</span> <span class="constructor">GetStateInform()</span></span><br><span class="line">    &#123;</span><br><span class="line">        return m_stateinformation;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 备忘录</span></span><br><span class="line"><span class="keyword">class</span> Originator;</span><br><span class="line"><span class="keyword">class</span> Memento</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    MementoState m_state;</span><br><span class="line">public:</span><br><span class="line">    <span class="constructor">Memento(MementoState <span class="params">state</span>)</span> : m<span class="constructor">_state(<span class="params">state</span>)</span> &#123;&#125;;</span><br><span class="line">    friend <span class="keyword">class</span> Originator; <span class="comment">// Originator为友元类，只有Originator才能访问Memento成员</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>2.再定义原发器类<code>Originator</code>，并提供创建备忘录的接口<code>SaveStateToCreatedMemento()</code>和恢复备忘录的接口<code>LoadStateFromMemento()</code>:</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 原发器</span></span><br><span class="line"><span class="keyword">class</span> Originator</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    MementoState m_state;</span><br><span class="line">public:</span><br><span class="line">    <span class="constructor">Originator(MementoState <span class="params">state</span>)</span> : m<span class="constructor">_state(<span class="params">state</span>)</span> &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    Memento* <span class="constructor">SaveStateToCreatedMemento()</span></span><br><span class="line">    &#123;</span><br><span class="line">        Memento *pMemento = <span class="keyword">new</span> <span class="constructor">Memento(<span class="params">m_state</span>)</span>;  <span class="comment">// 生成备忘录</span></span><br><span class="line">        return pMemento;</span><br><span class="line">    &#125;</span><br><span class="line">    void <span class="constructor">LoadStateFromMemento(Memento <span class="operator">*</span><span class="params">pMemento</span>)</span> <span class="comment">// 恢复备忘录</span></span><br><span class="line">    &#123;</span><br><span class="line">        m_state = pMemento-&gt;m_state;   <span class="comment">// 只有Originator才能访问Memento的私有成员</span></span><br><span class="line">    &#125;</span><br><span class="line">    void <span class="constructor">ChangeState(MementoState <span class="params">state</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        m_state = state;</span><br><span class="line">    &#125;</span><br><span class="line">    void <span class="constructor">ShowState()</span></span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;State Information Is: &quot;</span> &lt;&lt; m_state.<span class="constructor">GetStateInform()</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>3.再定义备忘录的管理者类<code>Caretaker</code>，该类负责管理<code>Mememto</code>，负责保存备忘录，但是不能对备忘录的内容进行操作或检查，不能修改对象，也无须知道对象的实现细节：</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 备忘录管理</span></span><br><span class="line"><span class="keyword">class</span> Caretaker</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    vector&lt;Memento*&gt; m_vecMemento;  <span class="comment">// vector 支持随机存取，list不支持,保存多个备忘录对象，可以支持多次撤销和恢复</span></span><br><span class="line">public:</span><br><span class="line">    <span class="constructor">Caretaker()</span> &#123;&#125;;</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="constructor">Caretaker()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span> (vector&lt;Memento*&gt;::iterator it = m_vecMemento.<span class="keyword">begin</span><span class="literal">()</span>;</span><br><span class="line">             it != m_vecMemento.<span class="keyword">end</span><span class="literal">()</span>;</span><br><span class="line">             ++it)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="constructor">SAFE_RELASE_POINTER(<span class="operator">*</span><span class="params">it</span>)</span>;  <span class="comment">// 备忘录管理者负责释放备忘录对象内存</span></span><br><span class="line">        &#125;</span><br><span class="line">        m_vecMemento.clear<span class="literal">()</span>;</span><br><span class="line">    &#125;</span><br><span class="line">public:</span><br><span class="line">    void <span class="constructor">SaveMemento(Memento <span class="operator">*</span><span class="params">pMemento</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        m_vecMemento.push<span class="constructor">_back(<span class="params">pMemento</span>)</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    Memento* <span class="constructor">LoadMementoByIndex(<span class="params">int</span> MementoIndex)</span></span><br><span class="line">    &#123;</span><br><span class="line">        return m_vecMemento<span class="literal">[M<span class="identifier">ementoIndex</span>]</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>4.测试备忘录模式：</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">void <span class="constructor">MementoTest_General()</span></span><br><span class="line">&#123;</span><br><span class="line">    Caretaker *pCT = <span class="keyword">new</span> <span class="constructor">Caretaker()</span>;</span><br><span class="line">    MementoState state1(<span class="string">&quot;First Step&quot;</span>);</span><br><span class="line">    MementoState state2(<span class="string">&quot;Second Step&quot;</span>);</span><br><span class="line">    MementoState state3(<span class="string">&quot;Third Step&quot;</span>);</span><br><span class="line"></span><br><span class="line">    Originator *pO = <span class="keyword">new</span> <span class="constructor">Originator(<span class="params">state1</span>)</span>;</span><br><span class="line">    pO-&gt;<span class="constructor">ShowState()</span>;</span><br><span class="line"></span><br><span class="line">    pCT-&gt;<span class="constructor">SaveMemento(<span class="params">pO</span>-&gt;SaveStateToCreatedMemento()</span>); <span class="comment">// Caretaker 管理添加新建的第一个Memento</span></span><br><span class="line">    pO-&gt;<span class="constructor">ChangeState(<span class="params">state2</span>)</span>;</span><br><span class="line">    pO-&gt;<span class="constructor">ShowState()</span>;</span><br><span class="line"></span><br><span class="line">    pCT-&gt;<span class="constructor">SaveMemento(<span class="params">pO</span>-&gt;SaveStateToCreatedMemento()</span>); <span class="comment">// Caretaker 管理添加新建的第二个Memento</span></span><br><span class="line">    pO-&gt;<span class="constructor">ChangeState(<span class="params">state3</span>)</span>;</span><br><span class="line">    pO-&gt;<span class="constructor">ShowState()</span>;</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Restore State 1: &quot;</span>;</span><br><span class="line">    pO-&gt;<span class="constructor">LoadStateFromMemento(<span class="params">pCT</span>-&gt;LoadMementoByIndex(1)</span>); <span class="comment">// 从Caretaker中取第二个Memento保存的状态</span></span><br><span class="line">    pO-&gt;<span class="constructor">ShowState()</span>;</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Restore State 0: &quot;</span>;</span><br><span class="line">    pO-&gt;<span class="constructor">LoadStateFromMemento(<span class="params">pCT</span>-&gt;LoadMementoByIndex(0)</span>); <span class="comment">// 从Caretaker中取第一个Memento保存的状态</span></span><br><span class="line">    pO-&gt;<span class="constructor">ShowState()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="constructor">SAFE_RELASE_POINTER(<span class="params">pO</span>)</span>;</span><br><span class="line">    <span class="constructor">SAFE_RELASE_POINTER(<span class="params">pCT</span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>5.运行结果：</p>
+<pre><code>State Information Is: First Step
+State Information Is: Second Step
+State Information Is: Third Step
+Restore State 1: State Information Is: Second Step
+Restore State 0: State Information Is: First Step
+</code></pre>
+<blockquote>
+<p>备忘录的封装：<br>备忘录是一个很特殊的对象，只有原发器对它拥有控制的权力，负责人只负责管理，而其他类无法访问到备忘录,它只需要从负责人处取出备忘录对象并将原发器对象的状态恢复，而无须关心备忘录的保存细节。理想的情况是只允许生成该备忘录的那个原发器访问备忘录的内部状态，<br>在C++中可以使用friend关键字，让原发器类和备忘录类成为友元类，互相之间可以访问对象的一些私有的属性；在Java语言中可以将原发器类和备忘录类放在一个包中，让它们之间满足默认的包内可见性；也可以将备忘录类作为原发器类的内部类，使得只有原发器才可以访问备忘录中的数据</p>
+</blockquote>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>必须保存一个对象在某一个时刻的(部分)状态, 这样以后需要时它才能恢复到先前的状态</li>
+<li>如果一个用接口来让其它对象直接得到这些状态，将会暴露对象的实现细节并破坏对象的封装性</li>
+</ul>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><ul>
+<li>优点<ul>
+<li>提供了一种状态恢复的实现机制，使得用户可以方便地回到一个特定的历史步骤</li>
+<li>备忘录实现了对信息的封装，一个备忘录对象是一种原发器对象状态的表示，不会被其他代码所改动。备忘录保存了原发器的状态，采用列表、堆栈等集合来存储备忘录对象可以实现多次撤销操作</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>如果原发器在生成备忘录时必须拷贝并存储大量的信息或者客户非常频繁地创建备忘录和恢复原发器状态，可能会导致非常大的开销</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>存储增量式改变：如果备忘录的创建及其返回（给它们的原发器）的顺序是可预测的，备忘录可以仅存储原发器内部状态的增量改变</p>
+</blockquote>
+<h2 id="备忘录模式具体实例"><a href="#备忘录模式具体实例" class="headerlink" title="备忘录模式具体实例"></a>备忘录模式具体实例</h2><hr>
+<h3 id="游戏角色状态保存恢复问题"><a href="#游戏角色状态保存恢复问题" class="headerlink" title="游戏角色状态保存恢复问题"></a>游戏角色状态保存恢复问题</h3><p><strong>使用备忘录模式简单实现前言所述的游戏角色保存和恢复功能</strong></p>
+<p><strong>代码实现</strong><br>1.定义游戏角色备忘录类<code>GameRoleMemento</code>:</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 游戏角色备忘录</span></span><br><span class="line"><span class="keyword">class</span> GameRole;</span><br><span class="line"><span class="keyword">class</span> GameRoleMemento</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">int</span> m_RoleAgileValue;</span><br><span class="line">    <span class="built_in">int</span> m_RolePowerValue;</span><br><span class="line">    <span class="built_in">int</span> m_RoleIntelligenceValue;</span><br><span class="line">public:</span><br><span class="line">    <span class="constructor">GameRoleMemento(<span class="params">int</span> <span class="params">agile</span>, <span class="params">int</span> <span class="params">powr</span>, <span class="params">int</span> <span class="params">intelligence</span>)</span></span><br><span class="line">        : m<span class="constructor">_RoleAgileValue(<span class="params">agile</span>)</span>, m<span class="constructor">_RolePowerValue(<span class="params">powr</span>)</span>, m<span class="constructor">_RoleIntelligenceValue(<span class="params">intelligence</span>)</span> &#123;&#125;;</span><br><span class="line">    friend <span class="keyword">class</span> GameRole;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>2.定义游戏角色原发器类<code>GameRole</code>,包含创建和恢复游戏角色备忘录的接口:</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 游戏角色(原发器)</span></span><br><span class="line"><span class="keyword">class</span> GameRole</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">int</span> m_RoleAgileValue;</span><br><span class="line">    <span class="built_in">int</span> m_RolePowerValue;</span><br><span class="line">    <span class="built_in">int</span> m_RoleIntelligenceValue;</span><br><span class="line">public:</span><br><span class="line">    <span class="constructor">GameRole(<span class="params">int</span> <span class="params">agile</span>, <span class="params">int</span> <span class="params">powr</span>, <span class="params">int</span> <span class="params">intelligence</span>)</span></span><br><span class="line">        : m<span class="constructor">_RoleAgileValue(<span class="params">agile</span>)</span>, m<span class="constructor">_RolePowerValue(<span class="params">powr</span>)</span>, m<span class="constructor">_RoleIntelligenceValue(<span class="params">intelligence</span>)</span> &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    GameRoleMemento* <span class="constructor">CreateMemento()</span></span><br><span class="line">    &#123;</span><br><span class="line">        return <span class="keyword">new</span> <span class="constructor">GameRoleMemento(<span class="params">m_RoleAgileValue</span>, <span class="params">m_RolePowerValue</span>, <span class="params">m_RoleIntelligenceValue</span>)</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    void <span class="constructor">SetMemento(GameRoleMemento <span class="operator">*</span><span class="params">pGameRoleMemento</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        m_RoleAgileValue = pGameRoleMemento-&gt;m_RoleAgileValue;</span><br><span class="line">        m_RolePowerValue = pGameRoleMemento-&gt;m_RolePowerValue;</span><br><span class="line">        m_RoleIntelligenceValue = pGameRoleMemento-&gt;m_RoleIntelligenceValue;</span><br><span class="line">    &#125;</span><br><span class="line">    void <span class="constructor">Attack()</span></span><br><span class="line">    &#123;</span><br><span class="line">        m_RolePowerValue-= <span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    void <span class="constructor">ShowAttribute()</span></span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Hero Attribution: [Agile]:&quot;</span> &lt;&lt; m_RoleAgileValue &lt;&lt; <span class="string">&quot; [Power]:&quot;</span> &lt;&lt; m_RolePowerValue &lt;&lt; </span><br><span class="line">        <span class="string">&quot; [Intelligence]:&quot;</span> &lt;&lt; m_RoleIntelligenceValue &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>3.定义游戏角色备忘录管理者类<code>GameRoleCaretaker</code>,负责管理游戏角色备忘录:</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 游戏角色备忘录管理者</span></span><br><span class="line"><span class="keyword">class</span> GameRoleCaretaker</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    vector&lt;GameRoleMemento*&gt; m_vecGameRoleMemento;</span><br><span class="line">public:</span><br><span class="line">    <span class="constructor">GameRoleCaretaker()</span> &#123;&#125;;</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="constructor">GameRoleCaretaker()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span> (vector&lt;GameRoleMemento*&gt;::iterator it = m_vecGameRoleMemento.<span class="keyword">begin</span><span class="literal">()</span>;</span><br><span class="line">             it != m_vecGameRoleMemento.<span class="keyword">end</span><span class="literal">()</span>;</span><br><span class="line">             ++it)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="constructor">SAFE_RELASE_POINTER(<span class="operator">*</span><span class="params">it</span>)</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        m_vecGameRoleMemento.clear<span class="literal">()</span>;</span><br><span class="line">    &#125;</span><br><span class="line">public:</span><br><span class="line">    void <span class="constructor">SaveGameRoleMemento(GameRoleMemento <span class="operator">*</span><span class="params">pGRM</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        m_vecGameRoleMemento.push<span class="constructor">_back(<span class="params">pGRM</span>)</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    GameRoleMemento* <span class="constructor">LoadGameRoleMementoByIndex(<span class="params">int</span> GameRoleMementoIndex)</span></span><br><span class="line">    &#123;</span><br><span class="line">        return m_vecGameRoleMemento<span class="literal">[G<span class="identifier">ameRoleMementoIndex</span>]</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>4.测试备忘录模式:</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">void <span class="constructor">MementoTest_GameRole()</span></span><br><span class="line">&#123;</span><br><span class="line">    GameRoleCaretaker *pGRCT = <span class="keyword">new</span> <span class="constructor">GameRoleCaretaker()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//原始属性状态</span></span><br><span class="line">    GameRole  *pGR = <span class="keyword">new</span> <span class="constructor">GameRole(50,50,50)</span>;</span><br><span class="line">    pGR-&gt;<span class="constructor">ShowAttribute()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//攻击一次后的状态，先保存,并显示属性</span></span><br><span class="line">    pGRCT-&gt;<span class="constructor">SaveGameRoleMemento(<span class="params">pGR</span>-&gt;CreateMemento()</span>);</span><br><span class="line">    pGR-&gt;<span class="constructor">Attack()</span>;</span><br><span class="line">    pGR-&gt;<span class="constructor">ShowAttribute()</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//再攻击一次后的状态，先保存,并显示属性</span></span><br><span class="line">    pGRCT-&gt;<span class="constructor">SaveGameRoleMemento(<span class="params">pGR</span>-&gt;CreateMemento()</span>);</span><br><span class="line">    pGR-&gt;<span class="constructor">Attack()</span>;</span><br><span class="line">    pGR-&gt;<span class="constructor">ShowAttribute()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//恢复第二次攻击前的状态,并显示属性</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Game Role Restore 1： &quot;</span>;</span><br><span class="line">    pGR-&gt;<span class="constructor">SetMemento(<span class="params">pGRCT</span>-&gt;LoadGameRoleMementoByIndex(1)</span>);</span><br><span class="line">    pGR-&gt;<span class="constructor">ShowAttribute()</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//恢复第一次攻击前的状态,并显示属性</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Game Role Restore 0： &quot;</span>;</span><br><span class="line">    pGR-&gt;<span class="constructor">SetMemento(<span class="params">pGRCT</span>-&gt;LoadGameRoleMementoByIndex(0)</span>);</span><br><span class="line">    pGR-&gt;<span class="constructor">ShowAttribute()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="constructor">SAFE_RELASE_POINTER(<span class="params">pGRCT</span>)</span>;</span><br><span class="line">    <span class="constructor">SAFE_RELASE_POINTER(<span class="params">pGR</span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>5.运行结果:</p>
+<pre><code>Hero Attribution: [Agile]:50 [Power]:50 [Intelligence]:50
+Hero Attribution: [Agile]:50 [Power]:40 [Intelligence]:50
+Hero Attribution: [Agile]:50 [Power]:30 [Intelligence]:50
+Game Role Restore 1： Hero Attribution: [Agile]:50 [Power]:40 [Intelligence]:50
+Game Role Restore 0： Hero Attribution: [Agile]:50 [Power]:50 [Intelligence]:50
+</code></pre>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Frank Tao
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://www.taolingyang.com/2018/04/25/%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F/" title="备忘录模式(行为型)">http://www.taolingyang.com/2018/04/25/备忘录模式/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Design-Pattern/" rel="tag"># Design Pattern</a>
+              <a href="/tags/Behavior-Pattern/" rel="tag"># Behavior Pattern</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/04/05/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/" rel="prev" title="解释器模式(行为型)">
+                  <i class="fa fa-chevron-left"></i> 解释器模式(行为型)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/05/02/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" rel="next" title="桥接模式(结构型)">
+                  桥接模式(结构型) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank Tao</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">412k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">6:15</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://railway-starter-production-f6c1.up.railway.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"请文明评论呀","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":false,"comment_count":true,"requiredFields":["nick"],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/2018/04/25/%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F/"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+  <script>
+	  (function(){
+		  var bp = document.createElement('script');
+		  var curProtocol = window.location.protocol.split(':')[0];
+		  if (curProtocol === 'https') {
+			  bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		  }
+		  else {
+			  bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		  }
+		  var s = document.getElementsByTagName("script")[0];
+		  s.parentNode.insertBefore(bp, s);
+	  })();
+  </script>
+</body>
+</html>

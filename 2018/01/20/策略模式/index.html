@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.taolingyang.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.13.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言 在出去旅游的时候，有很多种交通方式均能达到旅游的目的地。可以选择汽车，方便自由，也可以选择火车，速度较快，也可以沿途看风景，路程较远可以选择飞机，时间快。实现某一个功能有多条途径，每一条途径对应一种算法，此时我们可以使用一种设计模式来实现灵活地选择解决途径，也能够方便地增加新的解决途径，这就是本章要将要介绍的策略模式。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="策略模式(行为型)">
+<meta property="og:url" content="http://www.taolingyang.com/2018/01/20/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="Share Mind">
+<meta property="og:description" content="前言 在出去旅游的时候，有很多种交通方式均能达到旅游的目的地。可以选择汽车，方便自由，也可以选择火车，速度较快，也可以沿途看风景，路程较远可以选择飞机，时间快。实现某一个功能有多条途径，每一条途径对应一种算法，此时我们可以使用一种设计模式来实现灵活地选择解决途径，也能够方便地增加新的解决途径，这就是本章要将要介绍的策略模式。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://www.taolingyang.com/.com//Strategy.jpg">
+<meta property="article:published_time" content="2018-01-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-09-09T01:52:18.432Z">
+<meta property="article:author" content="Frank Tao">
+<meta property="article:tag" content="Design Pattern">
+<meta property="article:tag" content="Behavior Pattern">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.taolingyang.com/.com//Strategy.jpg">
+
+
+<link rel="canonical" href="http://www.taolingyang.com/2018/01/20/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://www.taolingyang.com/2018/01/20/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/","path":"2018/01/20/策略模式/","title":"策略模式(行为型)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>策略模式(行为型) | Share Mind</title>
+  
+
+
+
+
+
+<link rel="dns-prefetch" href="https://railway-starter-production-f6c1.up.railway.app">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Share Mind</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Love Reading | Film | Climbing | Snooker</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">策略模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%84%8F%E5%9B%BE"><span class="nav-number">2.1.</span> <span class="nav-text">意图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E4%B8%8E%E8%80%85"><span class="nav-number">2.2.</span> <span class="nav-text">参与者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="nav-number">2.3.</span> <span class="nav-text">模式结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.4.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%B9%E8%BF%9B%E7%89%88"><span class="nav-number">2.5.</span> <span class="nav-text">改进版</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%94%B9%E8%BF%9B%E7%89%881-%E9%80%9A%E8%BF%87%E5%B0%86Strategy%E4%BD%9C%E4%B8%BAC-%E6%A8%A1%E6%9D%BF%E5%8F%82%E6%95%B0%E6%9D%A5%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.5.1.</span> <span class="nav-text">改进版1-通过将Strategy作为C++模板参数来实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%94%B9%E8%BF%9B%E7%89%882-%E9%80%9A%E8%BF%87%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F%E6%9D%A5%E5%88%9B%E5%BB%BA%E5%85%B7%E4%BD%93%E7%AD%96%E7%95%A5%E5%AF%B9%E8%B1%A1"><span class="nav-number">2.5.2.</span> <span class="nav-text">改进版2-通过工厂方法模式来创建具体策略对象</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">2.6.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">2.7.</span> <span class="nav-text">优缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E%E5%85%B6%E4%BB%96%E5%8F%AF%E4%BB%A5%E6%B6%88%E9%99%A4if-else%E6%9D%A1%E4%BB%B6%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8C%BA%E5%88%AB-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F%E3%80%81%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F%E3%80%81%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%E3%80%81%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.8.</span> <span class="nav-text">与其他可以消除if-else条件模式的区别(状态模式、策略模式、工厂模式、责任链模式)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F%E5%85%B7%E4%BD%93%E5%AE%9E%E4%BE%8B"><span class="nav-number">3.</span> <span class="nav-text">策略模式具体实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%85%E6%B8%B8%E4%BA%A4%E9%80%9A%E5%B7%A5%E5%85%B7%E9%80%89%E6%8B%A9%E9%97%AE%E9%A2%98"><span class="nav-number">3.1.</span> <span class="nav-text">旅游交通工具选择问题</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Frank Tao"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Frank Tao</p>
+  <div class="site-description" itemprop="description">welcome to taolingyang’s blog -~-</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/franktly" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;franktly" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/tao-ling-yang" title="ZhiHu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;tao-ling-yang" rel="noopener" target="_blank"><i class="fa fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/2273442920" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;2273442920" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+  <a href="https://github.com/franktly" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.taolingyang.com/2018/01/20/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Frank Tao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Share Mind">
+      <meta itemprop="description" content="welcome to taolingyang’s blog -~-">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="策略模式(行为型) | Share Mind">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          策略模式(行为型)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-01-20 00:00:00" itemprop="dateCreated datePublished" datetime="2018-01-20T00:00:00+08:00">2018-01-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Design-Pattern/" itemprop="url" rel="index"><span itemprop="name">Design Pattern</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/2018/01/20/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2018/01/20/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>11k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>10 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>在出去旅游的时候，有很多种交通方式均能达到旅游的目的地。可以选择汽车，方便自由，也可以选择火车，速度较快，也可以沿途看风景，路程较远可以选择飞机，时间快。实现某一个功能有多条途径，每一条途径对应一种算法，此时我们可以使用一种设计模式来实现灵活地选择解决途径，也能够方便地增加新的解决途径，这就是本章要将要介绍的策略模式。</p>
+<span id="more"></span>
+
+<h2 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h2><hr>
+<p>在策略模式中，定义一些独立的类来封装不同的算法，每一个类封装一种具体的算法(策略)，为了保证这些策略在使用时具有一致性，一般会提供一个抽象的策略类来做规则的定义，而每种算法则对应于一个具体策略类，将算法的定义和使用分离，也就是将算法的行为和环境分开</p>
+<h3 id="意图"><a href="#意图" class="headerlink" title="意图"></a>意图</h3><p>定义一系列算法类，将每一个算法封装起来，并让它们可以相互替换，策略模式让算法独立于使用它的客户而变化</p>
+<h3 id="参与者"><a href="#参与者" class="headerlink" title="参与者"></a>参与者</h3><ul>
+<li><p>Context<br>环境类，用一个ConcreteStrategy对象类配置<br>维护一个对Strategy对象的引用<br>可以定义一个接口来让Strategy访问它的数据</p>
+</li>
+<li><p>Strategy<br>抽象策略类，定义所有支持的算法的公共接口。Context使用这个接口来调用某ConcreteStrategy对象定义的算法</p>
+</li>
+<li><p>ConcreteState<br>具体策略类，以Strategy接口实现某具体算法<br>可以拥有一个Context对象引用访问Context的数据</p>
+</li>
+</ul>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="/.com//Strategy.jpg" alt="strategy"></p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>1.首先定义抽象策略类<code>Strategy</code>，声明算法接口<code>AlgorithmInterface()</code>：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Abstract Strategy</span></span><br><span class="line"><span class="keyword">class</span> <span class="title">Strategy</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">AlgorithmInterface</span>()</span> = <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>2.再定义三个具体的策略类<code>ConcreteStrategyA</code>、<code>ConcreteStrategyB</code>及<code>ConcreteStrategyC</code>,并实现算法接口<code>AlgorithmInterface()</code>：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Concrete Strategy A</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ConcreteStrategyA</span> : <span class="keyword">public</span> Strategy</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">AlgorithmInterface</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot; I am Concrete Strategy A&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Concrete Strategy B</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ConcreteStrategyB</span> : <span class="keyword">public</span> Strategy</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">AlgorithmInterface</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot; I am Concrete Strategy B&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Concrete Strategy C</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ConcreteStrategyC</span> : <span class="keyword">public</span> Strategy</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">AlgorithmInterface</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot; I am Concrete Strategy C&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>3.再定义策略环境类<code>StrategyContext</code>,具有<code>Strategy</code>对象的引用：</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Context</span></span><br><span class="line"><span class="keyword">class</span> StrategyContext</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    Strategy *m_pStrategy;</span><br><span class="line">public:</span><br><span class="line">    <span class="constructor">StrategyContext(Strategy <span class="operator">*</span><span class="params">pS</span>)</span> : m<span class="constructor">_pStrategy(<span class="params">pS</span>)</span> &#123;&#125;;  <span class="comment">// 构造静态注入策略对象</span></span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="constructor">StrategyContext()</span> </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="constructor">SAFE_RELASE_POINTER(<span class="params">m_pStrategy</span>)</span>;</span><br><span class="line">    &#125;</span><br><span class="line">public:</span><br><span class="line">    void <span class="constructor">SetStrategy(Strategy <span class="operator">*</span><span class="params">pS</span>)</span>   <span class="comment">// 动态注入策略对象</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="constructor">SAFE_RELASE_POINTER(<span class="params">m_pStrategy</span>)</span>;<span class="comment">// 释放之前申请的对象</span></span><br><span class="line">        m_pStrategy = pS;</span><br><span class="line">    &#125;</span><br><span class="line">public:</span><br><span class="line">    void <span class="constructor">ContextInterface()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="constructor">NULL_POINTER(<span class="params">m_pStrategy</span>)</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            m_pStrategy-&gt;<span class="constructor">AlgorithmInterface()</span>; <span class="comment">// 调用注入的策略对象算法</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>4.测试策略模式：</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">void <span class="constructor">StrategyTest_General()</span></span><br><span class="line">&#123;</span><br><span class="line">    Strategy *pCSA = <span class="keyword">new</span> <span class="constructor">ConcreteStrategyA()</span>;</span><br><span class="line">    Strategy *pCSB = <span class="keyword">new</span> <span class="constructor">ConcreteStrategyB()</span>;</span><br><span class="line">    Strategy *pCSC = <span class="keyword">new</span> <span class="constructor">ConcreteStrategyC()</span>;</span><br><span class="line"></span><br><span class="line">    StrategyContext *pSContext = <span class="keyword">new</span> <span class="constructor">StrategyContext(<span class="params">pCSA</span>)</span>;</span><br><span class="line">    pSContext-&gt;<span class="constructor">ContextInterface()</span>;</span><br><span class="line"></span><br><span class="line">    pSContext-&gt;<span class="constructor">SetStrategy(<span class="params">pCSB</span>)</span>;</span><br><span class="line">    pSContext-&gt;<span class="constructor">ContextInterface()</span>;</span><br><span class="line"></span><br><span class="line">    pSContext-&gt;<span class="constructor">SetStrategy(<span class="params">pCSC</span>)</span>;</span><br><span class="line">    pSContext-&gt;<span class="constructor">ContextInterface()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="constructor">SAFE_RELASE_POINTER(<span class="params">pSContext</span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>5.运行结果：</p>
+<pre><code> I am Concrete Strategy A
+ I am Concrete Strategy B
+ I am Concrete Strategy C
+</code></pre>
+<h3 id="改进版"><a href="#改进版" class="headerlink" title="改进版"></a>改进版</h3><h4 id="改进版1-通过将Strategy作为C-模板参数来实现"><a href="#改进版1-通过将Strategy作为C-模板参数来实现" class="headerlink" title="改进版1-通过将Strategy作为C++模板参数来实现"></a>改进版1-通过将Strategy作为C++模板参数来实现</h4><p>在C++中，可利用模板机制用一个Strategy来配置一个类。然而这种技术仅当下面条件满足时才可以使用:</p>
+<ul>
+<li>可以在编译时选择Strategy</li>
+<li>它不需在运行时改变<br>在这种情况下，要被配置的类（如Context）被定义为以一个Strategy类作为一个参数的模板类</li>
+</ul>
+<blockquote>
+<p>使用模板不再需要定义给Strategy定义接口的抽象类。把Strategy作为一个模板参数也使得可以将一个Strategy和它的Context静态地绑定在一起，从而提高效率</p>
+</blockquote>
+<p>1.实现代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">StrategyContextEx</span>  <span class="comment">// StrategyContext以Strategy为模板参数</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">ContextInterface</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        _strategy.<span class="built_in">AlgorithmInterface</span>();</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    T _strategy;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//把具体的Strategy作为一个模板参数将一个Strategy和它的Context静态地绑定在一起</span></span><br><span class="line"><span class="keyword">typedef</span> StrategyContextEx&lt;ConcreteStrategyA&gt; StrategyContextA;</span><br><span class="line"><span class="keyword">typedef</span> StrategyContextEx&lt;ConcreteStrategyB&gt; StrategyContextB;</span><br><span class="line"><span class="keyword">typedef</span> StrategyContextEx&lt;ConcreteStrategyC&gt; StrategyContextC;</span><br></pre></td></tr></table></figure>
+
+<p>2.客户端测试代码：</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">void StrategyTest_GeneralTemplateEx()</span><br><span class="line">&#123;</span><br><span class="line">    StrategyContextA SC_A<span class="comment">;</span></span><br><span class="line">    SC_A.ContextInterface()<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    StrategyContextB SC_B<span class="comment">;</span></span><br><span class="line">    SC_B.ContextInterface()<span class="comment">;    </span></span><br><span class="line">    </span><br><span class="line">    StrategyContextC SC_C<span class="comment">;</span></span><br><span class="line">    SC_C.ContextInterface()<span class="comment">;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3.运行结果：</p>
+<pre><code> I am Concrete Strategy A
+ I am Concrete Strategy B
+ I am Concrete Strategy C
+</code></pre>
+<h4 id="改进版2-通过工厂方法模式来创建具体策略对象"><a href="#改进版2-通过工厂方法模式来创建具体策略对象" class="headerlink" title="改进版2-通过工厂方法模式来创建具体策略对象"></a>改进版2-通过工厂方法模式来创建具体策略对象</h4><p>在上述策略模式中，客户端通过new不同的具体策略类来创建对象，对于多个策略可以将创建工作通过工厂方法模式来实现</p>
+<p>1.具体实现：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Use Factory Pattern to Produce Concrete Strategy</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Abstract Strategy Factory</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">StrategyAbstractFactory</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> Strategy* <span class="title">CreateStrategy</span><span class="params">()</span> </span>= <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Concrete Strategy Factory A</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">StrategyFactoryA</span> : <span class="keyword">public</span> StrategyAbstractFactory</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> Strategy* <span class="title">CreateStrategy</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">ConcreteStrategyA</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Concrete Strategy Factory B</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">StrategyFactoryB</span> : <span class="keyword">public</span> StrategyAbstractFactory</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> Strategy* <span class="title">CreateStrategy</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">ConcreteStrategyB</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Concrete Strategy Factory C</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">StrategyFactoryC</span> : <span class="keyword">public</span> StrategyAbstractFactory</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> Strategy* <span class="title">CreateStrategy</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">ConcreteStrategyC</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>2.客户端调用直接调用工厂方法即可：</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">void <span class="constructor">StrategyTest_GeneralEx()</span></span><br><span class="line">&#123;</span><br><span class="line">    StrategyAbstractFactory *pSFA = <span class="keyword">new</span> <span class="constructor">StrategyFactoryA()</span>;</span><br><span class="line">    Strategy *pSA = pSFA-&gt;<span class="constructor">CreateStrategy()</span>;   <span class="comment">// 调用工厂方法创建具体策略对象</span></span><br><span class="line"></span><br><span class="line">    StrategyAbstractFactory *pSFB = <span class="keyword">new</span> <span class="constructor">StrategyFactoryB()</span>;</span><br><span class="line">    Strategy *pSB = pSFB-&gt;<span class="constructor">CreateStrategy()</span>;</span><br><span class="line"></span><br><span class="line">    StrategyAbstractFactory *pSFC = <span class="keyword">new</span> <span class="constructor">StrategyFactoryC()</span>;</span><br><span class="line">    Strategy *pSC = pSFC-&gt;<span class="constructor">CreateStrategy()</span>;</span><br><span class="line"></span><br><span class="line">    StrategyContext *pSContext =<span class="keyword">new</span> <span class="constructor">StrategyContext(<span class="params">pSA</span>)</span>;</span><br><span class="line">    pSContext-&gt;<span class="constructor">ContextInterface()</span>;</span><br><span class="line"></span><br><span class="line">    pSContext-&gt;<span class="constructor">SetStrategy(<span class="params">pSB</span>)</span>;</span><br><span class="line">    pSContext-&gt;<span class="constructor">ContextInterface()</span>;</span><br><span class="line"></span><br><span class="line">    pSContext-&gt;<span class="constructor">SetStrategy(<span class="params">pSC</span>)</span>;</span><br><span class="line">    pSContext-&gt;<span class="constructor">ContextInterface()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="constructor">SAFE_RELASE_POINTER(<span class="params">pSFA</span>)</span>;</span><br><span class="line">    <span class="constructor">SAFE_RELASE_POINTER(<span class="params">pSFB</span>)</span>;</span><br><span class="line">    <span class="constructor">SAFE_RELASE_POINTER(<span class="params">pSFC</span>)</span>;</span><br><span class="line">    <span class="constructor">SAFE_RELASE_POINTER(<span class="params">pSContext</span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>3.进一步的，对于工厂方法，同样也可以通过C++模板特性来替换抽象Strategy类的多态特性，代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">StrategyFactoryBase</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">T* <span class="title">CreateStrategy</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> T;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> StrategyFactoryBase&lt;ConcreteStrategyA&gt;  StrategyFactoryTemplateA;</span><br><span class="line"><span class="keyword">typedef</span> StrategyFactoryBase&lt;ConcreteStrategyB&gt;  StrategyFactoryTemplateB;</span><br><span class="line"><span class="keyword">typedef</span> StrategyFactoryBase&lt;ConcreteStrategyC&gt;  StrategyFactoryTemplateC;</span><br></pre></td></tr></table></figure>
+
+<p>4.客户端使用：</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">void StrategyTest_GeneralFactoryTemplateEx()</span><br><span class="line">&#123;</span><br><span class="line">    StrategyFactoryTemplateA SFT_A<span class="comment">;</span></span><br><span class="line">    Strategy *pSA <span class="operator">=</span> SFT_A.CreateStrategy()<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    StrategyFactoryTemplateB SFT_B<span class="comment">;</span></span><br><span class="line">    Strategy *pSB <span class="operator">=</span> SFT_B.CreateStrategy()<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    StrategyFactoryTemplateC SFT_C<span class="comment">;</span></span><br><span class="line">    Strategy *pSC <span class="operator">=</span> SFT_C.CreateStrategy()<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    StrategyContext *pSContext <span class="operator">=</span> new StrategyContext(pSA)<span class="comment">;</span></span><br><span class="line">    pSContext-&gt;ContextInterface()<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    pSContext-&gt;SetStrategy(pSB)<span class="comment">;</span></span><br><span class="line">    pSContext-&gt;ContextInterface()<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    pSContext-&gt;SetStrategy(pSC)<span class="comment">;</span></span><br><span class="line">    pSContext-&gt;ContextInterface()<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    SAFE_RELASE_POINTER(pSContext)<span class="comment">;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>5.运行结果：</p>
+<pre><code> I am Concrete Strategy A
+ I am Concrete Strategy B
+ I am Concrete Strategy C
+</code></pre>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>许多相关的类仅仅是行为有异。 “策略”提供了一种用多个行为中的一个行为来配置一个类的方法。即一个系统需要动态地在几种算法中选择一种</li>
+<li>需要使用一个算法的不同变体。例如，你可能会定义一些反映不同的空间、时间权衡的算法。当这些变体实现为一个算法的类层次时,可以使用策略模式</li>
+<li>算法使用客户不应该知道的数据。可使用策略模式以避免暴露复杂的与算法相关的数据结构，让算法和对象分开来，使得算法可以独立于使用它的客户而变化</li>
+<li>一个类定义了多种行为 , 并且这些行为在这个类的操作中以多个条件语句的形式出现。将相关的条件分支移入它们各自的Strategy类中以代替这些条件语句</li>
+</ul>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><ul>
+<li>优点<ul>
+<li>相关算法系列 Strategy类层次为Context定义了一系列的可供重用的算法或行为 继承有助于析取出这些算法中的公共功能</li>
+<li>将算法封装在独立的Strategy类中使得你可以独立于其Context改变它，使它易于切换、易于理解、易于扩展</li>
+<li>消除了一些if else条件语句</li>
+<li>实现的选择 Strategy模式可以提供相同行为的不同实现。客户可以根据不同时间、空间权衡取舍要求从不同策略中进行选择</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>客户端必须知道所有的策略类，并自行决定使用哪一个策略类，该模式有一个潜在的缺点，就是一个客户要选择一个合适的Strategy就必须知道这些Strategy到底有何不同。此时可能不得不向客户暴露具体的实现问题。因此仅当这些不同行为变体与客户相关的行为时才需要使用Strategy模式</li>
+<li>无论各个ConcreteStrategy实现的算法是简单还是复杂, 它们都共享Strategy定义的接口。因此很可能某些ConcreteStrategy不会都用到所有通过这个接口传递给它们的信息；简单的ConcreteStrategy可能不使用其中的任何信息。这就意味着有时Context会创建和初始化一些永远不会用到的参数。如果存在这样问题，那么将需要在Strategy和Context之间更进行紧密的耦合</li>
+<li>策略模式将造成产生很多策略类</li>
+</ul>
+</li>
+</ul>
+<h3 id="与其他可以消除if-else条件模式的区别-状态模式、策略模式、工厂模式、责任链模式"><a href="#与其他可以消除if-else条件模式的区别-状态模式、策略模式、工厂模式、责任链模式" class="headerlink" title="与其他可以消除if-else条件模式的区别(状态模式、策略模式、工厂模式、责任链模式)"></a>与其他可以消除if-else条件模式的区别(状态模式、策略模式、工厂模式、责任链模式)</h3><p>1.状态模式</p>
+<ul>
+<li>可以认为“状态模式是完全封装且自修改的策略模式”</li>
+<li>策略模式只是的条件选择只执行一次;而状态模式是随着实例参数（对象实例的状态）的改变不停地更改执行模式。换言之，策略模式只是在对象初始化的时候更改执行模式;而状态模式是根据对象实例的周期时间而动态地改变对象实例的执行模式</li>
+<li>在状态模式中，状态的变迁是由对象的内部条件决定，外界只需关心其接口，不必关心其状态对象的创建和转化;而策略模式里，采取何种策略由外部条件(Context)决定</li>
+<li>策略模式的环境类自己选择一个具体策略类，具体策略类无须关心环境类;而状态模式的环境类由于外在因素需要放进一个具体状态中，以便通过其方法实现状态的切换，因此环境类和状态类之间存在一种双向的关联关系</li>
+<li>使用策略模式时，客户端需要知道所选的具体策略是哪一个;而使用状态模式时，客户端无须关心具体状态，环境类的状态会根据用户的操作自动转换</li>
+<li>如果系统中某个类的对象存在多种状态，不同状态下行为有差异，而且这些状态之间可以发生转换时使用状态模式;如果系统中某个类的某一行为存在多种实现方式，而且这些实现方式可以互换时使用策略模式</li>
+</ul>
+<p>2.工厂模式</p>
+<ul>
+<li>工厂模式是创建型模式，它关注对象创建提供创建对象的接口让对象的创建与具体的使用客户无关;策略模式是对象行为型模式，它关注行为和算法的封装。它定义一系列的算法，把每一个算法封装起来,，并且使它们可相互替换，使得算法可独立于使用它的客户而变化</li>
+</ul>
+<p>3.责任链模式</p>
+<ul>
+<li>状态与责任链两个设计模式最大的区别就是状态模式是让各个状态对象自己知道其下一个处理的对象是谁;而职责链模式中的各个对象并不指定其下一个处理的对象到底是谁，只有在客户端才设定</li>
+</ul>
+<h2 id="策略模式具体实例"><a href="#策略模式具体实例" class="headerlink" title="策略模式具体实例"></a>策略模式具体实例</h2><hr>
+<h3 id="旅游交通工具选择问题"><a href="#旅游交通工具选择问题" class="headerlink" title="旅游交通工具选择问题"></a>旅游交通工具选择问题</h3><p><strong>使用策略模式简单实现前言所述的旅游交通工具选择问题</strong></p>
+<p><strong>代码实现</strong><br>1.定义抽象旅游策略类<code>TravelStrategy</code>，并声明<code>Travel()</code>接口:</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Abstract Travel Strategy</span></span><br><span class="line"><span class="keyword">class</span> <span class="title">TravelStrategy</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Travel</span>()</span> = <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>2.定义三种具体的旅游类<code>CarStrategy</code>、<code>AirplaneStrategy</code>和<code>TrainStrategy</code>，并实现<code>Travel()</code>接口:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Concrete Travel Strategy : Car Strategy</span></span><br><span class="line"><span class="comment">// Singleton &amp; Atuo memory delete</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CarStrategy</span> : <span class="keyword">public</span> TravelStrategy</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">static</span> CarStrategy *m_pStrategy;</span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">Garbage</span></span><br><span class="line">    &#123;</span><br><span class="line">        ~<span class="built_in">Garbage</span>()</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (!<span class="built_in">NULL_POINTER</span>(CarStrategy::<span class="built_in">GetInstance</span>()))</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="function"><span class="keyword">delete</span> <span class="title">CarStrategy::GetInstance</span><span class="params">()</span></span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="type">static</span> Garbage g;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">static</span> CarStrategy* <span class="title">GetInstance</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">NULL_POINTER</span>(m_pStrategy))</span><br><span class="line">        &#123;</span><br><span class="line">            m_pStrategy =  <span class="keyword">new</span> <span class="built_in">CarStrategy</span>();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> m_pStrategy;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">CarStrategy</span>() &#123;&#125;;</span><br><span class="line">    <span class="built_in">CarStrategy</span>(<span class="type">const</span> CarStrategy&amp;) &#123;&#125;;</span><br><span class="line">    CarStrategy&amp; <span class="keyword">operator</span> = (<span class="type">const</span> CarStrategy&amp;) &#123;&#125;;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Travel</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Select The Way of Car For Traveling&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">CarStrategy* CarStrategy::m_pStrategy = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Concrete Travel Strategy : Airplane Strategy</span></span><br><span class="line"><span class="comment">// Singleton &amp; Atuo memory delete</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AirplaneStrategy</span> : <span class="keyword">public</span> TravelStrategy</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">static</span> AirplaneStrategy *m_pStrategy;</span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">Garbage</span></span><br><span class="line">    &#123;</span><br><span class="line">        ~<span class="built_in">Garbage</span>()</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (!<span class="built_in">NULL_POINTER</span>(AirplaneStrategy::<span class="built_in">GetInstance</span>()))</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="function"><span class="keyword">delete</span> <span class="title">AirplaneStrategy::GetInstance</span><span class="params">()</span></span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="type">static</span> Garbage g;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">static</span> AirplaneStrategy* <span class="title">GetInstance</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">NULL_POINTER</span>(m_pStrategy))</span><br><span class="line">        &#123;</span><br><span class="line">            m_pStrategy =  <span class="keyword">new</span> <span class="built_in">AirplaneStrategy</span>();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> m_pStrategy;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">AirplaneStrategy</span>() &#123;&#125;;</span><br><span class="line">    <span class="built_in">AirplaneStrategy</span>(<span class="type">const</span> AirplaneStrategy&amp;) &#123;&#125;;</span><br><span class="line">    AirplaneStrategy&amp; <span class="keyword">operator</span> = (<span class="type">const</span> AirplaneStrategy&amp;) &#123;&#125;;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Travel</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Select The Way of Airplane For Traveling&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">AirplaneStrategy* AirplaneStrategy::m_pStrategy = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Concrete Travel Strategy : Train Strategy</span></span><br><span class="line"><span class="comment">// Singleton &amp; Atuo memory delete</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TrainStrategy</span> : <span class="keyword">public</span> TravelStrategy</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">static</span> TrainStrategy *m_pStrategy;</span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">Garbage</span></span><br><span class="line">    &#123;</span><br><span class="line">        ~<span class="built_in">Garbage</span>()</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (!<span class="built_in">NULL_POINTER</span>(TrainStrategy::<span class="built_in">GetInstance</span>()))</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="function"><span class="keyword">delete</span> <span class="title">TrainStrategy::GetInstance</span><span class="params">()</span></span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="type">static</span> Garbage g;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">static</span> TrainStrategy* <span class="title">GetInstance</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">NULL_POINTER</span>(m_pStrategy))</span><br><span class="line">        &#123;</span><br><span class="line">            m_pStrategy =  <span class="keyword">new</span> <span class="built_in">TrainStrategy</span>();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> m_pStrategy;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">TrainStrategy</span>() &#123;&#125;;</span><br><span class="line">    <span class="built_in">TrainStrategy</span>(<span class="type">const</span> TrainStrategy&amp;) &#123;&#125;;</span><br><span class="line">    TrainStrategy&amp; <span class="keyword">operator</span> = (<span class="type">const</span> TrainStrategy&amp;) &#123;&#125;;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Travel</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Select The Way of Train For Traveling&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">TrainStrategy* TrainStrategy::m_pStrategy = <span class="literal">NULL</span>;</span><br></pre></td></tr></table></figure>
+
+<p>3.定义旅游的上下文调用类<code>Person</code>, 具有<code>TravelStrategy</code>的一个对象引用:</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Travel Context : Person</span></span><br><span class="line"><span class="keyword">class</span> <span class="title">Person</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    TravelStrategy *m_pTravelStrategy;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Person(TravelStrategy *pTS) : m_pTravelStrategy(pTS) &#123;&#125;;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">SetTravelStrategy</span>(<span class="params">TravelStrategy *pTS</span>) <span class="comment">// 有Garbage类，不需要手动释放ConcreteTravelStrategy对象了</span></span></span><br><span class="line">    &#123;</span><br><span class="line">        m_pTravelStrategy = pTS;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Travel</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        m_pTravelStrategy-&gt;Travel(); <span class="comment">// 委托调用具体Strategy的Travel方法</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>4.测试策略模式:</p>
+<figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">void</span> <span class="function"><span class="title">StrategyTest_Travel</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="variable">Person</span> *<span class="variable">pPerson</span> = <span class="variable">new</span> <span class="function"><span class="title">Person</span>(<span class="variable">CarStrategy</span>::<span class="title">GetInstance</span>());</span></span><br><span class="line"><span class="function">    <span class="variable">pPerson</span>-&gt;<span class="title">Travel</span>();</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    <span class="variable">pPerson</span>-&gt;<span class="title">SetTravelStrategy</span>(<span class="variable">AirplaneStrategy</span>::<span class="title">GetInstance</span>());</span></span><br><span class="line"><span class="function">    <span class="variable">pPerson</span>-&gt;<span class="title">Travel</span>();</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    <span class="variable">pPerson</span>-&gt;<span class="title">SetTravelStrategy</span>(<span class="variable">TrainStrategy</span>::<span class="title">GetInstance</span>());</span></span><br><span class="line"><span class="function">    <span class="variable">pPerson</span>-&gt;<span class="title">Travel</span>();</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    <span class="title">SAFE_RELASE_POINTER</span>(<span class="variable">pPerson</span>);</span></span><br><span class="line"><span class="function">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>5.运行结果:</p>
+<pre><code>Select The Way of Car For Traveling
+Select The Way of Airplane For Traveling
+Select The Way of Train For Traveling
+</code></pre>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Frank Tao
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://www.taolingyang.com/2018/01/20/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" title="策略模式(行为型)">http://www.taolingyang.com/2018/01/20/策略模式/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Design-Pattern/" rel="tag"># Design Pattern</a>
+              <a href="/tags/Behavior-Pattern/" rel="tag"># Behavior Pattern</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/01/02/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" rel="prev" title="状态模式(行为型)">
+                  <i class="fa fa-chevron-left"></i> 状态模式(行为型)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/02/01/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" rel="next" title="迭代器模式(行为型)">
+                  迭代器模式(行为型) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank Tao</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">412k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">6:15</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://railway-starter-production-f6c1.up.railway.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"请文明评论呀","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":false,"comment_count":true,"requiredFields":["nick"],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/2018/01/20/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+  <script>
+	  (function(){
+		  var bp = document.createElement('script');
+		  var curProtocol = window.location.protocol.split(':')[0];
+		  if (curProtocol === 'https') {
+			  bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		  }
+		  else {
+			  bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		  }
+		  var s = document.getElementsByTagName("script")[0];
+		  s.parentNode.insertBefore(bp, s);
+	  })();
+  </script>
+</body>
+</html>

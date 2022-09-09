@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.taolingyang.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.13.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言 在公司上班时候，每周都需要写工作周报，而写周报的时候，每次的格式都差不多，有时候想偷懒，就想自己弄个周报的模板，然后每次填充模板的内容，这样既提高了工作效率，又保证了格式的一致性，上级领导每次浏览周报的时候也一目了然了，真是一石二鸟–)，这种可以看成原型模式的应用，即每次周报对象内容都大概相同，仅需要复制粘贴，然后修改下每周的差异内容即可。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="原型模式(创建型)">
+<meta property="og:url" content="http://www.taolingyang.com/2017/10/20/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="Share Mind">
+<meta property="og:description" content="前言 在公司上班时候，每周都需要写工作周报，而写周报的时候，每次的格式都差不多，有时候想偷懒，就想自己弄个周报的模板，然后每次填充模板的内容，这样既提高了工作效率，又保证了格式的一致性，上级领导每次浏览周报的时候也一目了然了，真是一石二鸟–)，这种可以看成原型模式的应用，即每次周报对象内容都大概相同，仅需要复制粘贴，然后修改下每周的差异内容即可。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://www.taolingyang.com/.com//Prototype.png">
+<meta property="article:published_time" content="2017-10-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-09-09T01:52:18.400Z">
+<meta property="article:author" content="Frank Tao">
+<meta property="article:tag" content="Design Pattern">
+<meta property="article:tag" content="Construction Pattern">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.taolingyang.com/.com//Prototype.png">
+
+
+<link rel="canonical" href="http://www.taolingyang.com/2017/10/20/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://www.taolingyang.com/2017/10/20/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/","path":"2017/10/20/原型模式/","title":"原型模式(创建型)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>原型模式(创建型) | Share Mind</title>
+  
+
+
+
+
+
+<link rel="dns-prefetch" href="https://railway-starter-production-f6c1.up.railway.app">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Share Mind</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Love Reading | Film | Climbing | Snooker</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">原型模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%84%8F%E5%9B%BE"><span class="nav-number">2.1.</span> <span class="nav-text">意图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E4%B8%8E%E8%80%85"><span class="nav-number">2.2.</span> <span class="nav-text">参与者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="nav-number">2.3.</span> <span class="nav-text">模式结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.4.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">2.5.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">2.6.</span> <span class="nav-text">优缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E%E5%85%B6%E4%BB%96%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%9E%8B%E5%8C%BA%E5%88%AB"><span class="nav-number">2.7.</span> <span class="nav-text">与其他创建型模型区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F%E5%85%B7%E4%BD%93%E5%AE%9E%E4%BE%8B"><span class="nav-number">3.</span> <span class="nav-text">原型模式具体实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-1"><span class="nav-number">3.1.</span> <span class="nav-text">代码实现</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Frank Tao"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Frank Tao</p>
+  <div class="site-description" itemprop="description">welcome to taolingyang’s blog -~-</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/franktly" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;franktly" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/tao-ling-yang" title="ZhiHu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;tao-ling-yang" rel="noopener" target="_blank"><i class="fa fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/2273442920" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;2273442920" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+  <a href="https://github.com/franktly" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.taolingyang.com/2017/10/20/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Frank Tao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Share Mind">
+      <meta itemprop="description" content="welcome to taolingyang’s blog -~-">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="原型模式(创建型) | Share Mind">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          原型模式(创建型)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-10-20 00:00:00" itemprop="dateCreated datePublished" datetime="2017-10-20T00:00:00+08:00">2017-10-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Design-Pattern/" itemprop="url" rel="index"><span itemprop="name">Design Pattern</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/2017/10/20/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2017/10/20/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>在公司上班时候，每周都需要写工作周报，而写周报的时候，每次的格式都差不多，有时候想偷懒，就想自己弄个周报的模板，然后每次填充模板的内容，这样既提高了工作效率，又保证了格式的一致性，上级领导每次浏览周报的时候也一目了然了，真是一石二鸟–)，这种可以看成原型模式的应用，即每次周报对象内容都大概相同，仅需要复制粘贴，然后修改下每周的差异内容即可。</p>
+<span id="more"></span>
+
+<h2 id="原型模式"><a href="#原型模式" class="headerlink" title="原型模式"></a>原型模式</h2><hr>
+<p>原型模式，顾名思义，就是有个对象的原型，然后再通过此原型对象来创建新的对象。而这些新的对象，可以内容相同，也可以不同。</p>
+<h3 id="意图"><a href="#意图" class="headerlink" title="意图"></a>意图</h3><p>用原型实例指定创建对象的种类，并通过拷贝这些原型创建新的对象</p>
+<h3 id="参与者"><a href="#参与者" class="headerlink" title="参与者"></a>参与者</h3><ul>
+<li><p>AbstractPrototype<br>抽象原型类，声明一个克隆自身的接口</p>
+</li>
+<li><p>ConcretePrototype<br>具体原型类，实现一个克隆自身的操作</p>
+</li>
+<li><p>Client<br>让一个原型克隆自身从而创建一个新的对象</p>
+</li>
+</ul>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="/.com//Prototype.png" alt="prototype"></p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><ol>
+<li><p>首先声明一个抽象的原型类<code>AbstractPrototype</code>，原型类中必须有<code>clone()</code>接口(虚函数):</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> AbstractPrototype</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    <span class="constructor">AbstractPrototype()</span> &#123;&#125;;</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="constructor">AbstractPrototype()</span> &#123;&#125;;</span><br><span class="line">    <span class="keyword">virtual</span> AbstractPrototype* <span class="constructor">Clone()</span> = <span class="number">0</span>; <span class="comment">// 克隆接口,返回自身的类型</span></span><br><span class="line">&#125;; </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然后分别实现两个具体的原型对象，实现其中的<code>clone()</code>接口(一般通过拷贝构造函数来实现)：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 具体原型对象1</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Prototype1</span>: <span class="keyword">public</span> AbstractPrototype</span><br><span class="line"> &#123;</span><br><span class="line"> <span class="keyword">private</span>:</span><br><span class="line">     <span class="type">int</span> m_ValueTest;         <span class="comment">//浅拷贝 测试值</span></span><br><span class="line"> <span class="keyword">public</span>:</span><br><span class="line">     <span class="built_in">Prototype1</span>(<span class="type">int</span> value): <span class="built_in">m_ValueTest</span>(value) &#123;&#125;;</span><br><span class="line">     <span class="built_in">Prototype1</span>(<span class="type">const</span> Prototype1&amp; rhs) <span class="comment">// 拷贝构造函数</span></span><br><span class="line">     &#123;</span><br><span class="line">         m_ValueTest = rhs.m_ValueTest;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="function">Prototype1* <span class="title">Clone</span><span class="params">()</span> <span class="comment">// 返回自己类类型</span></span></span><br><span class="line"><span class="function">     </span>&#123;</span><br><span class="line">         <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Prototype1</span>(*<span class="keyword">this</span>); <span class="comment">// 通过调用拷贝构造函数来Clone对象</span></span><br><span class="line">     &#125;</span><br><span class="line">     <span class="function"><span class="type">void</span> <span class="title">ShowValue</span><span class="params">()</span></span></span><br><span class="line"><span class="function">     </span>&#123;</span><br><span class="line">         cout &lt;&lt; m_ValueTest &lt;&lt; endl;</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">class</span> <span class="title class_">Prototype2</span>: <span class="keyword">public</span> AbstractPrototype</span><br><span class="line"> &#123;</span><br><span class="line"> <span class="keyword">private</span>:</span><br><span class="line">     <span class="type">int</span> m_ValueTest;     <span class="comment">// 浅拷贝，一般的拷贝</span></span><br><span class="line">     <span class="type">char</span> *m_pName;      <span class="comment">// 涉及到深拷贝</span></span><br><span class="line"> <span class="keyword">public</span>:</span><br><span class="line">     <span class="built_in">Prototype2</span>(<span class="type">int</span> value, <span class="type">const</span> <span class="type">char</span>* pname)</span><br><span class="line">     &#123;</span><br><span class="line">         m_ValueTest = value;</span><br><span class="line">         <span class="keyword">if</span> (<span class="literal">NULL</span> == pname)</span><br><span class="line">         &#123;</span><br><span class="line">             m_pName = <span class="keyword">new</span> <span class="type">char</span>[<span class="number">1</span>];</span><br><span class="line">             m_pName[<span class="number">0</span>] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="keyword">else</span></span><br><span class="line">         &#123;</span><br><span class="line">             m_pName = <span class="keyword">new</span> <span class="type">char</span>[<span class="built_in">strlen</span>(pname) + <span class="number">1</span>]; </span><br><span class="line">             <span class="built_in">strcpy</span>(m_pName, pname);</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;;</span><br><span class="line">     <span class="keyword">virtual</span> ~<span class="built_in">Prototype2</span>()</span><br><span class="line">     &#123;</span><br><span class="line">         <span class="keyword">delete</span> m_pName; <span class="comment">// 释放内存</span></span><br><span class="line">     &#125;</span><br><span class="line">     <span class="built_in">Prototype2</span>(<span class="type">const</span> Prototype2&amp; rhs) <span class="comment">// 拷贝构造函数</span></span><br><span class="line">     &#123;</span><br><span class="line">         <span class="comment">//浅拷贝：只会拷贝对象中的基本的数据类型 </span></span><br><span class="line">         m_ValueTest = rhs.m_ValueTest;  </span><br><span class="line"></span><br><span class="line">         <span class="comment">//深拷贝：需要手动申请内存，对于数组、容器对象、引用（指针）对象       </span></span><br><span class="line">         m_pName = <span class="keyword">new</span>  <span class="type">char</span>[<span class="built_in">strlen</span>(rhs.m_pName) + <span class="number">1</span>];     </span><br><span class="line">         <span class="built_in">strcpy</span>(m_pName, rhs.m_pName);</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="function">Prototype2* <span class="title">Clone</span><span class="params">()</span> <span class="comment">// 返回自己类类型</span></span></span><br><span class="line"><span class="function">     </span>&#123; </span><br><span class="line">          <span class="comment">// 通过调用拷贝构造函数来Clone对象</span></span><br><span class="line">         Prototype2 *pP2 = <span class="keyword">new</span> <span class="built_in">Prototype2</span>(*<span class="keyword">this</span>);</span><br><span class="line">         pP2-&gt;m_ValueTest++; <span class="comment">//改变克隆的对象内部成员，克隆出不同m_ValueTest的对象</span></span><br><span class="line">         <span class="keyword">return</span> pP2; </span><br><span class="line">     &#125;</span><br><span class="line">     <span class="function"><span class="type">void</span> <span class="title">ShowValue</span><span class="params">()</span></span></span><br><span class="line"><span class="function">     </span>&#123;</span><br><span class="line">         cout &lt;&lt; m_ValueTest &lt;&lt; endl;</span><br><span class="line">         cout &lt;&lt; m_pName &lt;&lt; endl;</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试原型模式：</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">PrototypeTest</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="comment">// 返回子类型的类指针，抽象类没有ShowValue方法</span></span><br><span class="line">    Prototype1 *pP1= <span class="keyword">new</span> <span class="built_in">Prototype1</span>(<span class="number">10</span>); </span><br><span class="line"></span><br><span class="line">    Prototype1 *pPcopy= pP1-&gt;<span class="built_in">Clone</span>(); <span class="comment">// 克隆出新对象pPcopy</span></span><br><span class="line">    pP1-&gt;<span class="built_in">ShowValue</span>();      <span class="comment">//  10</span></span><br><span class="line">    pPcopy-&gt;<span class="built_in">ShowValue</span>();   <span class="comment">// 10</span></span><br><span class="line"></span><br><span class="line">    Prototype2 *pP2= <span class="keyword">new</span> <span class="built_in">Prototype2</span>(<span class="number">20</span>, <span class="string">&quot;Tly&quot;</span>);</span><br><span class="line">    Prototype2 *pPcopy2= pP2-&gt;<span class="built_in">Clone</span>();</span><br><span class="line">    pP2-&gt;<span class="built_in">ShowValue</span>();        <span class="comment">// 20, &quot;Tly&quot;</span></span><br><span class="line">    pPcopy2-&gt;<span class="built_in">ShowValue</span>();    <span class="comment">// 21  &quot;Tly&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">delete</span> pP1; pP1 = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">delete</span> pPcopy; pPcopy = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">delete</span> pP2; pP2 = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">delete</span> pPcopy2; pPcopy2 = <span class="literal">NULL</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>运行结果：</p>
+<pre><code>10
+10
+20
+Tly
+21
+Tly
+</code></pre>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>创建新对象成本较大，如初始化需要占用较长的时间、内存资源、网络资源等等，新的对象可以通过已有对象的复制得来，如是相似，则更改相应的属性成员变量即可</li>
+<li>如果系统要保存对象的状态，而对象的状态变化很小，或者对象本身占用内存较少时，可以使用原型模式配合备忘录模式来实现</li>
+<li>当我们的对象类型不是开始就能确定的，而这个类型是在运行期确定的话，那么我们通过这个类型的对象克隆出一个新的对象比较容易一些</li>
+<li>重复地创建相似对象时可以考虑使用原型模式</li>
+<li>创建对象时，构造函数的参数很多，而自己又不完全的知道每个参数的意义，就可以使用原型模式来创建一个新的对象，不必去理会创建的过程</li>
+</ul>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><ul>
+<li>优点<ul>
+<li>当创建新的对象实例较为复杂时，使用原型模式可以简化对象的创建过程，通过复制一个已有实例可以提高新实例的创建效率</li>
+<li>扩展性较好，由于在原型模式中提供了抽象原型类，在客户端可以针对抽象原型类进行编程，而将具体原型类写在配置文件中，增加或减少产品类对原有系统都没有任何影响</li>
+<li>可以使用深克隆的方式保存对象的状态，使用原型模式将对象复制一份并将其状态保存起来，以便在需要的时候使用（如恢复到某一历史状态），可辅助实现撤销操作</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>需要为每一个类配备一个克隆方法，而且该克隆方法位于一个类的内部，当对已有的类进行改造时，需要修改源代码，违背了“开闭原则”</li>
+<li>在实现深克隆时需要编写较为复杂的代码，而且当对象之间存在多重的嵌套引用时，为了实现深克隆，每一层对象对应的类都必须支持深克隆，实现起来可能会比较麻烦</li>
+</ul>
+</li>
+</ul>
+<h3 id="与其他创建型模型区别"><a href="#与其他创建型模型区别" class="headerlink" title="与其他创建型模型区别"></a>与其他创建型模型区别</h3><ul>
+<li>工厂方法模式、抽象工厂模式、建造者模式和原型模式都是创建型模式</li>
+<li>工厂方法模式适用于生产较复杂，一个工厂生产单一的一种产品的时候</li>
+<li>抽象工厂模式适用于一个工厂生产多个相互依赖的产品；</li>
+<li>建造者模式着重于复杂对象的一步一步创建，组装产品的过程，并在创建的过程中，可以控制每一个简单对象的创建；</li>
+<li>原型模式则更强调的是从自身复制自己，创建要给和自己一模一样的对象</li>
+</ul>
+<h2 id="原型模式具体实例"><a href="#原型模式具体实例" class="headerlink" title="原型模式具体实例"></a>原型模式具体实例</h2><hr>
+<p><strong>实现前言所描述的简单工作周报和工作月报原型，增加一个原型管理器来管理这两种原型</strong></p>
+<h3 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h3><ol>
+<li><p>声明一个抽象的原型类：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 抽象原型</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AbstractReport</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">AbstractReport</span>()&#123;&#125;;</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">AbstractReport</span>() &#123;&#125;;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> AbstractReport* <span class="title">Clone</span><span class="params">()</span> </span>= <span class="number">0</span>; <span class="comment">// 抽象克隆方法</span></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">display</span><span class="params">(<span class="type">void</span>)</span> </span>&#123;&#125;; <span class="comment">//用来显示</span></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">setReportTitle</span><span class="params">(string title)</span> </span>&#123;&#125;; <span class="comment">//用来修改title</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>分别实现两个具体的原型类：</p>
+<figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 周报具体原型</span></span><br><span class="line">class WeeklyReport : public AbstractReport</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    string <span class="variable">_reportTitle</span>;</span><br><span class="line">    int <span class="variable">_weekNo</span>;</span><br><span class="line">    string <span class="variable">_name</span>;</span><br><span class="line">    string <span class="variable">_description</span>;</span><br><span class="line">    char* <span class="variable">_accessory</span>;</span><br><span class="line">public:</span><br><span class="line">    WeeklyReport(string title, int no, string <span class="built_in">name</span>, string description, \</span><br><span class="line">        const char* accessory): <span class="variable">_reportTitle</span>(title), <span class="variable">_weekNo</span>(no), <span class="variable">_name</span>(<span class="built_in">name</span>), <span class="variable">_description</span>(description)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (NULL == accessory)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="variable">_accessory</span>  = new char[<span class="number">0</span>];</span><br><span class="line">            <span class="variable">_accessory</span>[<span class="number">0</span>] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="variable">_accessory</span> = new char[strlen(accessory) + <span class="number">1</span>];</span><br><span class="line">            strcpy(<span class="variable">_accessory</span>, accessory);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    virtual ~WeeklyReport()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (NULL != <span class="variable">_accessory</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            delete <span class="variable">_accessory</span>;</span><br><span class="line">            <span class="variable">_accessory</span> = NULL;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">public:</span><br><span class="line">    WeeklyReport(WeeklyReport &amp;rhs) <span class="comment">//拷贝构造函数，浅拷贝 + 深拷贝</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="variable">_reportTitle</span> = rhs.<span class="variable">_reportTitle</span>; </span><br><span class="line">        <span class="variable">_weekNo</span> = rhs.<span class="variable">_weekNo</span>;</span><br><span class="line">        <span class="variable">_name</span> =  rhs.<span class="variable">_name</span>;</span><br><span class="line">        <span class="variable">_description</span> = rhs.<span class="variable">_description</span>;</span><br><span class="line">        <span class="variable">_accessory</span> = new char[strlen(rhs.<span class="variable">_accessory</span>) + <span class="number">1</span>]; <span class="comment">// 深拷贝</span></span><br><span class="line">        memmove(<span class="variable">_accessory</span>, rhs.<span class="variable">_accessory</span>, (strlen(rhs.<span class="variable">_accessory</span>) + <span class="number">1</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    WeeklyReport* Clone() <span class="comment">// 克隆接口</span></span><br><span class="line">    &#123;</span><br><span class="line">        WeeklyReport *report = new WeeklyReport(*this);</span><br><span class="line">        return report;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    void setReportTitle(string reportTitle)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="variable">_reportTitle</span> = reportTitle;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    void display(void)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;weekly report title: &quot;</span> &lt;&lt; <span class="variable">_reportTitle</span> &lt;&lt; <span class="literal">endl</span>;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;weekly no: &quot;</span> &lt;&lt; <span class="variable">_weekNo</span> &lt;&lt; <span class="literal">endl</span>;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;reporter: &quot;</span> &lt;&lt; <span class="variable">_name</span> &lt;&lt; <span class="literal">endl</span>;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;description: &quot;</span> &lt;&lt; <span class="variable">_description</span>  &lt;&lt;<span class="literal">endl</span>;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;accessory: &quot;</span> &lt;&lt; <span class="variable">_accessory</span>  &lt;&lt;<span class="literal">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 月报具体原型</span></span><br><span class="line">class MonthlyReport : public AbstractReport</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    string <span class="variable">_reportTitle</span>;</span><br><span class="line">    int <span class="variable">_monthNo</span>;</span><br><span class="line">    string <span class="variable">_name</span>;</span><br><span class="line">    string <span class="variable">_description</span>;</span><br><span class="line">    char* <span class="variable">_accessory</span>;</span><br><span class="line">public:</span><br><span class="line">    MonthlyReport(string title, int no, string <span class="built_in">name</span>, string description, \</span><br><span class="line">        const char* accessory): <span class="variable">_reportTitle</span>(title), <span class="variable">_monthNo</span>(no), <span class="variable">_name</span>(<span class="built_in">name</span>), <span class="variable">_description</span>(description)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (NULL == accessory)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="variable">_accessory</span>  = new char[<span class="number">0</span>];</span><br><span class="line">            <span class="variable">_accessory</span>[<span class="number">0</span>] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="variable">_accessory</span> = new char[strlen(accessory) + <span class="number">1</span>];</span><br><span class="line">            strcpy(<span class="variable">_accessory</span>, accessory);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    virtual ~MonthlyReport()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (NULL != <span class="variable">_accessory</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            delete <span class="variable">_accessory</span>;</span><br><span class="line">            <span class="variable">_accessory</span> = NULL;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">public:</span><br><span class="line">    MonthlyReport(MonthlyReport &amp;rhs) <span class="comment">//拷贝构造函数，浅拷贝 + 深拷贝</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="variable">_reportTitle</span> = rhs.<span class="variable">_reportTitle</span>; </span><br><span class="line">        <span class="variable">_monthNo</span> = rhs.<span class="variable">_monthNo</span>;</span><br><span class="line">        <span class="variable">_name</span> =  rhs.<span class="variable">_name</span>;</span><br><span class="line">        <span class="variable">_description</span> = rhs.<span class="variable">_description</span>;</span><br><span class="line">        <span class="variable">_accessory</span> = new char[strlen(rhs.<span class="variable">_accessory</span>) + <span class="number">1</span>]; <span class="comment">// 深拷贝</span></span><br><span class="line">        memmove(<span class="variable">_accessory</span>, rhs.<span class="variable">_accessory</span>, (strlen(rhs.<span class="variable">_accessory</span>) + <span class="number">1</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    MonthlyReport* Clone() <span class="comment">// 克隆接口</span></span><br><span class="line">    &#123;</span><br><span class="line">        MonthlyReport *report = new MonthlyReport(*this);</span><br><span class="line">        return report;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    void setReportTitle(string reportTitle)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="variable">_reportTitle</span> = reportTitle;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    void display(void)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;monthly report title: &quot;</span> &lt;&lt; <span class="variable">_reportTitle</span> &lt;&lt;<span class="literal">endl</span>;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;monthly no: &quot;</span> &lt;&lt; <span class="variable">_monthNo</span> &lt;&lt;<span class="literal">endl</span>;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;reporter: &quot;</span> &lt;&lt; <span class="variable">_name</span> &lt;&lt;<span class="literal">endl</span>;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;description: &quot;</span> &lt;&lt; <span class="variable">_description</span> &lt;&lt;<span class="literal">endl</span>;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;accessory: &quot;</span> &lt;&lt; <span class="variable">_accessory</span> &lt;&lt;<span class="literal">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义一个原型管理器类，使用单例模式：</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Report Manager</span></span><br><span class="line"><span class="keyword">class</span> ReportManager</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    map&lt;<span class="built_in">string</span>, AbstractReport*&gt; reportMap;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="constructor">ReportManager()</span>&#123;&#125;;</span><br><span class="line">    <span class="constructor">ReportManager(<span class="params">const</span> ReportManager &amp;<span class="params">rhs</span>)</span> &#123;&#125;;</span><br><span class="line">    ReportManager&amp; operator = (const ReportManager &amp;rhs) &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">    static ReportManager* get<span class="constructor">Instance(<span class="params">void</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        static ReportManager reportMgr;</span><br><span class="line">        return &amp;reportMgr;</span><br><span class="line">    &#125;</span><br><span class="line">public:</span><br><span class="line">    <span class="comment">// 增加新的report</span></span><br><span class="line">    void add<span class="constructor">Report(<span class="params">string</span> <span class="params">name</span>, AbstractReport<span class="operator">*</span> <span class="params">report</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        reportMap.insert(make<span class="constructor">_pair(<span class="params">name</span>, <span class="params">report</span>)</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    AbstractReport* get<span class="constructor">Report(<span class="params">string</span> <span class="params">name</span>)</span> <span class="comment">// 返回一个report副本</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span> (map&lt;<span class="built_in">string</span>, AbstractReport*&gt;::iterator it = reportMap.<span class="keyword">begin</span><span class="literal">()</span>; \</span><br><span class="line">             it  != reportMap.<span class="keyword">end</span><span class="literal">()</span>; ++it)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (it-&gt;first<span class="operator"> == </span>name)</span><br><span class="line">            &#123;</span><br><span class="line">                return (it-&gt;second)-&gt;<span class="constructor">Clone()</span>; <span class="comment">// clone方法返回副本</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return NULL;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试实例：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">void ReportPrototypeTest()</span><br><span class="line">&#123;</span><br><span class="line">    ReportManager *<span class="built_in">rm</span> = ReportManager::getInstance();</span><br><span class="line"></span><br><span class="line">    WeeklyReport  *wr =new WeeklyReport (<span class="string">&quot;design model&quot;</span>, <span class="number">1</span>, <span class="string">&quot;tly&quot;</span>, <span class="string">&quot;design domain object model&quot;</span>,<span class="string">&quot;no accessory&quot;</span>);</span><br><span class="line">    MonthlyReport *mr =new MonthlyReport(<span class="string">&quot;complete design all model&quot;</span>, <span class="number">3</span>, <span class="string">&quot;tly&quot;</span>, <span class="string">&quot;complte design all domain object model&quot;</span>,<span class="string">&quot;month accessory&quot;</span>);</span><br><span class="line">    </span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;<span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$origin</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span>&quot;</span> &lt;&lt; endl;</span><br><span class="line">    wr-&gt;display();</span><br><span class="line">    mr-&gt;display();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">rm</span>-&gt;addReport(<span class="string">&quot;week&quot;</span>, wr);</span><br><span class="line">    <span class="built_in">rm</span>-&gt;addReport(<span class="string">&quot;month&quot;</span>, mr);</span><br><span class="line"></span><br><span class="line">    AbstractReport *wrCopy = <span class="built_in">rm</span>-&gt;getReport(<span class="string">&quot;week&quot;</span>);</span><br><span class="line">    AbstractReport *mrCopy = <span class="built_in">rm</span>-&gt;getReport(<span class="string">&quot;month&quot;</span>);</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;<span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$copy</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span><span class="variable">$</span>&quot;</span> &lt;&lt; endl;</span><br><span class="line">    wrCopy-&gt;setReportTitle(<span class="string">&quot;change weekly report title&quot;</span>); //修改title</span><br><span class="line">    wrCopy-&gt;display();</span><br><span class="line">    mrCopy-&gt;display();</span><br><span class="line"></span><br><span class="line">    delete wr; wr = NULL;</span><br><span class="line">    delete mr; mr = NULL;</span><br><span class="line">    delete wrCopy; wrCopy = NULL;</span><br><span class="line">    delete mrCopy; mrCopy = NULL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>运行结果：</p>
+<pre><code>$$$$$$$$$$origin$$$$$$$$$$
+weekly report title: design model
+weekly no: 1
+reporter: tly
+description: design domain object model
+accessory: no accessory
+monthly report title: complete design all model
+monthly no: 3
+reporter: tly
+description: complte design all domain object model
+accessory: month accessory
+$$$$$$$$$$copy$$$$$$$$$$
+weekly report title: change weekly report title
+weekly no: 1
+reporter: tly
+description: design domain object model
+accessory: no accessory
+monthly report title: complete design all model
+monthly no: 3
+reporter: tly
+description: complte design all domain object model
+accessory: month accessory
+</code></pre>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Frank Tao
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://www.taolingyang.com/2017/10/20/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" title="原型模式(创建型)">http://www.taolingyang.com/2017/10/20/原型模式/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Design-Pattern/" rel="tag"># Design Pattern</a>
+              <a href="/tags/Construction-Pattern/" rel="tag"># Construction Pattern</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/10/02/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" rel="prev" title="建造者模式(创建型)">
+                  <i class="fa fa-chevron-left"></i> 建造者模式(创建型)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/11/05/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" rel="next" title="单例模式(创建型)">
+                  单例模式(创建型) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank Tao</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">412k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">6:15</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://railway-starter-production-f6c1.up.railway.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"请文明评论呀","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":false,"comment_count":true,"requiredFields":["nick"],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/2017/10/20/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+  <script>
+	  (function(){
+		  var bp = document.createElement('script');
+		  var curProtocol = window.location.protocol.split(':')[0];
+		  if (curProtocol === 'https') {
+			  bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		  }
+		  else {
+			  bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		  }
+		  var s = document.getElementsByTagName("script")[0];
+		  s.parentNode.insertBefore(bp, s);
+	  })();
+  </script>
+</body>
+</html>

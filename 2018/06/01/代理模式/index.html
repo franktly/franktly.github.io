@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.taolingyang.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.13.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言 在一个陌生的城市找房子住的时候，一般都需要通过房产中介或者熟人介绍的方式来找房子。这个第三方的角色相当于代理的角色，负责代理真实的房东或业主来给我们提供相关的租房信息，而不需要我们直接与房东接触。同时，而为了安全性，一般代理还会让我们进行身份验证，同时为了方便租户管理，他们还会记录相关的租户信息。这里的第三方角色就是本文将要介绍的代理模式中的代理对象。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="代理模式(结构型)">
+<meta property="og:url" content="http://www.taolingyang.com/2018/06/01/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="Share Mind">
+<meta property="og:description" content="前言 在一个陌生的城市找房子住的时候，一般都需要通过房产中介或者熟人介绍的方式来找房子。这个第三方的角色相当于代理的角色，负责代理真实的房东或业主来给我们提供相关的租房信息，而不需要我们直接与房东接触。同时，而为了安全性，一般代理还会让我们进行身份验证，同时为了方便租户管理，他们还会记录相关的租户信息。这里的第三方角色就是本文将要介绍的代理模式中的代理对象。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://www.taolingyang.com/.com//Proxy.jpg">
+<meta property="article:published_time" content="2018-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-09-09T01:52:18.399Z">
+<meta property="article:author" content="Frank Tao">
+<meta property="article:tag" content="Design Pattern">
+<meta property="article:tag" content="Structural Pattern">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.taolingyang.com/.com//Proxy.jpg">
+
+
+<link rel="canonical" href="http://www.taolingyang.com/2018/06/01/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://www.taolingyang.com/2018/06/01/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/","path":"2018/06/01/代理模式/","title":"代理模式(结构型)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>代理模式(结构型) | Share Mind</title>
+  
+
+
+
+
+
+<link rel="dns-prefetch" href="https://railway-starter-production-f6c1.up.railway.app">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Share Mind</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Love Reading | Film | Climbing | Snooker</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">代理模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%84%8F%E5%9B%BE"><span class="nav-number">2.1.</span> <span class="nav-text">意图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E4%B8%8E%E8%80%85"><span class="nav-number">2.2.</span> <span class="nav-text">参与者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="nav-number">2.3.</span> <span class="nav-text">模式结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.4.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%88%86%E7%B1%BB"><span class="nav-number">2.5.</span> <span class="nav-text">代理模式的分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%90%86"><span class="nav-number">2.5.1.</span> <span class="nav-text">远程代理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E4%BB%A3%E7%90%86"><span class="nav-number">2.5.2.</span> <span class="nav-text">虚拟代理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%93%E5%86%B2%E4%BB%A3%E7%90%86"><span class="nav-number">2.5.3.</span> <span class="nav-text">缓冲代理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%9D%E6%8A%A4%E4%BB%A3%E7%90%86"><span class="nav-number">2.5.4.</span> <span class="nav-text">保护代理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E4%BB%A3%E7%90%86"><span class="nav-number">2.5.5.</span> <span class="nav-text">引用计数代理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">2.6.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">2.7.</span> <span class="nav-text">优缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F-amp-%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">2.8.</span> <span class="nav-text">与适配器模式&amp;装饰器模式的区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F%E5%85%B7%E4%BD%93%E5%AE%9E%E4%BE%8B"><span class="nav-number">3.</span> <span class="nav-text">代理模式具体实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A7%9F%E6%88%BF%E9%97%AE%E9%A2%98"><span class="nav-number">3.1.</span> <span class="nav-text">租房问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-1"><span class="nav-number">3.1.1.</span> <span class="nav-text">代码实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88"><span class="nav-number">3.2.</span> <span class="nav-text">智能指针</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-2"><span class="nav-number">3.2.1.</span> <span class="nav-text">代码实现</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Frank Tao"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Frank Tao</p>
+  <div class="site-description" itemprop="description">welcome to taolingyang’s blog -~-</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/franktly" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;franktly" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/tao-ling-yang" title="ZhiHu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;tao-ling-yang" rel="noopener" target="_blank"><i class="fa fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/2273442920" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;2273442920" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+  <a href="https://github.com/franktly" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.taolingyang.com/2018/06/01/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Frank Tao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Share Mind">
+      <meta itemprop="description" content="welcome to taolingyang’s blog -~-">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="代理模式(结构型) | Share Mind">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          代理模式(结构型)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-06-01 00:00:00" itemprop="dateCreated datePublished" datetime="2018-06-01T00:00:00+08:00">2018-06-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Design-Pattern/" itemprop="url" rel="index"><span itemprop="name">Design Pattern</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/2018/06/01/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2018/06/01/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>6.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>在一个陌生的城市找房子住的时候，一般都需要通过房产中介或者熟人介绍的方式来找房子。这个第三方的角色相当于代理的角色，负责代理真实的房东或业主来给我们提供相关的租房信息，而不需要我们直接与房东接触。同时，而为了安全性，一般代理还会让我们进行身份验证，同时为了方便租户管理，他们还会记录相关的租户信息。这里的第三方角色就是本文将要介绍的代理模式中的代理对象。</p>
+<span id="more"></span>
+
+<h2 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h2><hr>
+<h3 id="意图"><a href="#意图" class="headerlink" title="意图"></a>意图</h3><p>为其他对象提供一种代理以控制对这个对象的访问</p>
+<blockquote>
+<p>常用的结构型设计模式之一，当无法直接访问某个对象或访问某个对象存在困难时可以通过一个代理对象来间接访问，为了保证客户端使用的透明性，所访问的真实对象与代理对象需要实现相同的接口</p>
+</blockquote>
+<h3 id="参与者"><a href="#参与者" class="headerlink" title="参与者"></a>参与者</h3><ul>
+<li><p>Proxy<br>保存一个引用使得代理可以访问实体，若RealSubject和Subject的接口相同，Proxy会引用Subject<br>提供一个与Subject的接口相同的接口，这样代理就可以用来替代实体<br>控制对实体的存取，并可能负责创建和删除它</p>
+</li>
+<li><p>Subject<br>定义RealSubject和Proxy的共用接口，这样就在任何使用RealSubject的地方都可以使用Proxy。</p>
+</li>
+<li><p>RealSubject<br>定义Proxy所代表的实体</p>
+</li>
+</ul>
+<blockquote>
+<p>代理根据其种类，在适当的时候向RealSubject转发请求</p>
+</blockquote>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p><img src="/.com//Proxy.jpg" alt="proxy"></p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>1.首先定义抽象的<code>Subject</code>,并提供<code>Request()</code>接口：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Base Common Interface of RealSubject &amp; Proxy</span></span><br><span class="line"><span class="keyword">class</span> <span class="title">Subject</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Subject() &#123;&#125;;</span><br><span class="line">    <span class="keyword">virtual</span> ~Subject() &#123;&#125;;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Request</span>()</span> = <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>2.再分别定义<code>Subject</code>类的两个子类，真实的被代理的对象类<code>RealSubject</code>和代理类<code>Proxy</code>类：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// RealSubject</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RealSubject</span> : <span class="keyword">public</span> Subject</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">RealSubject</span>() &#123;&#125;;</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">RealSubject</span>() &#123;&#125;;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Request</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Real Subject Request !&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Proxy</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Proxy</span> : <span class="keyword">public</span> Subject</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    RealSubject *m_pRealSubject;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Proxy</span>(Subject *pSubject) : <span class="built_in">m_pRealSubject</span>(pSubject) &#123;&#125;;</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">Proxy</span>() &#123;&#125;;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Request</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">NULL</span> != m_pRealSubject)</span><br><span class="line">        &#123;</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;Proxy Request !&quot;</span> &lt;&lt; endl;</span><br><span class="line">            m_pRealSubject-&gt;<span class="built_in">Request</span>(); <span class="comment">// 调用真实对象类RealSubject的方法</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>3.测试代理模式：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">ProxyTest_General</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Subject *pRS = <span class="keyword">new</span> <span class="built_in">RealSubject</span>();</span><br><span class="line">    Subject *pPS = <span class="keyword">new</span> <span class="built_in">Proxy</span>(pRS);</span><br><span class="line">    pPS-&gt;<span class="built_in">Request</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">NULL</span> != pRS)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">delete</span> pRS; pRS = <span class="literal">NULL</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">NULL</span> != pPS)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">delete</span> pPS; pPS = <span class="literal">NULL</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>4.运行结果：</p>
+<pre><code>Proxy Request !
+Real Subject Request !
+</code></pre>
+<h3 id="代理模式的分类"><a href="#代理模式的分类" class="headerlink" title="代理模式的分类"></a>代理模式的分类</h3><p>代理模式根据其使用场景可以分为以下几类：</p>
+<h4 id="远程代理"><a href="#远程代理" class="headerlink" title="远程代理"></a>远程代理</h4><p>可以隐藏一个对象存在于不同地址空间的事实，负责对请求及其参数进行编码，并向不同地址空间中的实体发送已编码的请求<br>它使得客户端程序可以访问在远程主机上的对象，远程主机可能具有更好的计算性能与处理速度，可以快速响应并处理客户端的请求。远程代理可以将网络的细节隐藏起来，使得客户端不必考虑网络的存在。客户端完全可以认为被代理的远程业务对象是在本地而不是在远程，而远程代理对象承担了大部分的网络通信工作，并负责对远程业务方法的调用</p>
+<blockquote>
+<p>为位于两个不同地址空间对象的访问提供了一种实现机制，可以将一些消耗资源较多的对象和操作移至性能更好的计算机上，提高系统的整体运行效率</p>
+</blockquote>
+<h4 id="虚拟代理"><a href="#虚拟代理" class="headerlink" title="虚拟代理"></a>虚拟代理</h4><p>可以缓存实体的附加信息，以便延迟对它的访问<br>对于一些占用系统资源较多或者加载时间较长的对象，可以给这些对象提供一个虚拟代理。在真实对象创建成功之前虚拟代理扮演真实对象的替身，而当真实对象创建之后，虚拟代理将用户的请求转发给真实对象</p>
+<blockquote>
+<p>通过一个消耗资源较少的对象来代表一个消耗资源较多的对象，可以在一定程度上节省系统的运行开销</p>
+</blockquote>
+<h4 id="缓冲代理"><a href="#缓冲代理" class="headerlink" title="缓冲代理"></a>缓冲代理</h4><p>为某一个操作的结果提供临时的缓存存储空间，以便在后续使用中能够共享这些结果，优化系统性能，缩短执行时间</p>
+<h4 id="保护代理"><a href="#保护代理" class="headerlink" title="保护代理"></a>保护代理</h4><p>检查调用者是否具有实现一个请求所必需的访问权限</p>
+<blockquote>
+<p>可以控制对一个对象的访问权限，为不同用户提供不同级别的使用权限</p>
+</blockquote>
+<h4 id="引用计数代理"><a href="#引用计数代理" class="headerlink" title="引用计数代理"></a>引用计数代理</h4><p>允许在访问一个对象时有一些附加的内务处理</p>
+<blockquote>
+<p>可以对一个对象的访问(引用)提供一些额外的操作</p>
+</blockquote>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>当客户端对象需要访问远程主机中的对象时可以使用<strong>远程代理</strong></li>
+<li>当需要用一个消耗资源较少的对象来代表一个消耗资源较多的对象，从而降低系统开销、缩短运行时间时可以使用<strong>虚拟代理</strong>，例如一个对象需要很长时间才能完成加载时</li>
+<li>当需要为某一个被频繁访问的操作结果提供一个临时存储空间，以供多个客户端共享访问这些结果时可以使用<strong>缓冲代理</strong>。通过使用缓冲代理，系统无须在客户端每一次访问时都重新执行操作，只需直接从临时缓冲区获取操作结果即可</li>
+<li>当需要控制对一个对象的访问，为不同用户提供不同级别的访问权限时可以使用<strong>保护代理</strong></li>
+<li>当需要为一个对象的访问（引用）提供一些额外的操作时可以使用<strong>智能引用代理</strong></li>
+</ul>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><ul>
+<li>优点<ul>
+<li>协调调用者和被调用者，在一定程度上降低了系统的耦合度</li>
+<li>不同类型的代理模式也具有其特有的优点</li>
+</ul>
+</li>
+</ul>
+<h3 id="与适配器模式-amp-装饰器模式的区别"><a href="#与适配器模式-amp-装饰器模式的区别" class="headerlink" title="与适配器模式&amp;装饰器模式的区别"></a>与适配器模式&amp;装饰器模式的区别</h3><ul>
+<li>适配器Adapter为它所适配的对象提供了一个不同的接口。相反，代理提供了与它的实体相同的接口。然而，用于访问保护的代理可能会拒绝执行实体会执行的操作，因此，它的接口实际上可能只是实体接口的一个子集</li>
+<li>尽管Decorator的实现部分与代理相似，但Decorator的目的不一样。Decorator为对象添加一个或多个功能，而代理则控制对对象的访问</li>
+</ul>
+<h2 id="代理模式具体实例"><a href="#代理模式具体实例" class="headerlink" title="代理模式具体实例"></a>代理模式具体实例</h2><hr>
+<h3 id="租房问题"><a href="#租房问题" class="headerlink" title="租房问题"></a>租房问题</h3><p><strong>使用代理模式简单实现前言所述的过程</strong></p>
+<h4 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h4><p>1.定义抽象的<code>AbstractRenter</code>类，并提供<code>rent</code>接口:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Abstract rent class </span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AbstractRenter</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">rent</span><span class="params">(<span class="type">void</span>)</span> </span>= <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>2.分别实现<code>AbstractRenter</code>的子类<code>RealRenter</code>及<code>ProxyRenter</code>:</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// real renter == house owner</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RealRenter</span> : <span class="keyword">public</span> <span class="title class_">AbstractRenter</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="attr">public</span>:</span><br><span class="line">    <span class="built_in">void</span> <span class="title function_">rent</span>(<span class="params"><span class="built_in">void</span></span>)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;i have a house to rent, please contact me if you need!&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// proxy renter == house proxy</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ProxyRenter</span> : <span class="keyword">public</span> <span class="title class_">AbstractRenter</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="attr">private</span>:</span><br><span class="line">    <span class="title class_">RealRenter</span> _renter;</span><br><span class="line"><span class="attr">public</span>:</span><br><span class="line">    <span class="title class_">ProxyRenter</span>(<span class="title class_">RealRenter</span> &amp;renter) : <span class="title function_">_renter</span>(<span class="params">renter</span>) &#123;&#125;;</span><br><span class="line"><span class="attr">public</span>:</span><br><span class="line">    <span class="built_in">void</span> <span class="title function_">rent</span>(<span class="params"><span class="built_in">void</span></span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="title function_">validId</span>();</span><br><span class="line">        _renter.<span class="title function_">rent</span>();</span><br><span class="line">        <span class="title function_">logHouseUser</span>();</span><br><span class="line">    &#125;</span><br><span class="line"><span class="attr">private</span>:</span><br><span class="line">    <span class="built_in">void</span> <span class="title function_">validId</span>(<span class="params"><span class="built_in">void</span></span>)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;please valid your identification&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">void</span> <span class="title function_">logHouseUser</span>(<span class="params"><span class="built_in">void</span></span>)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;log the house user information&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>3.测试代理模式:</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Proxy_Test_Renter</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    RealRenter  realRenter;</span><br><span class="line">    <span class="function">ProxyRenter <span class="title">proxyRenter</span><span class="params">(realRenter)</span></span>;</span><br><span class="line">    AbstractRenter &amp;pR = proxyRenter;</span><br><span class="line">    pR.<span class="built_in">rent</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>4.运行结果:</p>
+<pre><code>please valid your identification
+i have a house to rent, please contact me if you need!
+log the house user information
+</code></pre>
+<h3 id="智能指针"><a href="#智能指针" class="headerlink" title="智能指针"></a>智能指针</h3><p><strong>使用智能引用计数代理模式实现智能指针功能</strong></p>
+<blockquote>
+<p>作用: 为了解决“被异常抛出时发生资源泄漏”的问题<br>原理：资源在局部对象构造时分配，在局部对象析构时释放。这样即使在函数执行过程时发生异常退出，也会因为异常能保证局部对象被析构从而保证资源被释放</p>
+</blockquote>
+<blockquote>
+<p>auto_ptr析构的时候肯定会删除他所拥有的那个对象，所有我们就要注意了，一个萝卜一个坑，两个auto_ptr不能同时拥有同一个对象,在析构时都试图删除p两次删除同一个对象的行为在C++标准中是未定义的<br>不能用auto_ptr来管理一个数组指针，因为auto_ptr的析构函数中删除指针用的是delete,而不是delete []<br>构造函数的explicit关键词有效阻止从一个“裸”指针隐式转换成auto_ptr类型<br>auto_ptr只是一种简单的智能指针，如有特殊需求，需要使用其他智能指针，比如share_ptr<br>auto_ptr不能作为容器对象，STL容器中的元素经常要支持拷贝，赋值等操作，在这过程中auto_ptr会传递所有权，那么source与sink元素之间就不等价了</p>
+</blockquote>
+<h4 id="代码实现-2"><a href="#代码实现-2" class="headerlink" title="代码实现"></a>代码实现</h4><p>1.C++ STL智能指针（auto_ptr)的简单实现Smart_Ptr:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//Smart_Ptr类就是一个代理，客户只需操作Smart_Ptr的对象，而不需要与被代理的指针m_ptr打交道</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Smart_Ptr</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    T* m_ptr;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// Construction </span></span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">Smart_Ptr</span><span class="params">(T* ptr = <span class="number">0</span>)</span> : m_ptr(ptr) &#123;</span>&#125;;  <span class="comment">// forbide implict convert</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    ~<span class="built_in">Smart_Ptr</span>()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">reset</span>(); </span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// Copy Construction </span></span><br><span class="line">    <span class="comment">// not const input para , for its m_ptr changed</span></span><br><span class="line">    <span class="comment">// release rhs&#x27;s proxy control </span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">Smart_Ptr</span>(Smart_Ptr &amp;rhs) : <span class="built_in">m_ptr</span>(rhs.<span class="built_in">release</span>()) &#123;&#125;; </span><br><span class="line"></span><br><span class="line">    <span class="comment">//Assignment</span></span><br><span class="line">    Smart_Ptr&amp; <span class="keyword">operator</span> = (Smart_Ptr &amp;rhs)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// first release rhs&#x27;s proxy control; secode reset to this&#x27;s proxy control; thirdly return this</span></span><br><span class="line"></span><br><span class="line">        <span class="built_in">reset</span>(rhs.<span class="built_in">release</span>());</span><br><span class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    T* <span class="keyword">operator</span> -&gt;() <span class="type">const</span> <span class="comment">// 类成员函数为const ，防止更改类成员</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> m_ptr;</span><br><span class="line">    &#125;</span><br><span class="line">    T&amp; <span class="keyword">operator</span> *() <span class="type">const</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> *m_ptr;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">T* <span class="title">get</span><span class="params">()</span> <span class="type">const</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> m_ptr;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Release Ownership</span></span><br><span class="line">    <span class="function">T* <span class="title">release</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="function">T* <span class="title">tmp</span><span class="params">(m_ptr)</span></span>; <span class="comment">// tmp = m_ptr;</span></span><br><span class="line">        m_ptr = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> tmp;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Reset Ownership: copy ptr to m_ptr,</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">reset</span><span class="params">(T* ptr = <span class="number">0</span>)</span> </span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (m_ptr != ptr)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">delete</span> m_ptr;</span><br><span class="line">            m_ptr = ptr;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>2.测试Smart_Ptr代理模式：</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">void <span class="constructor">Proxy_Test_SmartPtr()</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="comment">// UD-SmartPtr Test:</span></span><br><span class="line">    <span class="built_in">int</span> *p =  <span class="keyword">new</span> <span class="built_in">int</span>(<span class="number">10</span>);</span><br><span class="line"><span class="comment">//  Smart_Ptr&lt;int&gt; sp_int_1(p); //  构造int(10)返回指针的代理sp_int</span></span><br><span class="line">    Smart_Ptr&lt;<span class="built_in">int</span>&gt; sp<span class="constructor">_int_2(<span class="params">p</span>)</span>;  <span class="comment">// sp_int_1 失去p控制权</span></span><br><span class="line">    Smart_Ptr&lt;<span class="built_in">int</span>&gt; sp_int_3 = sp_int_2; <span class="comment">//  sp_int_1,2 均失去p控制权</span></span><br><span class="line">    Smart_Ptr&lt;<span class="built_in">int</span>&gt; sp<span class="constructor">_int_4(<span class="params">sp_int_3</span>)</span>; <span class="comment">//  sp_int_1,2,3 均失去p控制权</span></span><br><span class="line"><span class="comment">//  cout &lt;&lt; &quot;User Defined Smart_Ptr: sp_int1 value is &quot; &lt;&lt; *sp_int_1 &lt;&lt; endl;</span></span><br><span class="line"><span class="comment">//  cout &lt;&lt; &quot;User Defined Smart_Ptr: sp_int2 value is &quot; &lt;&lt; *sp_int_2 &lt;&lt; endl;</span></span><br><span class="line"><span class="comment">//  cout &lt;&lt; &quot;User Defined Smart_Ptr: sp_int3 value is &quot; &lt;&lt; *sp_int_3 &lt;&lt; endl;</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;User Defined Smart_Ptr: sp_int4 value is &quot;</span> &lt;&lt; *sp_int_4 &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line"><span class="comment">// STL-AutoPtr Test:</span></span><br><span class="line">    <span class="built_in">string</span> *p2 = <span class="keyword">new</span> <span class="built_in">string</span>(<span class="string">&quot;Hello&quot;</span>);   </span><br><span class="line">    auto_ptr&lt;<span class="built_in">string</span>&gt; ap<span class="constructor">_string_1(<span class="params">p2</span>)</span>;;  <span class="comment">// STL 标准库 auto_ptr</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;STL Smart_Ptr: ap_string_1 value is &quot;</span> &lt;&lt; *ap_string_1 &lt;&lt; endl;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>3.运行结果：</p>
+<pre><code>User Defined Smart_Ptr: sp_int4 value is 10
+STL Smart_Ptr: ap_string_1 value is Hello
+</code></pre>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Frank Tao
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://www.taolingyang.com/2018/06/01/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" title="代理模式(结构型)">http://www.taolingyang.com/2018/06/01/代理模式/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Design-Pattern/" rel="tag"># Design Pattern</a>
+              <a href="/tags/Structural-Pattern/" rel="tag"># Structural Pattern</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/05/15/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/" rel="prev" title="享元模式(结构型)">
+                  <i class="fa fa-chevron-left"></i> 享元模式(结构型)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/06/16/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/" rel="next" title="外观模式(结构型)">
+                  外观模式(结构型) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank Tao</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">412k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">6:15</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://railway-starter-production-f6c1.up.railway.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"请文明评论呀","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":false,"comment_count":true,"requiredFields":["nick"],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/2018/06/01/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+  <script>
+	  (function(){
+		  var bp = document.createElement('script');
+		  var curProtocol = window.location.protocol.split(':')[0];
+		  if (curProtocol === 'https') {
+			  bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		  }
+		  else {
+			  bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		  }
+		  var s = document.getElementsByTagName("script")[0];
+		  s.parentNode.insertBefore(bp, s);
+	  })();
+  </script>
+</body>
+</html>

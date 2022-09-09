@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.taolingyang.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.13.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言 GNU CC（简称Gcc）是GNU项目中符合ANSI C标准的编译系统，能够编译用C、C++和Object- C等语言编写的程序。Gcc不仅功能强大，而且可以编译如C、C++、Object C、Java等多种语言，而且Gcc又是一个交叉平台编译器，它能够在当前CPU平台上为多种不同体系结构的硬件平台开发软件。本章中的示例均采用Gcc版本为4.8.2。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gcc编译链接及常用选项总结">
+<meta property="og:url" content="http://www.taolingyang.com/2016/06/08/Linux-Gcc%E7%BC%96%E8%AF%91%E9%93%BE%E6%8E%A5%E5%8F%8A%E5%B8%B8%E7%94%A8%E9%80%89%E9%A1%B9%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="Share Mind">
+<meta property="og:description" content="前言 GNU CC（简称Gcc）是GNU项目中符合ANSI C标准的编译系统，能够编译用C、C++和Object- C等语言编写的程序。Gcc不仅功能强大，而且可以编译如C、C++、Object C、Java等多种语言，而且Gcc又是一个交叉平台编译器，它能够在当前CPU平台上为多种不同体系结构的硬件平台开发软件。本章中的示例均采用Gcc版本为4.8.2。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-06-07T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-09-09T01:52:18.365Z">
+<meta property="article:author" content="Frank Tao">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Gcc">
+<meta property="article:tag" content="编译">
+<meta property="article:tag" content="链接">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://www.taolingyang.com/2016/06/08/Linux-Gcc%E7%BC%96%E8%AF%91%E9%93%BE%E6%8E%A5%E5%8F%8A%E5%B8%B8%E7%94%A8%E9%80%89%E9%A1%B9%E6%80%BB%E7%BB%93/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://www.taolingyang.com/2016/06/08/Linux-Gcc%E7%BC%96%E8%AF%91%E9%93%BE%E6%8E%A5%E5%8F%8A%E5%B8%B8%E7%94%A8%E9%80%89%E9%A1%B9%E6%80%BB%E7%BB%93/","path":"2016/06/08/Linux-Gcc编译链接及常用选项总结/","title":"Gcc编译链接及常用选项总结"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Gcc编译链接及常用选项总结 | Share Mind</title>
+  
+
+
+
+
+
+<link rel="dns-prefetch" href="https://railway-starter-production-f6c1.up.railway.app">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Share Mind</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Love Reading | Film | Climbing | Snooker</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gcc%E7%BC%96%E8%AF%91%E9%93%BE%E6%8E%A5%E6%B5%81%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">Gcc编译链接流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B"><span class="nav-number">2.1.</span> <span class="nav-text">预处理过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91"><span class="nav-number">2.2.</span> <span class="nav-text">编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B1%87%E7%BC%96"><span class="nav-number">2.3.</span> <span class="nav-text">汇编</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%93%BE%E6%8E%A5"><span class="nav-number">2.4.</span> <span class="nav-text">链接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Gcc%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9%E5%88%86%E6%9E%90"><span class="nav-number">2.5.</span> <span class="nav-text">Gcc编译选项分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E4%BD%93%E9%80%89%E9%A1%B9"><span class="nav-number">2.5.1.</span> <span class="nav-text">总体选项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%91%8A%E8%AD%A6%E5%92%8C%E5%87%BA%E9%94%99%E9%80%89%E9%A1%B9"><span class="nav-number">2.5.2.</span> <span class="nav-text">告警和出错选项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E9%80%89%E9%A1%B9"><span class="nav-number">2.5.3.</span> <span class="nav-text">优化选项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E7%9B%B8%E5%85%B3%E9%80%89%E9%A1%B9"><span class="nav-number">2.5.4.</span> <span class="nav-text">体系结构相关选项</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Frank Tao"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Frank Tao</p>
+  <div class="site-description" itemprop="description">welcome to taolingyang’s blog -~-</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/franktly" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;franktly" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/tao-ling-yang" title="ZhiHu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;tao-ling-yang" rel="noopener" target="_blank"><i class="fa fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/2273442920" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;2273442920" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+  <a href="https://github.com/franktly" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.taolingyang.com/2016/06/08/Linux-Gcc%E7%BC%96%E8%AF%91%E9%93%BE%E6%8E%A5%E5%8F%8A%E5%B8%B8%E7%94%A8%E9%80%89%E9%A1%B9%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Frank Tao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Share Mind">
+      <meta itemprop="description" content="welcome to taolingyang’s blog -~-">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Gcc编译链接及常用选项总结 | Share Mind">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Gcc编译链接及常用选项总结
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2016-06-08 00:00:00" itemprop="dateCreated datePublished" datetime="2016-06-08T00:00:00+08:00">2016-06-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/2016/06/08/Linux-Gcc%E7%BC%96%E8%AF%91%E9%93%BE%E6%8E%A5%E5%8F%8A%E5%B8%B8%E7%94%A8%E9%80%89%E9%A1%B9%E6%80%BB%E7%BB%93/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2016/06/08/Linux-Gcc%E7%BC%96%E8%AF%91%E9%93%BE%E6%8E%A5%E5%8F%8A%E5%B8%B8%E7%94%A8%E9%80%89%E9%A1%B9%E6%80%BB%E7%BB%93/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>7.8k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>GNU CC（简称Gcc）是GNU项目中符合ANSI C标准的编译系统，能够编译用C、C++和Object- C等语言编写的程序。Gcc不仅功能强大，而且可以编译如C、C++、Object C、Java等多种语言，而且Gcc又是一个交叉平台编译器，它能够在当前CPU平台上为多种不同体系结构的硬件平台开发软件。本章中的示例均采用Gcc版本为4.8.2。</p>
+<span id="more"></span>
+
+<h2 id="Gcc编译链接流程"><a href="#Gcc编译链接流程" class="headerlink" title="Gcc编译链接流程"></a>Gcc编译链接流程</h2><hr>
+<p>Gcc编译链接流程分为<strong>四个步骤</strong>:</p>
+<ol>
+<li>预处理(Pre-Processsing)</li>
+<li>编译(Compiling)</li>
+<li>汇编(Assembling)</li>
+<li>链接(Linking)</li>
+</ol>
+<p>Gcc指令的一般格式为：</p>
+<pre><code>gcc [option1] compile-files [option2] object-files
+</code></pre>
+<blockquote>
+<p>其中目标文件可缺省，Gcc默认生成的可执行文件命名为:编译文件名.out</p>
+</blockquote>
+<p>下面以简单的<code>hello world</code>程序为例说明Gcc编译的四个过程：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;hello world&quot;</span>);</span><br><span class="line">  <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="预处理过程"><a href="#预处理过程" class="headerlink" title="预处理过程"></a>预处理过程</h3><p><code>option1</code> 为<code>-E</code>,生成的目标文件为<code>.i</code>(c)或<code>.ii</code>(c++)后缀的经过预处理的编译输入文件,Gcc指令为：</p>
+<pre><code>tly@ubuntu ~&gt; gcc -E test.c -o test.i
+</code></pre>
+<p>生成的预编译文件内容为：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"># <span class="number">1</span> <span class="string">&quot;test.c&quot;</span></span><br><span class="line"># <span class="number">1</span> <span class="string">&quot;&lt;command-line&gt;&quot;</span></span><br><span class="line"># <span class="number">1</span> <span class="string">&quot;/usr/include/stdc-predef.h&quot;</span> <span class="number">1</span> <span class="number">3</span> <span class="number">4</span></span><br><span class="line"># <span class="number">1</span> <span class="string">&quot;&lt;command-line&gt;&quot;</span> <span class="number">2</span></span><br><span class="line"># <span class="number">1</span> <span class="string">&quot;test.c&quot;</span></span><br><span class="line"># <span class="number">1</span> <span class="string">&quot;/usr/include/stdio.h&quot;</span> <span class="number">1</span> <span class="number">3</span> <span class="number">4</span></span><br><span class="line"># <span class="number">27</span> <span class="string">&quot;/usr/include/stdio.h&quot;</span> <span class="number">3</span> <span class="number">4</span></span><br><span class="line"># <span class="number">1</span> <span class="string">&quot;/usr/include/features.h&quot;</span> <span class="number">1</span> <span class="number">3</span> <span class="number">4</span></span><br><span class="line"># <span class="number">374</span> <span class="string">&quot;/usr/include/features.h&quot;</span> <span class="number">3</span> <span class="number">4</span></span><br><span class="line"># <span class="number">1</span> <span class="string">&quot;/usr/include/i386-linux-gnu/sys/cdefs.h&quot;</span> <span class="number">1</span> <span class="number">3</span> <span class="number">4</span></span><br><span class="line">... 省略</span><br><span class="line">...</span><br><span class="line"><span class="function"><span class="keyword">extern</span> <span class="type">char</span> *<span class="title">ctermid</span> <span class="params">(<span class="type">char</span> *__s)</span> __<span class="title">attribute__</span> <span class="params">((__nothrow__ , __leaf__))</span></span>;</span><br><span class="line"># <span class="number">913</span> <span class="string">&quot;/usr/include/stdio.h&quot;</span> <span class="number">3</span> <span class="number">4</span></span><br><span class="line"><span class="function"><span class="keyword">extern</span> <span class="type">void</span> <span class="title">flockfile</span> <span class="params">(FILE *__stream)</span> __<span class="title">attribute__</span> <span class="params">((__nothrow__ , __leaf__))</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">extern</span> <span class="type">int</span> <span class="title">ftrylockfile</span> <span class="params">(FILE *__stream)</span> __<span class="title">attribute__</span> <span class="params">((__nothrow__ , __leaf__))</span> </span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">extern</span> <span class="type">void</span> <span class="title">funlockfile</span> <span class="params">(FILE *__stream)</span> __<span class="title">attribute__</span> <span class="params">((__nothrow__ , __leaf__))</span></span>;</span><br><span class="line"># <span class="number">943</span> <span class="string">&quot;/usr/include/stdio.h&quot;</span> <span class="number">3</span> <span class="number">4</span></span><br><span class="line"># <span class="number">2</span> <span class="string">&quot;test.c&quot;</span> <span class="number">2</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;hello world&quot;</span>);</span><br><span class="line">  <span class="keyword">return</span>;</span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Gcc预处理过程把<code>&lt;stdio.h&gt;</code>的内容插入到hello.i文件中了</p>
+</blockquote>
+<h3 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h3><p><code>option1</code> 为<code>-S</code>,生成的目标文件为<code>.s</code>或<code>.S</code>后缀的经过编译但是没有汇编过的汇编文件,Gcc编译过程首先要检查代码的规范性、是否有语法错误等，以确定代码的实际要做的工作，在检查无误后，Gcc把代码翻译成汇编语言Gcc指令为：</p>
+<pre><code>tly@ubuntu ~&gt; gcc -S test.i -o test.s
+</code></pre>
+<p>生成的编译之后的汇编文件内容为：</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">        <span class="string">.file</span>   <span class="string">&quot;test.c&quot;</span></span><br><span class="line">        <span class="string">.section</span>        <span class="string">.rodata</span></span><br><span class="line"><span class="string">.LC0</span>:</span><br><span class="line">        <span class="string">.string</span> <span class="string">&quot;hello world&quot;</span></span><br><span class="line">        <span class="string">.text</span></span><br><span class="line">        <span class="string">.globl</span>  main</span><br><span class="line">        <span class="string">.type</span>   main, @function</span><br><span class="line">main:</span><br><span class="line"><span class="string">.LFB0</span>:</span><br><span class="line">        <span class="string">.cfi_startproc</span></span><br><span class="line">        pushl   %ebp</span><br><span class="line">        <span class="string">.cfi_def_cfa_offset</span> 8</span><br><span class="line">        <span class="string">.cfi_offset</span> 5, -8</span><br><span class="line">        movl    %esp, %ebp</span><br><span class="line">        <span class="string">.cfi_def_cfa_register</span> 5</span><br><span class="line">        andl    $-16, %esp</span><br><span class="line">        subl    $16, %esp</span><br><span class="line">        movl    $<span class="string">.LC0</span>, <span class="params">(%esp)</span></span><br><span class="line">        call    printf</span><br><span class="line">        nop</span><br><span class="line">        leave</span><br><span class="line">        <span class="string">.cfi_restore</span> 5</span><br><span class="line">        <span class="string">.cfi_def_cfa</span> 4, 4</span><br><span class="line">        ret</span><br><span class="line">        <span class="string">.cfi_endproc</span></span><br><span class="line"><span class="string">.LFE0</span>:</span><br><span class="line">        <span class="string">.size</span>   main, <span class="string">.-main</span></span><br><span class="line">        <span class="string">.ident</span>  <span class="string">&quot;GCC: (Ubuntu 4.8.2-19ubuntu1) 4.8.2&quot;</span></span><br><span class="line">        <span class="string">.section</span>        <span class="string">.note.GNU-stack</span>,<span class="string">&quot;&quot;</span>,@progbits</span><br><span class="line">~                                                       </span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Gcc编译过程已经将其转化为汇编语言了</p>
+</blockquote>
+<h3 id="汇编"><a href="#汇编" class="headerlink" title="汇编"></a>汇编</h3><p><code>option1</code> 为<code>-c</code>，生成的目标文件为以<code>.o</code>为后缀的二进制目标代码文件，Gcc指令为：</p>
+<pre><code>tly@ubuntu ~&gt; gcc -c test.s -o test.o
+</code></pre>
+<p>生成的汇编之后的目标文件内容为：</p>
+<figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">^?ELF^A^A^A^@^@^@^@^@^@^@^@^@^A^@^C^@^A^@^@^@^@^@^@^@^@^@^@^@^X^A^@^@^@^@^@^@4^@^@^@^@^@(^@^M^@</span><br><span class="line">^@U&lt;<span class="number">89</span>&gt;å&lt;<span class="number">83</span>&gt;äð&lt;<span class="number">83</span>&gt;ì^PÇ^D$^@^@^@^@èüÿÿÿ&lt;<span class="number">90</span>&gt;ÉÃhello world^@^@GCC: (Ubuntu <span class="number">4.8</span><span class="number">.2</span><span class="number">-19</span>ubuntu1) <span class="number">4.8</span><span class="number">.2</span>^@^@^@^@^T^@^@^@^@^@^@^@^AzR^@^A|^H^A^[^L^D^D&lt;<span class="number">88</span>&gt;^A^@^@^\^@^@^@^\^@^@^@^@^@^@^@^X^@^@^@^@A^N^H&lt;<span class="number">85</span>&gt;^BB^M^ETÅ^L^D^D^@^@^@.symtab^@.strtab^@.shstrtab^@.rel.<span class="keyword">text</span>^@.data^@.bss^@.rodata^@.comment^@.note.GNU-stack^@.rel.eh_frame^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^_^@^@^@^A^@^@^@^F^@^@^@^@^@^@^@4^@^@^@^X^@^@^@^@^@^@^@^@^@^@^@^A^@^@^@^@^@^@^@^[^@^@^@  ^@^@^@^@^@^@^@^@^@^@^@ä^C^@^@^P^@^@^@^K^@^@^@^A^@^@^@^D^@^@^@^H^@^@^@%^@^@^@^A^@^@^@^C^@^@^@^@^@^@^@L^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^A^@^@^@^@^@^@^@+^@^@^@^H^@^@^@^C^@^@^@^@^@^@^@L^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^A^@^@^@^@^@^@^@0^@^@^@^A^@^@^@^B^@^@^@^@^@^@^@L^@^@^@^L^@^@^@^@^@^@^@^@^@^@^@^A^@^@^@^@^@^@^@8^@^@^@^A^@^@^@0^@^@^@^@^@^@^@X^@^@^@%^@^@^@^@^@^@^@^@^@^@^@^A^@^@^@^A^@^@^@A^@^@^@^A^@^@^@^@^@^@^@^@^@^@^@&#125;^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^A^@^@^@^@^@^@^@U^@^@^@^A^@^@^@^B^@^@^@^@^@^@^@&lt;<span class="number">80</span>&gt;^@^@^@8^@^@^@^@^@^@^@^@^@^@^@^D^@^@^@^@^@^@^@Q^@^@^@        ^@^@^@^@^@^@^@^@^@^@^@ô^C^@^@^H^@^@^@^K^@^@^@^H^@^@^@^D^@^@^@^H^@^@^@^Q^@^@^@^C^@^@^@^@^@^@^@^@^@^@^@¸^@^@^@_^@^@^@^@^@^@^@^@^@^@^@^A^@^@^@^@^@^@^@^A^@^@^@^B^@^@^@^@^@^@^@^@^@^@^@ ^C^@^@°^@^@^@^L^@^@^@       ^@^@^@^D^@^@^@^P^@^@^@  ^@^@^@^C^@^@^@^@^@^@^@^@^@^@^@Ð^C^@^@^T^@^@^@^@^@^@^@^@^@^@^@^A^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^A^@^@^@^@^@^@^@^@^@^@^@^D^@ñÿ^@^@^@^@^@^@^@^@^@^@^@^@^C^@^A^@^@^@^@^@^@^@^@^@^@^@^@^@^C^@^C^@^@^@^@^@^@^@^@^@^@^@^@^@^C^@^D^@^@^@^@^@^@^@^@^@^@^@^@^@^C^@^E^@^@^@^@^@^@^@^@^@^@^@^@^@^C^@^G^@^@^@^@^@^@^@^@^@^@^@^@^@^C^@^H^@^@^@^@^@^@^@^@^@^@^@^@^@^C^@^F^@^H^@^@^@^@^@^@^@^X^@^@^@^R^@^A^@^M^@^@^@^@^@^@^@^@^@^@^@^P^@^@^@^@test.c^@main^@printf^@^L^@^@^@^A^E^@^@^Q^@^@^@^B</span><br><span class="line">^@^@ ^@^@^@^B^B^@^@</span><br><span class="line">                                                </span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Gcc汇编成的.o目标文件是乱码，不过可以通过nm命令查看其符号表：</p>
+</blockquote>
+<pre><code>tly@ubuntu ~&gt; nm test.o
+00000000 T main
+         U printf
+</code></pre>
+<h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><p>在成功编译之后，就进入了链接阶段，这个<code>hello world</code>小程序的链接过程主要是查找包含的<code>stdio.h</code>头文件的<code>printf()</code>函数的实现（因为<code>stdio.h</code>头文件只包含函数声明)，这个函数实现是在<code>libc.so.6</code>的库文件中。在没有特别指定时，Gcc会到系统默认的搜索路径<code>/usr/lib</code>下进行查找，也就是链接到<code>libc.so.6</code>库函数中去，这样就能实现函数<code>printf()</code>了，而这也就是链接的作用。</p>
+<blockquote>
+<p>函数库一般分为<strong>静态库</strong>和<strong>动态库</strong>两种。<br><strong>静态库</strong>:是指编译链接时，把库文件的代码全部加入到可执行文件中，因此生成的文件比较大，但在运行时也就不再需要库文件了。其后缀名一般为<code>.a</code>(linux)或<code>.lib</code>(windows)。<br><strong>动态库</strong>: 与之相反，在编译链接时并没有把库文件的代码加入到可执行文件中，而是在程序执行时由<em>运行时链接文件加载库</em>，这样可以节省系统的开销。动态库一般为<code>.so</code>(linux)或<code>.dll</code>(windows)，如前面所述的libc.so.6就是动态库。<br>Gcc在编译时默认使用动态库</p>
+</blockquote>
+<p>当然，也可以一次性使用<code>-c</code>选项，直接生成目标文件<code>test.o</code>,Gcc指令为:</p>
+<pre><code>tly@ubuntu ~&gt; gcc -c test.c -o test.o
+</code></pre>
+<p>完成了链接之后，Gcc就可以生成可执行文件<code>test</code>,Gcc指令为:</p>
+<pre><code>tly@ubuntu ~&gt; gcc test.o -o test
+</code></pre>
+<p>运行该可执行文件<code>test</code>：</p>
+<pre><code>tly@ubuntu ~&gt; ./test
+hello world⏎      
+</code></pre>
+<h3 id="Gcc编译选项分析"><a href="#Gcc编译选项分析" class="headerlink" title="Gcc编译选项分析"></a>Gcc编译选项分析</h3><p>Gcc有超过100个的可用选项，一般主要包括以下五种类型选项：</p>
+<ol>
+<li>总体选项</li>
+<li>告警和出错选项</li>
+<li>优化选项</li>
+<li>体系结构相关选项</li>
+</ol>
+<h4 id="总体选项"><a href="#总体选项" class="headerlink" title="总体选项"></a>总体选项</h4><hr>
+<table>
+<thead>
+<tr>
+<th align="center">选项名</th>
+<th align="center">选项意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">-E</td>
+<td align="center">只是编译不汇编，生成汇编代码.s</td>
+</tr>
+<tr>
+<td align="center">-S</td>
+<td align="center">只进行预编译生成.i，不做其他处理</td>
+</tr>
+<tr>
+<td align="center">-c</td>
+<td align="center">只是编译不链接，生成目标文件.o</td>
+</tr>
+<tr>
+<td align="center">-g</td>
+<td align="center">在可执行程序中包含标准调试信息</td>
+</tr>
+<tr>
+<td align="center">-o file</td>
+<td align="center">把输出文件输出到file里</td>
+</tr>
+<tr>
+<td align="center">-v</td>
+<td align="center">打印出编译器内部编译各过程的命令行信息和编译器的版本</td>
+</tr>
+<tr>
+<td align="center">-I dir</td>
+<td align="center">在头文件的搜索路径列表中添加dir目录</td>
+</tr>
+<tr>
+<td align="center">-L dir</td>
+<td align="center">在库文件的搜索路径列表中添加dir目录</td>
+</tr>
+<tr>
+<td align="center">-static</td>
+<td align="center">链接静态库</td>
+</tr>
+<tr>
+<td align="center">-llibrary</td>
+<td align="center">链接名为library的库文件库</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>对于<code>-I dir</code>选项可在头文件的搜索路径列表中添加dir目录。由于Linux中头文件都默认放到了<code>/usr/include/</code>目录下，因此，当用户希望添加放置在其他位置的头文件时，就可以通过<code>-I dir</code>选项来指定(<code>-L dir</code>类似)，这样，Gcc就会到相应的位置查找对应的目录<br><code>&lt;&gt;</code>表示在标准路径中搜索头文件，<code>“ ”</code>表示在本目录中搜索，如果把自定义的头文件<code>#include&lt;my.h&gt;改为</code>#include “my.h”<code>，就不需要加上“-I”选项了</code><br><code>-I dir</code>和<code>-L dir</code>都只是指定了路径，而没有指定文件，因此不能在路径中包含文件名</p>
+</blockquote>
+<blockquote>
+<p>对于<code>-llibrary</code>选项，省去了前缀<code>lib</code>,它实际上是指示Gcc去连接库文件liblibrary.so。由于在Linux下的库文件命名时有一个规定：必须以<code>lib</code>三个字母开头。因此在用<code>-l</code>选项指定链接的库文件名时可以省去<code>lib</code>三个字母。也就是说Gcc在对<code>-llibrary</code>进行处理时，会自动去链接名为<code>liblibrary.so</code>的文件</p>
+</blockquote>
+<h4 id="告警和出错选项"><a href="#告警和出错选项" class="headerlink" title="告警和出错选项"></a>告警和出错选项</h4><hr>
+<table>
+<thead>
+<tr>
+<th align="center">选项名</th>
+<th align="center">选项意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">-ansi</td>
+<td align="center">支持符合ANSI标准的C程序</td>
+</tr>
+<tr>
+<td align="center">-pedantic</td>
+<td align="center">允许发出ANSI C标准所列的全部警告信息</td>
+</tr>
+<tr>
+<td align="center">-pedantic-error</td>
+<td align="center">允许发出ANSI C标准所列的全部错误信息</td>
+</tr>
+<tr>
+<td align="center">-w</td>
+<td align="center">关闭所有告警</td>
+</tr>
+<tr>
+<td align="center">-Wall</td>
+<td align="center">允许发出Gcc提供的所有有用的报警信息</td>
+</tr>
+</tbody></table>
+<p>修改上述的<code>helloworld</code>测试程序为：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="type">long</span> <span class="type">long</span> tmp; <span class="comment">// 增加非ANSI-C类型long long 未使用的临时变量tmp</span></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;hello world&quot;</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>; <span class="comment">// 返回错误类型int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>1.默认无告警和出错选项情况：</p>
+<pre><code>tly@ubuntu ~&gt; gcc -c test.c -o test.o
+test.c: In function ‘main’:
+test.c:6:3: warning: ‘return’ with a value, in function returning void [enabled by default]
+   return 0;
+   ^
+</code></pre>
+<blockquote>
+<p>只识别了main的错误返回类型int</p>
+</blockquote>
+<p>2.增加<code>-ansi</code>选项情况：</p>
+<pre><code>tly@ubuntu ~&gt; gcc -c test.c -o test.o -ansi
+test.c: In function ‘main’:
+test.c:6:3: warning: ‘return’ with a value, in function returning void [enabled by default]
+   return 0;
+   ^
+</code></pre>
+<blockquote>
+<p>只识别了main的错误返回类型int</p>
+</blockquote>
+<p>3.增加<code>-pedantic</code>选项情况：</p>
+<pre><code>tly@ubuntu ~&gt; gcc -c test.c -o test.o -pedantic
+test.c:2:6: warning: return type of ‘main’ is not ‘int’ [-Wmain]
+ void main(int argc, char* argv[])
+      ^
+test.c: In function ‘main’:
+test.c:4:8: warning: ISO C90 does not support ‘long long’ [-Wlong-long]
+   long long tmp;
+        ^
+test.c:6:3: warning: ‘return’ with a value, in function returning void [enabled by default]
+   return 0;
+   ^
+</code></pre>
+<blockquote>
+<p>识别了main的错误返回类型int 和 long long 非 ISO C90 支持类型</p>
+</blockquote>
+<p>4.增加<code>-pedantic-errors</code>选项情况：</p>
+<pre><code>tly@ubuntu ~&gt; gcc -c test.c -o test.o -pedantic-errors 
+test.c:2:6: error: return type of ‘main’ is not ‘int’ [-Wmain]
+ void main(int argc, char* argv[])
+      ^
+test.c: In function ‘main’:
+test.c:4:8: error: ISO C90 does not support ‘long long’ [-Wlong-long]
+   long long tmp;
+        ^
+test.c:6:3: error: ‘return’ with a value, in function returning void
+   return 0;
+   ^
+</code></pre>
+<blockquote>
+<p>识别了main的错误返回类型int 和 long long 非 ISO C90 支持类型</p>
+</blockquote>
+<p>5.增加<code>-w</code>选项情况：</p>
+<pre><code>tly@ubuntu ~&gt; gcc -c test.c -o test.o -w
+</code></pre>
+<blockquote>
+<p>屏蔽了告警和出错信息</p>
+</blockquote>
+<p>6.增加<code>-Wall</code>选项情况： </p>
+<pre><code>tly@ubuntu ~&gt; gcc -c test.c -o test.o -Wall
+test.c:2:6: warning: return type of ‘main’ is not ‘int’ [-Wmain]
+ void main(int argc, char* argv[])
+      ^
+test.c: In function ‘main’:
+test.c:6:3: warning: ‘return’ with a value, in function returning void [enabled by default]
+   return 0;
+   ^
+test.c:4:13: warning: unused variable ‘tmp’ [-Wunused-variable]
+   long long tmp;
+             ^
+</code></pre>
+<blockquote>
+<p>识别了main的错误返回类型int 和临时变量tmp未使用的告警信息</p>
+</blockquote>
+<h4 id="优化选项"><a href="#优化选项" class="headerlink" title="优化选项"></a>优化选项</h4><hr>
+<table>
+<thead>
+<tr>
+<th align="center">选项名</th>
+<th align="center">选项意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">-On</td>
+<td align="center">n是一个代表优化级别的整数,典型的范围是从0变化到2或3</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>不同的优化级别对应不同的优化处理工作。<br>-O 提供基础级别的优化<br>-O2 提供更加高级的代码优化,会占用更长的编译时间<br>-O3 提供最高级的代码优化<br>进行调试的时候，最好关闭编译优化，否则程序自动优化，执行的步骤可能有变化</p>
+</blockquote>
+<h4 id="体系结构相关选项"><a href="#体系结构相关选项" class="headerlink" title="体系结构相关选项"></a>体系结构相关选项</h4><hr>
+<table>
+<thead>
+<tr>
+<th align="center">选项名</th>
+<th align="center">选项意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">-mcpu&#x3D;type</td>
+<td align="center">对不同的CPU使用相应的CPU指令。可选择的有i386、i486、pentium等</td>
+</tr>
+<tr>
+<td align="center">-mieee-fp</td>
+<td align="center">使用IEEE标准进行浮点数的比较</td>
+</tr>
+<tr>
+<td align="center">-mno-ieee-fp</td>
+<td align="center">不使用IEEE标准进行浮点数的比较</td>
+</tr>
+<tr>
+<td align="center">-msoft-float</td>
+<td align="center">输出包含浮点库调用的目标代码</td>
+</tr>
+<tr>
+<td align="center">-mshort</td>
+<td align="center">把int类型作为16位处理，相当于short int</td>
+</tr>
+<tr>
+<td align="center">-mrtd</td>
+<td align="center">将函数参数个数固定的函数用ret NUM返回，节省调用函数的一条指令</td>
+</tr>
+</tbody></table>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Frank Tao
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://www.taolingyang.com/2016/06/08/Linux-Gcc%E7%BC%96%E8%AF%91%E9%93%BE%E6%8E%A5%E5%8F%8A%E5%B8%B8%E7%94%A8%E9%80%89%E9%A1%B9%E6%80%BB%E7%BB%93/" title="Gcc编译链接及常用选项总结">http://www.taolingyang.com/2016/06/08/Linux-Gcc编译链接及常用选项总结/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/Gcc/" rel="tag"># Gcc</a>
+              <a href="/tags/%E7%BC%96%E8%AF%91/" rel="tag"># 编译</a>
+              <a href="/tags/%E9%93%BE%E6%8E%A5/" rel="tag"># 链接</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2016/06/02/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" rel="prev" title="排序算法">
+                  <i class="fa fa-chevron-left"></i> 排序算法
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2016/06/10/Linux-fork%E5%92%8Cvfork%E5%87%BD%E6%95%B0%E5%8C%BA%E5%88%AB/" rel="next" title="fork和vfork函数区别">
+                  fork和vfork函数区别 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank Tao</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">412k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">6:15</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://railway-starter-production-f6c1.up.railway.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"请文明评论呀","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":false,"comment_count":true,"requiredFields":["nick"],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/2016/06/08/Linux-Gcc%E7%BC%96%E8%AF%91%E9%93%BE%E6%8E%A5%E5%8F%8A%E5%B8%B8%E7%94%A8%E9%80%89%E9%A1%B9%E6%80%BB%E7%BB%93/"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+  <script>
+	  (function(){
+		  var bp = document.createElement('script');
+		  var curProtocol = window.location.protocol.split(':')[0];
+		  if (curProtocol === 'https') {
+			  bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		  }
+		  else {
+			  bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		  }
+		  var s = document.getElementsByTagName("script")[0];
+		  s.parentNode.insertBefore(bp, s);
+	  })();
+  </script>
+</body>
+</html>

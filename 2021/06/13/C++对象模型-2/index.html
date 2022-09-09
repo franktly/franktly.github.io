@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.taolingyang.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.13.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言 前一篇主要介绍了C++对象的内部基本布局和三种对象模型，没有考虑到继承的情况。在各种继承情况下，对象的内存布局又有什么变化呢？接下来将分三篇从普通单继承，普通多继承，虚拟单继承，虚拟多继承，菱形普通继承，菱形虚拟继承等几种继承方式下分别探究下C++对象模型的特点">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++对象模型-2">
+<meta property="og:url" content="http://www.taolingyang.com/2021/06/13/C++%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-2/index.html">
+<meta property="og:site_name" content="Share Mind">
+<meta property="og:description" content="前言 前一篇主要介绍了C++对象的内部基本布局和三种对象模型，没有考虑到继承的情况。在各种继承情况下，对象的内存布局又有什么变化呢？接下来将分三篇从普通单继承，普通多继承，虚拟单继承，虚拟多继承，菱形普通继承，菱形虚拟继承等几种继承方式下分别探究下C++对象模型的特点">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://www.taolingyang.com/.com//base_layout.png">
+<meta property="og:image" content="http://www.taolingyang.com/.com//sin_com_layout.png">
+<meta property="og:image" content="http://www.taolingyang.com/.com//mul_com_layout.png">
+<meta property="article:published_time" content="2021-06-12T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-09-09T01:52:18.319Z">
+<meta property="article:author" content="Frank Tao">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Object Model">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.taolingyang.com/.com//base_layout.png">
+
+
+<link rel="canonical" href="http://www.taolingyang.com/2021/06/13/C++%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-2/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://www.taolingyang.com/2021/06/13/C++%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-2/","path":"2021/06/13/C++对象模型-2/","title":"C++对象模型-2"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>C++对象模型-2 | Share Mind</title>
+  
+
+
+
+
+
+<link rel="dns-prefetch" href="https://railway-starter-production-f6c1.up.railway.app">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Share Mind</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Love Reading | Film | Climbing | Snooker</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%99%AE%E9%80%9A%E7%BB%A7%E6%89%BF"><span class="nav-number">2.</span> <span class="nav-text">普通继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%B1%BB"><span class="nav-number">2.1.</span> <span class="nav-text">基类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81"><span class="nav-number">2.1.1.</span> <span class="nav-text">简单实现代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Gcc%E6%9F%A5%E7%9C%8B%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80"><span class="nav-number">2.1.2.</span> <span class="nav-text">Gcc查看内存布局</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80%E7%9A%84%E4%BB%A3%E7%A0%81%E9%AA%8C%E8%AF%81"><span class="nav-number">2.1.3.</span> <span class="nav-text">内存布局的代码验证</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%99%AE%E9%80%9A%E5%8D%95%E7%BB%A7%E6%89%BF%E7%9A%84%E5%AD%90%E7%B1%BB"><span class="nav-number">2.2.</span> <span class="nav-text">普通单继承的子类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">简单实现代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Gcc%E6%9F%A5%E7%9C%8B%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">Gcc查看内存布局</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80%E7%9A%84%E4%BB%A3%E7%A0%81%E9%AA%8C%E8%AF%81-1"><span class="nav-number">2.2.3.</span> <span class="nav-text">内存布局的代码验证</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%99%AE%E9%80%9A%E5%A4%9A%E7%BB%A7%E6%89%BF%E7%9A%84%E5%AD%90%E7%B1%BB"><span class="nav-number">2.3.</span> <span class="nav-text">普通多继承的子类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81-2"><span class="nav-number">2.3.1.</span> <span class="nav-text">简单实现代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Gcc%E6%9F%A5%E7%9C%8B%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80-2"><span class="nav-number">2.3.2.</span> <span class="nav-text">Gcc查看内存布局</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80%E7%9A%84%E4%BB%A3%E7%A0%81%E9%AA%8C%E8%AF%81-2"><span class="nav-number">2.3.3.</span> <span class="nav-text">内存布局的代码验证</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Frank Tao"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Frank Tao</p>
+  <div class="site-description" itemprop="description">welcome to taolingyang’s blog -~-</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/franktly" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;franktly" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/tao-ling-yang" title="ZhiHu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;tao-ling-yang" rel="noopener" target="_blank"><i class="fa fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/2273442920" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;2273442920" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+  <a href="https://github.com/franktly" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.taolingyang.com/2021/06/13/C++%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Frank Tao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Share Mind">
+      <meta itemprop="description" content="welcome to taolingyang’s blog -~-">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="C++对象模型-2 | Share Mind">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++对象模型-2
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-06-13 00:00:00" itemprop="dateCreated datePublished" datetime="2021-06-13T00:00:00+08:00">2021-06-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/2021/06/13/C++%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-2/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2021/06/13/C++%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-2/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>14k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>12 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>前一篇主要介绍了C++对象的内部基本布局和三种对象模型，没有考虑到继承的情况。在各种继承情况下，对象的内存布局又有什么变化呢？接下来将分三篇从普通单继承，普通多继承，虚拟单继承，虚拟多继承，菱形普通继承，菱形虚拟继承等几种继承方式下分别探究下C++对象模型的特点</p>
+<span id="more"></span>
+
+<h2 id="普通继承"><a href="#普通继承" class="headerlink" title="普通继承"></a>普通继承</h2><hr>
+<h3 id="基类"><a href="#基类" class="headerlink" title="基类"></a>基类</h3><hr>
+<h4 id="简单实现代码"><a href="#简单实现代码" class="headerlink" title="简单实现代码"></a>简单实现代码</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Base 类： First Inheritance Level</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Base</span>(<span class="type">int</span> var = <span class="number">10</span>) : _base_var(var) &#123;&#125;;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Run</span><span class="params">(<span class="type">void</span>)</span> </span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Base Class Run()&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">RunBase</span><span class="params">(<span class="type">void</span>)</span> </span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Base Class RunBase()&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> _base_var;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Gcc查看内存布局"><a href="#Gcc查看内存布局" class="headerlink" title="Gcc查看内存布局"></a>Gcc查看内存布局</h4><figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Vtable <span class="keyword">for</span> Base</span><br><span class="line">Base::_ZTV4Base: <span class="number">4</span> entries</span><br><span class="line"><span class="number">0</span>     (int <span class="comment">(*)(...))0</span></span><br><span class="line"><span class="comment">8     (int (*)</span>(...))(&amp; _ZTI4Base)</span><br><span class="line"><span class="number">16</span>    (int <span class="comment">(*)(...))Base::Run</span></span><br><span class="line"><span class="comment">24    (int (*)</span>(...))Base::RunBase</span><br><span class="line"></span><br><span class="line"><span class="keyword">Class</span> Base</span><br><span class="line">   size=<span class="number">16</span> align=<span class="number">8</span></span><br><span class="line">   base size=<span class="number">12</span> base align=<span class="number">8</span></span><br><span class="line">Base (<span class="number">0</span>x0x7f223aac30c0) <span class="number">0</span></span><br><span class="line">    vptr=((&amp; Base::_ZTV4Base) + <span class="number">16</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>可以看到基类的内存空间排序顺序为虚函数表在第一个位置，这样做是为了保证高效的获取虚函数地址(不需要偏移)，提高效率，然后是成员变量，成员变量按声明顺序依次排列</p>
+</blockquote>
+<h4 id="内存布局的代码验证"><a href="#内存布局的代码验证" class="headerlink" title="内存布局的代码验证"></a>内存布局的代码验证</h4><p>1.测试代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">void</span><span class="params">(*pFunc)</span><span class="params">(<span class="type">void</span>)</span></span>; <span class="comment">// 函数指针定义，后续使用到的函数指针均为此</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">BaseTest</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Base b;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;---------begin base object inner memory layout test-------&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object size is: &quot;</span> &lt;&lt; <span class="built_in">sizeof</span>(b) &lt;&lt; std::endl; </span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object addr is: &quot;</span> &lt;&lt; &amp;b &lt;&lt; std::endl; <span class="comment">// </span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object vfptr value is: &quot;</span> &lt;&lt; (<span class="type">long</span>*)*(<span class="type">long</span>*)&amp;b &lt;&lt; std::endl; <span class="comment">//vfptr 在对象第1个位置 最外层(long*)是把第一个位置的值转换为long地址类型</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; typeid(b) is: &quot;</span> &lt;&lt; <span class="built_in">typeid</span>(b).<span class="built_in">name</span>() &lt;&lt; std::endl;  <span class="comment">// b对象类型</span></span><br><span class="line">    <span class="comment">//std::cout &lt;&lt; &quot; object vfptr[-1] type info name is: &quot; &lt;&lt; ((type_info*)((long*)(*(long*)&amp;b) - 1))-&gt;name() &lt;&lt; std::endl;</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object vfptr[0] func ptr  is: &quot;</span> &lt;&lt; (<span class="type">long</span>*)*(<span class="type">long</span>*)(*(<span class="type">long</span>*)&amp;b)&lt;&lt; std::endl; <span class="comment">//vfptr[0]的值 </span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object vfptr[0] func invoke res: &quot;</span>;</span><br><span class="line">    pFunc pRun = (pFunc)(*(<span class="type">long</span>*)(*(<span class="type">long</span>*)&amp;b));</span><br><span class="line">    (*pRun)(); <span class="comment">//调用vfptr[0](函数地址值)指向的函数</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object vfptr[1] func ptr  is: &quot;</span> &lt;&lt; (<span class="type">long</span>*)*((<span class="type">long</span>*)(*(<span class="type">long</span>*)&amp;b) + <span class="number">1</span>) &lt;&lt; std::endl; <span class="comment">//vfptr[1]的值 </span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object vfptr[1] func invoke res: &quot;</span>;</span><br><span class="line">    pFunc pRunBase = (pFunc)(*((<span class="type">long</span>*)(*(<span class="type">long</span>*)&amp;b) + <span class="number">1</span>));</span><br><span class="line">    (*pRunBase)(); <span class="comment">//调用vfptr[1](函数地址值)指向的函数</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object _base_var addr is: &quot;</span> &lt;&lt; (<span class="type">long</span>*)&amp;b + <span class="number">1</span> &lt;&lt; std::endl; <span class="comment">//_base_var 在对象第2个位置 </span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object _base_var value is: &quot;</span> &lt;&lt; (<span class="type">int</span>)*((<span class="type">long</span>*)&amp;b + <span class="number">1</span>) &lt;&lt; std::endl; <span class="comment">//_base_var 在对象第2个位置 </span></span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;---------end  base object inner memory layout test-------&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>&amp;b</code>为对象的地址；<br><code>*(long*)&amp;b</code>为对象内存第一个位置的值，即是虚函数表地址，因此需要强转为<code>long</code>型指针类型，因为表项也为指针类型(表项为函数地址指针类型，而指针视为<code>long</code>类型)<br><code>*((long*)(*(long*)&amp;b) + n)</code>为虚函数表第<code>n</code>(<code>n</code>从0开始)个表项的值(即虚函数地址值)，需要强转为<code>pFunc</code>类型<br><code>*((long*)&amp;b + m)</code>为对象内存第<code>m</code>个位置的值,此处<code>m = 1</code>为变量<code>_base_var</code>的数据本身值</p>
+</blockquote>
+<p>2.运行结果：</p>
+<figure class="highlight nim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">---------begin base <span class="keyword">object</span> inner memory layout test-------</span><br><span class="line"> <span class="keyword">object</span> size <span class="keyword">is</span>: <span class="number">16</span></span><br><span class="line"> <span class="keyword">object</span> <span class="keyword">addr</span> <span class="keyword">is</span>: <span class="number">0x7ffd9a7680e0</span></span><br><span class="line"> <span class="keyword">object</span> vfptr value <span class="keyword">is</span>: <span class="number">0x559bc73a9ce0</span></span><br><span class="line"> typeid(b) <span class="keyword">is</span>: <span class="number">4</span>Base</span><br><span class="line"> <span class="keyword">object</span> vfptr[<span class="number">0</span>] <span class="keyword">func</span> <span class="keyword">ptr</span>  <span class="keyword">is</span>: <span class="number">0x559bc73a611a</span></span><br><span class="line"> <span class="keyword">object</span> vfptr[<span class="number">0</span>] <span class="keyword">func</span> invoke res: <span class="type">Base</span> <span class="type">Class</span> <span class="type">Run</span>()</span><br><span class="line"> <span class="keyword">object</span> vfptr[<span class="number">1</span>] <span class="keyword">func</span> <span class="keyword">ptr</span>  <span class="keyword">is</span>: <span class="number">0x559bc73a6156</span></span><br><span class="line"> <span class="keyword">object</span> vfptr[<span class="number">1</span>] <span class="keyword">func</span> invoke res: <span class="type">Base</span> <span class="type">Class</span> <span class="type">RunBase</span>()</span><br><span class="line"> <span class="keyword">object</span> _base_var <span class="keyword">addr</span> <span class="keyword">is</span>: <span class="number">0x7ffd9a7680e8</span></span><br><span class="line"> <span class="keyword">object</span> _base_var value <span class="keyword">is</span>: <span class="number">10</span></span><br><span class="line">---------<span class="keyword">end</span>  base <span class="keyword">object</span> inner memory layout test-------</span><br></pre></td></tr></table></figure>
+
+<p>3.内存布局示意图：<br><img src="/.com//base_layout.png" alt="base"></p>
+<h3 id="普通单继承的子类"><a href="#普通单继承的子类" class="headerlink" title="普通单继承的子类"></a>普通单继承的子类</h3><hr>
+<h4 id="简单实现代码-1"><a href="#简单实现代码-1" class="headerlink" title="简单实现代码"></a>简单实现代码</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Single Common Derive： Second Inheritance Level</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Derive_Sin_Com</span> : <span class="keyword">public</span> Base</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Derive_Sin_Com</span>(<span class="type">int</span> var = <span class="number">20</span>) : <span class="built_in">Base</span>(var), _derive_sin_com_var(var) &#123;&#125;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Run</span><span class="params">(<span class="type">void</span>)</span> <span class="comment">// override Base::Run()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Derive_Sin_Com Class Run()&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">RunDerive_Sin_Com</span><span class="params">(<span class="type">void</span>)</span> <span class="comment">// new virtual function</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Derive_Sin_Com Class RunDerive_Sin_Com()&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> _derive_sin_com_var;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Gcc查看内存布局-1"><a href="#Gcc查看内存布局-1" class="headerlink" title="Gcc查看内存布局"></a>Gcc查看内存布局</h4><figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Vtable <span class="keyword">for</span> Derive_Sin_Com</span><br><span class="line">Derive_Sin_Com::_ZTV14Derive_Sin_Com: <span class="number">5</span> entries</span><br><span class="line"><span class="number">0</span>     (int <span class="comment">(*)(...))0</span></span><br><span class="line"><span class="comment">8     (int (*)</span>(...))(&amp; _ZTI14Derive_Sin_Com)</span><br><span class="line"><span class="number">16</span>    (int <span class="comment">(*)(...))Derive_Sin_Com::Run</span></span><br><span class="line"><span class="comment">24    (int (*)</span>(...))Base::RunBase</span><br><span class="line"><span class="number">32</span>    (int <span class="comment">(*)(...))Derive_Sin_Com::RunDerive_Sin_Com</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Class Derive_Sin_Com</span></span><br><span class="line"><span class="comment">   size=16 align=8</span></span><br><span class="line"><span class="comment">   base size=16 base align=8</span></span><br><span class="line"><span class="comment">Derive_Sin_Com (0x0x7f223ab202d8) 0</span></span><br><span class="line"><span class="comment">    vptr=((&amp; Derive_Sin_Com::_ZTV14Derive_Sin_Com) + 16)</span></span><br><span class="line"><span class="comment">  Base (0x0x7f223ab13480) 0</span></span><br><span class="line"><span class="comment">      primary-for Derive_Sin_Com (0x0x7f223ab202d8)</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>可以看到普通单继承的子类的内存空间特点是<strong>基类的内存布局+子类的成员变量</strong>，基类的内存布局包括基类的虚函数表和基类的成员变量。子类的虚函数在继承而来的基类的虚函数表基础上进行替换(override)，新增(子类新的虚函数)，保持操作(没有override)</p>
+</blockquote>
+<h4 id="内存布局的代码验证-1"><a href="#内存布局的代码验证-1" class="headerlink" title="内存布局的代码验证"></a>内存布局的代码验证</h4><p>1.测试代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">SingleCommonDeriveTest</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Derive_Sin_Com d;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;---------begin single common derive object inner memory layout test-------&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object size is: &quot;</span> &lt;&lt; <span class="built_in">sizeof</span>(d) &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object addr is: &quot;</span> &lt;&lt; &amp;d &lt;&lt; std::endl; <span class="comment">// d指针转换为long指针</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object vfptr value is: &quot;</span> &lt;&lt; (<span class="type">long</span>*)*(<span class="type">long</span>*)&amp;d &lt;&lt; std::endl; <span class="comment">//  vfptr地址</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; typeid(d) is: &quot;</span> &lt;&lt; <span class="built_in">typeid</span>(d).<span class="built_in">name</span>() &lt;&lt; std::endl;  <span class="comment">// d对象类型</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object vfptr[0] func ptr  is: &quot;</span> &lt;&lt; (<span class="type">long</span>*)*(<span class="type">long</span>*)(*(<span class="type">long</span>*)&amp;d) &lt;&lt; std::endl; <span class="comment">//vfptr[0]的值 </span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object vfptr[0] func invoke res: &quot;</span>;</span><br><span class="line">    pFunc pRun = (pFunc)(*(<span class="type">long</span>*)(*(<span class="type">long</span>*)&amp;d));</span><br><span class="line">    (*pRun)(); <span class="comment">//调用vfptr[0](函数地址值)指向的函数</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object vfptr[1] func ptr  is: &quot;</span> &lt;&lt; (<span class="type">long</span>*)*((<span class="type">long</span>*)(*(<span class="type">long</span>*)&amp;d) + <span class="number">1</span>) &lt;&lt; std::endl; <span class="comment">//vfptr[1]的值 </span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object vfptr[1] func invoke res: &quot;</span>;</span><br><span class="line">    pFunc pRunBase = (pFunc)(*((<span class="type">long</span>*)(*(<span class="type">long</span>*)&amp;d) + <span class="number">1</span>));</span><br><span class="line">    (*pRunBase)(); <span class="comment">//调用vfptr[1](函数地址值)指向的函数</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object vfptr[2] func ptr  is: &quot;</span> &lt;&lt; (<span class="type">long</span>*)*((<span class="type">long</span>*)(*(<span class="type">long</span>*)&amp;d) + <span class="number">2</span>) &lt;&lt; std::endl; <span class="comment">//vfptr[2]的值 </span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object vfptr[2] func invoke res: &quot;</span>;</span><br><span class="line">    pFunc pRunDerive_Sin_Com = (pFunc)(*((<span class="type">long</span>*)(*(<span class="type">long</span>*)&amp;d) + <span class="number">2</span>));</span><br><span class="line">    (*pRunDerive_Sin_Com)(); <span class="comment">//调用vfptr[2](函数地址值)指向的函数</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object _base_var addr is: &quot;</span> &lt;&lt; (<span class="type">long</span>*)&amp;d + <span class="number">1</span> &lt;&lt; std::endl; <span class="comment">//_base_var 在对象第2个位置 </span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object _base_var value is: &quot;</span> &lt;&lt; *((<span class="type">int</span>*)((<span class="type">long</span>*)&amp;d + <span class="number">1</span>) + <span class="number">0</span>) &lt;&lt; std::endl; </span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object _derive_sin_com_var addr is: &quot;</span> &lt;&lt; (<span class="type">long</span>*)((<span class="type">int</span>*)((<span class="type">long</span>*)&amp;d + <span class="number">1</span>) + <span class="number">1</span>) &lt;&lt; std::endl; <span class="comment">//_derive_sin_com_var 在对象第3个位置 </span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object _derive_sin_com_var value is: &quot;</span> &lt;&lt; *((<span class="type">int</span>*)((<span class="type">long</span>*)&amp;d + <span class="number">1</span>) + <span class="number">1</span>) &lt;&lt; std::endl; </span><br><span class="line">    </span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;---------end  single common derive  object inner memory layout test-------&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2.运行结果：</p>
+<figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">---------begin single common derive object inner memory layout test-------</span><br><span class="line"> object size is: 16</span><br><span class="line"> object addr is: 0x7ffd9db3df50</span><br><span class="line"> object vfptr value is: 0x5606ab76b728</span><br><span class="line"> typeid(d) is: 14Derive_Sin_Com</span><br><span class="line"> object vfptr[0] func ptr  is: 0x5606ab7671c8</span><br><span class="line"> object vfptr[0] func<span class="built_in"> invoke </span>res: Derive_Sin_Com Class Run()</span><br><span class="line"> object vfptr[1] func ptr  is: 0x5606ab766d62</span><br><span class="line"> object vfptr[1] func<span class="built_in"> invoke </span>res: Base Class RunBase()</span><br><span class="line"> object vfptr[2] func ptr  is: 0x5606ab767204</span><br><span class="line"> object vfptr[2] func<span class="built_in"> invoke </span>res: Derive_Sin_Com Class RunDerive_Sin_Com()</span><br><span class="line"> object _base_var addr is: 0x7ffd9db3df58</span><br><span class="line"> object _base_var value is: 20</span><br><span class="line"> object _derive_sin_com_var addr is: 0x7ffd9db3df5c</span><br><span class="line"> object _derive_sin_com_var value is: 20</span><br><span class="line">---------end  single common derive  object inner memory layout test-------</span><br></pre></td></tr></table></figure>
+
+<p>3.内存布局示意图：<br><img src="/.com//sin_com_layout.png" alt="single common derive"></p>
+<h3 id="普通多继承的子类"><a href="#普通多继承的子类" class="headerlink" title="普通多继承的子类"></a>普通多继承的子类</h3><hr>
+<h4 id="简单实现代码-2"><a href="#简单实现代码-2" class="headerlink" title="简单实现代码"></a>简单实现代码</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Base2 类 : First Inheritance Level</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Base2</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Base2</span>(<span class="type">int</span> var = <span class="number">10</span>) : _base2_var(var) &#123;&#125;;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Run</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Base2 Class Run()&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">RunBase2</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Base2 Class RunBase2()&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> _base2_var;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Multi Common Derive: Second Inheritance Level</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Derive_Mul_Com</span> : <span class="keyword">public</span> Base, <span class="keyword">public</span> Base2 </span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Derive_Mul_Com</span>(<span class="type">int</span> var = <span class="number">30</span>) : <span class="built_in">Base</span>(var), <span class="built_in">Base2</span>(var), _derive_mul_com_var(var) &#123;&#125;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Run</span><span class="params">(<span class="type">void</span>)</span> <span class="comment">// override Base::Run() and Base2::Run()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Derive_Mul_Com Class Run()&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">RunBase</span><span class="params">(<span class="type">void</span>)</span> <span class="comment">// override Base::RunBase()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Derive_Mul_Com Class RunBase()&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">RunDerive_Mul_Com</span><span class="params">(<span class="type">void</span>)</span> <span class="comment">// new virtual function</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Derive_Mul_Com Class RunDerive_Mul_Com()&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> _derive_mul_com_var;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Gcc查看内存布局-2"><a href="#Gcc查看内存布局-2" class="headerlink" title="Gcc查看内存布局"></a>Gcc查看内存布局</h4><figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">Vtable <span class="keyword">for</span> Derive_Mul_Com</span><br><span class="line">Derive_Mul_Com::_ZTV14Derive_Mul_Com: <span class="number">9</span> entries</span><br><span class="line"><span class="number">0</span>     (int <span class="comment">(*)(...))0</span></span><br><span class="line"><span class="comment">8     (int (*)</span>(...))(&amp; _ZTI14Derive_Mul_Com)</span><br><span class="line"><span class="number">16</span>    (int <span class="comment">(*)(...))Derive_Mul_Com::Run</span></span><br><span class="line"><span class="comment">24    (int (*)</span>(...))Derive_Mul_Com::RunBase</span><br><span class="line"><span class="number">32</span>    (int <span class="comment">(*)(...))Derive_Mul_Com::RunDerive_Mul_Com</span></span><br><span class="line"><span class="comment">40    (int (*)</span>(...))-<span class="number">16</span></span><br><span class="line"><span class="number">48</span>    (int <span class="comment">(*)(...))(&amp; _ZTI14Derive_Mul_Com)</span></span><br><span class="line"><span class="comment">56    (int (*)</span>(...))Derive_Mul_Com::_ZThn16_N14Derive_Mul_Com3RunEv</span><br><span class="line"><span class="number">64</span>    (int <span class="comment">(*)(...))Base2::RunBase2</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Class Derive_Mul_Com</span></span><br><span class="line"><span class="comment">   size=32 align=8</span></span><br><span class="line"><span class="comment">   base size=32 base align=8</span></span><br><span class="line"><span class="comment">Derive_Mul_Com (0x0x7f223af5caf0) 0</span></span><br><span class="line"><span class="comment">    vptr=((&amp; Derive_Mul_Com::_ZTV14Derive_Mul_Com) + 16)</span></span><br><span class="line"><span class="comment">  Base (0x0x7f223ab790c0) 0</span></span><br><span class="line"><span class="comment">      primary-for Derive_Mul_Com (0x0x7f223af5caf0)</span></span><br><span class="line"><span class="comment">  Base2 (0x0x7f223ab79120) 16</span></span><br><span class="line"><span class="comment">      vptr=((&amp; Derive_Mul_Com::_ZTV14Derive_Mul_Com) + 56)</span></span><br><span class="line"><span class="comment"></span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>可以看到普通多继承的子类的内存空间特点是<strong>基类的内存布局(按照继承的顺序依次布局基类)+子类的成员变量</strong>，基类的内存布局包括基类的虚函数表和基类的成员变量。子类的虚函数在继承而来的<strong>第一个继承的基类</strong>的虚函数表基础上进行替换(override)，新增(子类新的虚函数)，保持操作(没有override)</p>
+</blockquote>
+<h4 id="内存布局的代码验证-2"><a href="#内存布局的代码验证-2" class="headerlink" title="内存布局的代码验证"></a>内存布局的代码验证</h4><p>1.测试代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">MultiCommonDeriveTest</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Derive_Mul_Com d;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;---------begin multi common derive object inner memory layout test-------&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object size is: &quot;</span> &lt;&lt; <span class="built_in">sizeof</span>(d) &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object addr is: &quot;</span> &lt;&lt; &amp;d &lt;&lt; std::endl; <span class="comment">// d指针转换为long指针</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; typeid(d) is: &quot;</span> &lt;&lt; <span class="built_in">typeid</span>(d).<span class="built_in">name</span>() &lt;&lt; std::endl;  <span class="comment">// d对象类型</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;------ base obj begin -----&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object base vfptr value is: &quot;</span> &lt;&lt; (<span class="type">long</span>*)*(<span class="type">long</span>*)&amp;d &lt;&lt; std::endl; <span class="comment">//  base vfptr地址 在对象第1个位置</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object base vfptr[0] func ptr  is: &quot;</span> &lt;&lt; (<span class="type">long</span>*)*(<span class="type">long</span>*)(*(<span class="type">long</span>*)&amp;d) &lt;&lt; std::endl; <span class="comment">//vfptr[0]的值 </span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object base vfptr[0] func invoke res: &quot;</span>;</span><br><span class="line">    pFunc pRun = (pFunc)(*(<span class="type">long</span>*)(*(<span class="type">long</span>*)&amp;d));</span><br><span class="line">    (*pRun)(); <span class="comment">//调用vfptr[0](函数地址值)指向的函数</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object base vfptr[1] func ptr  is: &quot;</span> &lt;&lt; (<span class="type">long</span>*)*((<span class="type">long</span>*)(*(<span class="type">long</span>*)&amp;d) + <span class="number">1</span>) &lt;&lt; std::endl; <span class="comment">//vfptr[1]的值 </span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object base vfptr[1] func invoke res: &quot;</span>;</span><br><span class="line">    pFunc pRunBase = (pFunc)(*((<span class="type">long</span>*)(*(<span class="type">long</span>*)&amp;d) + <span class="number">1</span>));</span><br><span class="line">    (*pRunBase)(); <span class="comment">//调用vfptr[1](函数地址值)指向的函数</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object base vfptr[2] func ptr  is: &quot;</span> &lt;&lt; (<span class="type">long</span>*)*((<span class="type">long</span>*)(*(<span class="type">long</span>*)&amp;d) + <span class="number">2</span>) &lt;&lt; std::endl; <span class="comment">//vfptr[2]的值 </span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object base vfptr[2] func invoke res: &quot;</span>;</span><br><span class="line">    pFunc pRunDerive_Mul_Com = (pFunc)(*((<span class="type">long</span>*)(*(<span class="type">long</span>*)&amp;d) + <span class="number">2</span>));</span><br><span class="line">    (*pRunDerive_Mul_Com)(); <span class="comment">//调用vfptr[2](函数地址值)指向的函数</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object _base_var addr is: &quot;</span> &lt;&lt; (<span class="type">long</span>*)&amp;d + <span class="number">1</span> &lt;&lt; std::endl; <span class="comment">//_base_var 在对象第2个位置 </span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object _base_var value is: &quot;</span> &lt;&lt; (<span class="type">int</span>)*((<span class="type">long</span>*)&amp;d + <span class="number">1</span>) &lt;&lt; std::endl; </span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;------ base obj end -----&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;------ base2 obj begin -----&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object base2 vfptr addr is: &quot;</span> &lt;&lt; (<span class="type">long</span>*)&amp;d + <span class="number">2</span> &lt;&lt; std::endl; <span class="comment">//  base2 vfptr址 在对象第3个位置 </span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object base2 vfptr value is: &quot;</span> &lt;&lt; (<span class="type">long</span>*)*((<span class="type">long</span>*)&amp;d + <span class="number">2</span>) &lt;&lt; std::endl; <span class="comment">//  base2 vfptr值</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object base2 vfptr[0] func ptr  is: &quot;</span> &lt;&lt; (<span class="type">long</span>*)*(<span class="type">long</span>*)(*((<span class="type">long</span>*)&amp;d + <span class="number">2</span>)) &lt;&lt; std::endl; <span class="comment">//vfptr[0]的值 </span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object base2 vfptr[0] func invoke res: &quot;</span>;</span><br><span class="line">    pFunc pRun2 = (pFunc)(*(<span class="type">long</span>*)(*((<span class="type">long</span>*)&amp;d + <span class="number">2</span>)));</span><br><span class="line">    (*pRun2)(); <span class="comment">//调用vfptr[0](函数地址值)指向的函数</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object base2 vfptr[1] func ptr  is: &quot;</span> &lt;&lt; (<span class="type">long</span>*)*((<span class="type">long</span>*)(*((<span class="type">long</span>*)&amp;d + <span class="number">2</span>)) + <span class="number">1</span>) &lt;&lt; std::endl; <span class="comment">//vfptr[1]的值 </span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object base2 vfptr[1] func invoke res: &quot;</span>;</span><br><span class="line">    pFunc pRunBase2 = (pFunc)(*((<span class="type">long</span>*)(*((<span class="type">long</span>*)&amp;d + <span class="number">2</span>)) + <span class="number">1</span>));</span><br><span class="line">    (*pRunBase2)(); <span class="comment">//调用vfptr[1](函数地址值)指向的函数</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object _base2_var addr is: &quot;</span> &lt;&lt; (<span class="type">long</span>*)&amp;d + <span class="number">3</span> &lt;&lt; std::endl; <span class="comment">//_base2_var 在对象第4个位置 </span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object _base2_var value is: &quot;</span> &lt;&lt; (<span class="type">int</span>)*((<span class="type">long</span>*)&amp;d + <span class="number">3</span>) &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;------ base2 obj end -----&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object _derive_mul_com_var addr is: &quot;</span> &lt;&lt; (<span class="type">long</span>*)((<span class="type">int</span>*)((<span class="type">long</span>*)&amp;d + <span class="number">3</span>) + <span class="number">1</span>) &lt;&lt; std::endl; <span class="comment">//_derive_mul_com_var 在对象第5个位置 </span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; object _derive_mul_com_var value is: &quot;</span> &lt;&lt; *((<span class="type">int</span>*)((<span class="type">long</span>*)&amp;d + <span class="number">3</span>) + <span class="number">1</span>) &lt;&lt; std::endl; </span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;---------end  multi common derive  object inner memory layout test-------&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2.运行结果：</p>
+<figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">---------begin multi common derive object inner memory layout test-------</span><br><span class="line"> object size is: 32</span><br><span class="line"> object addr is: 0x7ffdcf415720</span><br><span class="line"> typeid(d) is: 14Derive_Mul_Com</span><br><span class="line">------ base obj begin -----</span><br><span class="line"> object base vfptr value is: 0x558b051786e0</span><br><span class="line"> object base vfptr[0] func ptr  is: 0x558b051742a4</span><br><span class="line"> object base vfptr[0] func<span class="built_in"> invoke </span>res: Derive_Mul_Com Class Run()</span><br><span class="line"> object base vfptr[1] func ptr  is: 0x558b051742ea</span><br><span class="line"> object base vfptr[1] func<span class="built_in"> invoke </span>res: Derive_Mul_Com Class RunBase()</span><br><span class="line"> object base vfptr[2] func ptr  is: 0x558b05174326</span><br><span class="line"> object base vfptr[2] func<span class="built_in"> invoke </span>res: Derive_Mul_Com Class RunDerive_Mul_Com()</span><br><span class="line"> object _base_var addr is: 0x7ffdcf415728</span><br><span class="line"> object _base_var value is: 30</span><br><span class="line">------ base obj end -----</span><br><span class="line">------ base2 obj begin -----</span><br><span class="line"> object base2 vfptr addr is: 0x7ffdcf415730</span><br><span class="line"> object base2 vfptr value is: 0x558b05178708</span><br><span class="line"> object base2 vfptr[0] func ptr  is: 0x558b051742df</span><br><span class="line"> object base2 vfptr[0] func<span class="built_in"> invoke </span>res: Derive_Mul_Com Class Run()</span><br><span class="line"> object base2 vfptr[1] func ptr  is: 0x558b05173e04</span><br><span class="line"> object base2 vfptr[1] func<span class="built_in"> invoke </span>res: Base2 Class RunBase2()</span><br><span class="line"> object _base2_var addr is: 0x7ffdcf415738</span><br><span class="line"> object _base2_var value is: 30</span><br><span class="line">------ base2 obj end -----</span><br><span class="line"> object _derive_mul_com_var addr is: 0x7ffdcf41573c</span><br><span class="line"> object _derive_mul_com_var value is: 30</span><br><span class="line">---------end  multi common derive  object inner memory layout test-------</span><br></pre></td></tr></table></figure>
+
+<p>3.内存布局示意图：<br><img src="/.com//mul_com_layout.png" alt="multi common derive"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><hr>
+<p>本篇主要介绍了C++类在普通继承下的子类对象内存特点，可以看出，子类对象中的虚函数均是在继承而来的基类虚函数表中进行操作的，不会创建自己的虚函数表，子类的自己内存部分只是增加了自己的成员变量部分。对于多重情况下，子类会继承每一个基类的虚函数表，这就意味着子类在多重继承下会存在多张虚表</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Frank Tao
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://www.taolingyang.com/2021/06/13/C++%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-2/" title="C++对象模型-2">http://www.taolingyang.com/2021/06/13/C++对象模型-2/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"># C++</a>
+              <a href="/tags/Object-Model/" rel="tag"># Object Model</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/06/03/C++%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-1/" rel="prev" title="C++对象模型-1">
+                  <i class="fa fa-chevron-left"></i> C++对象模型-1
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/06/25/C++%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-3/" rel="next" title="C++对象模型-3">
+                  C++对象模型-3 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank Tao</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">412k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">6:15</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://railway-starter-production-f6c1.up.railway.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"请文明评论呀","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":false,"comment_count":true,"requiredFields":["nick"],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/2021/06/13/C++%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-2/"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+  <script>
+	  (function(){
+		  var bp = document.createElement('script');
+		  var curProtocol = window.location.protocol.split(':')[0];
+		  if (curProtocol === 'https') {
+			  bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		  }
+		  else {
+			  bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		  }
+		  var s = document.getElementsByTagName("script")[0];
+		  s.parentNode.insertBefore(bp, s);
+	  })();
+  </script>
+</body>
+</html>

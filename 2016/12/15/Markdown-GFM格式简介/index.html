@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.taolingyang.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.13.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Markdown各种扩展Markdown除了标准的语法格式外，还有各种格式的扩展">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GFM格式Markdown简介">
+<meta property="og:url" content="http://www.taolingyang.com/2016/12/15/Markdown-GFM%E6%A0%BC%E5%BC%8F%E7%AE%80%E4%BB%8B/index.html">
+<meta property="og:site_name" content="Share Mind">
+<meta property="og:description" content="Markdown各种扩展Markdown除了标准的语法格式外，还有各种格式的扩展">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-12-14T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-09-09T01:52:18.367Z">
+<meta property="article:author" content="Frank Tao">
+<meta property="article:tag" content="GitHub">
+<meta property="article:tag" content="Markdown">
+<meta property="article:tag" content="标记语言">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://www.taolingyang.com/2016/12/15/Markdown-GFM%E6%A0%BC%E5%BC%8F%E7%AE%80%E4%BB%8B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://www.taolingyang.com/2016/12/15/Markdown-GFM%E6%A0%BC%E5%BC%8F%E7%AE%80%E4%BB%8B/","path":"2016/12/15/Markdown-GFM格式简介/","title":"GFM格式Markdown简介"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>GFM格式Markdown简介 | Share Mind</title>
+  
+
+
+
+
+
+<link rel="dns-prefetch" href="https://railway-starter-production-f6c1.up.railway.app">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Share Mind</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Love Reading | Film | Climbing | Snooker</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Markdown%E5%90%84%E7%A7%8D%E6%89%A9%E5%B1%95"><span class="nav-number">1.</span> <span class="nav-text">Markdown各种扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GFM-Markdown"><span class="nav-number">2.</span> <span class="nav-text">GFM Markdown</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E8%AF%8D%E5%86%85%E5%A4%9A%E4%B8%8B%E5%88%92%E7%BA%BF"><span class="nav-number">2.1.</span> <span class="nav-text">单词内多下划线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#URL%E8%87%AA%E5%8A%A8%E9%93%BE%E6%8E%A5"><span class="nav-number">2.2.</span> <span class="nav-text">URL自动链接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E7%BA%BF"><span class="nav-number">2.3.</span> <span class="nav-text">删除线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%85%E6%A0%8F%E5%BC%8F%E7%9A%84%E4%BB%A3%E7%A0%81%E5%9D%97"><span class="nav-number">2.4.</span> <span class="nav-text">栅栏式的代码块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95%E9%AB%98%E4%BA%AE"><span class="nav-number">2.5.</span> <span class="nav-text">语法高亮</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A8%E6%A0%BC"><span class="nav-number">2.6.</span> <span class="nav-text">表格</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTML"><span class="nav-number">2.7.</span> <span class="nav-text">HTML</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GFM%E6%8D%A2%E8%A1%8C"><span class="nav-number">2.8.</span> <span class="nav-text">GFM换行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E5%88%97%E8%A1%A8"><span class="nav-number">2.9.</span> <span class="nav-text">任务列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E7%94%A8"><span class="nav-number">2.10.</span> <span class="nav-text">引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E6%80%A7"><span class="nav-number">2.11.</span> <span class="nav-text">特性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Frank Tao"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Frank Tao</p>
+  <div class="site-description" itemprop="description">welcome to taolingyang’s blog -~-</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/franktly" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;franktly" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/tao-ling-yang" title="ZhiHu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;tao-ling-yang" rel="noopener" target="_blank"><i class="fa fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/2273442920" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;2273442920" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+  <a href="https://github.com/franktly" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.taolingyang.com/2016/12/15/Markdown-GFM%E6%A0%BC%E5%BC%8F%E7%AE%80%E4%BB%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Frank Tao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Share Mind">
+      <meta itemprop="description" content="welcome to taolingyang’s blog -~-">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="GFM格式Markdown简介 | Share Mind">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          GFM格式Markdown简介
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2016-12-15 00:00:00" itemprop="dateCreated datePublished" datetime="2016-12-15T00:00:00+08:00">2016-12-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Tools/" itemprop="url" rel="index"><span itemprop="name">Tools</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/2016/12/15/Markdown-GFM%E6%A0%BC%E5%BC%8F%E7%AE%80%E4%BB%8B/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2016/12/15/Markdown-GFM%E6%A0%BC%E5%BC%8F%E7%AE%80%E4%BB%8B/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>4.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="Markdown各种扩展"><a href="#Markdown各种扩展" class="headerlink" title="Markdown各种扩展"></a>Markdown各种扩展</h2><p>Markdown除了标准的语法格式外，还有各种格式的扩展</p>
+<span id="more"></span>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://michelf.ca/projects/php-markdown/extra/">PHP Markdown Extra</a><ul>
+<li>支持在html块元素中插入markdown语法</li>
+<li>支持为一些元素添加id或class</li>
+<li>支持将代码块用`或者<code>~</code>包起来，这样可以避免一些二义，还可以为代码块添加id或class</li>
+<li>支持手写的表格</li>
+<li>支持脚注引用</li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/bhollis/maruku/blob/master/docs/markdown_syntax.md">Maruku</a><br>是基于<strong>Ruby</strong>开发的解释器，具有以下特点：<ul>
+<li>支持原生Markdown</li>
+<li>支持所有PHP Markdown Extra的特性</li>
+<li>支持新的元数据语法，实际上就是给元素添加属性的能力</li>
+<li>支持公式格式输出<br>不过，该项目已经停止维护了</li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="http://kramdown.gettalong.org/">kramdown</a><br>同样是<strong>Ruby</strong>开发的解释器，kramdown吸取了Maruku几乎所有的特点，功能更为强大。其中有特点的功能有:<ul>
+<li>引入EOB标记^作为块元素的分隔符</li>
+<li>手写table的语法更加强大一些，支持table中的header和footer</li>
+<li>还支持注释，以及在转化时配置一些转化选项</li>
+<li>同样支持ALD(Attribute List Definitions属性列表定义)<br><a target="_blank" rel="noopener" href="https://help.github.com/articles/migrating-your-pages-site-from-maruku/">GitHub Page 推荐使用kramdown解释器</a></li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="http://www.pell.portland.or.us/~orc/Code/discount/">RDiscount</a><br>同样是<strong>Ruby</strong>开发的解释器，不过它是基于<a target="_blank" rel="noopener" href="http://www.pell.portland.or.us/~orc/Code/discount/">Discount</a>的语法移植的,以语法规则需要参考Discount。其语法支持几种上面没有提到过的特性:<ul>
+<li>文本居中，即输出<code>&lt;center&gt;</code></li>
+<li>图片大小定义<code>![dust mite](http://dust.mite =150x150)</code></li>
+<li>输出alpha列表：<code>&lt;ol type=&#39;a&#39;&gt;&lt;/ol&gt;</code></li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/vmg/redcarpet">Redcarpet</a><br>Redcarpet是一个转化库，可以在标准Markdown的基础上，配置一些额外的功能:<ul>
+<li>单词中间的_不处理</li>
+<li>转化PHP-Markdown风格的手写表格</li>
+<li>转化PHP-Markdown风格的带包含的代码块，也可禁用标准markdown的代码块语法自动link生成</li>
+<li>删除线支持：<code>~~good~~</code></li>
+<li>高亮标签<code>&lt;mark&gt;&lt;/mark&gt;</code>通过<code>==highlighted==</code>输出</li>
+<li>引用标签<code>&lt;q&gt;&lt;/q&gt;</code>通过<code>&quot;quote&quot;</code>输出</li>
+<li>转化PHP-Markdown风格脚注</li>
+<li>一些二义性的约束支持</li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://help.github.com/articles/writing-on-github/">GitHub</a><br><strong>Github Page对于上述的基于<em>Ruby</em>的markdown都是支持的</strong>，从<a target="_blank" rel="noopener" href="https://pages.github.com/versions/">这里</a>可以看到。另外，Github对于Issue、comments等，还定义了GFM(<a target="_blank" rel="noopener" href="https://help.github.com/articles/github-flavored-markdown/">GitHub Flavored Markdown</a>)，其中的语法一般基本来源于上面的提到的东西。除此之外，github还支持一些额外的特性：<ul>
+<li>支持把列表变成带勾选框的任务列表</li>
+<li>站内对分支、问题、用户等对象的直接引用</li>
+<li><a target="_blank" rel="noopener" href="http://www.emoji-cheat-sheet.com/">表情</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="GFM-Markdown"><a href="#GFM-Markdown" class="headerlink" title="GFM Markdown"></a>GFM Markdown</h2><hr>
+<p>GitHub 使用的是“GitHub Flavored Markdown”，简称GFM，有site-in issues,comments,pull requests等功能，它与标准的Markdown有一些区别，并增加了些新的扩展功能，区别如下：</p>
+<h3 id="单词内多下划线"><a href="#单词内多下划线" class="headerlink" title="单词内多下划线"></a>单词内多下划线</h3><p>标准的Markdown转换<code>_</code>成斜体，GFM忽略了单词内部的<code>_</code>，如：</p>
+<pre><code>hi_great_world
+do_this_and_do_other
+</code></pre>
+<p>效果：<br>hi_great_world<br>do_this_and_do_other</p>
+<blockquote>
+<p>这个特性允许代码里和名字里含有多个<code>_</code>的单词能够正确的解释，如果强调一个单词可以使用<code>*</code></p>
+</blockquote>
+<h3 id="URL自动链接"><a href="#URL自动链接" class="headerlink" title="URL自动链接"></a>URL自动链接</h3><p>标准Markdown使用<code>&lt;</code>URL<code>&gt;</code>来支持自动链接；GFM会自动链接标准的URLs，如果你想链接到一个URL(而不是设置链接文本)，你可以简单的输入一个URL地址，GFM会自动转换成一个URL链接，如:</p>
+<pre><code>http://www.franktly.com
+</code></pre>
+<p>效果：<br><a target="_blank" rel="noopener" href="http://www.franktly.com/">http://www.franktly.com</a></p>
+<h3 id="删除线"><a href="#删除线" class="headerlink" title="删除线"></a>删除线</h3><p>GFM增加了标准Markdown中没有的删除线的语法，使用两个<code>~</code>表示，如：</p>
+<pre><code>~~wrong text.~~
+</code></pre>
+<p>效果：<br><del>wrong text.</del></p>
+<h3 id="栅栏式的代码块"><a href="#栅栏式的代码块" class="headerlink" title="栅栏式的代码块"></a>栅栏式的代码块</h3><p>标准的Markdown把每行的开始带有4个空格或一个Tab的文本转换为代码块；GFM除了此，还支持<br>栅栏式代码块，仅仅需要把你的代码你用三个`包裹起来即可，不需要通过4个空格来区分了，如：</p>
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line">void hello()</span><br><span class="line">&#123;</span><br><span class="line">    print(<span class="string">&quot;hello&quot;</span>)<span class="comment">;</span></span><br><span class="line">&#125;</span><br><span class="line">```</span><br></pre></td></tr></table></figure>
+<p>效果(栅栏式代码块自动加了默认的高亮)：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">hello</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    print(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>尽管栅栏式代码块并不需要在前面增加一个空行（不像缩进式代码块），GFM建议最好加上一个空行，这样方便原始的Markdown更容易阅读<br>在列表里面，你必须使用8个空格来表示一个非栅栏式的代码块</p>
+</blockquote>
+<h3 id="语法高亮"><a href="#语法高亮" class="headerlink" title="语法高亮"></a>语法高亮</h3><p>代码块通过加语法高亮更容易阅读，在栅栏式代码块基础之上，增加一个可选的语言标字符(如 ruby,C,C++,pyhon等等)，GFM通过此种方式来进行代码语法高亮，如以下Ruby代码：</p>
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">```ruby</span><br><span class="line">require &#x27;redcarpet&#x27;</span><br><span class="line">markdown = Redcarpet.<span class="keyword">new</span>(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line">puts markdown.to_html</span><br><span class="line">```</span><br></pre></td></tr></table></figure>
+<p>效果：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">require</span> <span class="string">&#x27;redcarpet&#x27;</span></span><br><span class="line">markdown = <span class="title class_">Redcarpet</span>.new(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line">puts markdown.to_html</span><br></pre></td></tr></table></figure>
+<p>而没加高亮是这样的(标准Markdown换行加空四格)：</p>
+<pre><code>require &#39;redcarpet&#39;
+markdown = Redcarpet.new(&quot;Hello World!&quot;)
+puts markdown.to_html
+</code></pre>
+<blockquote>
+<p>GFM使用<a target="_blank" rel="noopener" href="https://github.com/github/linguist">Linguist</a>来检测语言进行语法高亮，可以参阅<a target="_blank" rel="noopener" href="https://github.com/github/linguist/blob/master/lib/linguist/languages.yml">YAML file</a>来确定哪些关键字的语言被支持</p>
+</blockquote>
+<h3 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h3><p>1)GFM在标准的Markdown语法基础上增加了表格，可以通过组合一系列单词通过连字符<code>-</code>（仅在第一行上使用）分隔第一行，通过<code>|</code>来分隔表格的每一列即可，如：</p>
+<figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">First Header | <span class="built_in">Second</span> Header</span><br><span class="line">-------------| -------------</span><br><span class="line">Content <span class="built_in">Cell</span> | Content <span class="built_in">Cell</span> </span><br><span class="line">Content <span class="built_in">Cell</span> | Content <span class="built_in">Cell</span>  </span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<table>
+<thead>
+<tr>
+<th>First Header</th>
+<th>Second Header</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Content Cell</td>
+<td>Content Cell</td>
+</tr>
+<tr>
+<td>Content Cell</td>
+<td>Content Cell</td>
+</tr>
+</tbody></table>
+<p>2)为了好看，可以在最后一列增加<code>|</code>:</p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">First Header |<span class="string"> Second Header </span>|</span><br><span class="line">-------------|<span class="string"> ------------- </span>|</span><br><span class="line">Content Cell |<span class="string"> Content Cell  </span>|</span><br><span class="line">Content Cell |<span class="string"> Content Cell  </span>|<span class="string"> </span></span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<table>
+<thead>
+<tr>
+<th>First Header</th>
+<th>Second Header</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Content Cell</td>
+<td>Content Cell</td>
+</tr>
+<tr>
+<td>Content Cell</td>
+<td>Content Cell</td>
+</tr>
+</tbody></table>
+<p>3)表头开始的破折号并不需要一定要匹配Header文本的长度(匹配的目的也是为了格式美观):</p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Name |<span class="string"> Description           </span>|</span><br><span class="line">-------------|<span class="string"> ------------- </span>|</span><br><span class="line">Open   |<span class="string"> Open Door </span>|</span><br><span class="line">Close  |<span class="string"> Close Door </span>|<span class="string"> </span></span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Open</td>
+<td>Open Door</td>
+</tr>
+<tr>
+<td>Close</td>
+<td>Close Door</td>
+</tr>
+</tbody></table>
+<p>4)通过在第一个行的<code>-</code>序列中增加<code>:</code>可以格式化文本的对齐方式，如<code>:</code>位于<code>-</code>序列左边表示文本左对齐，两边都有表示文本中间对齐，位于右边则表示右对齐，如：</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">| <span class="title class_">Left</span> <span class="title class_">Aligned</span> | <span class="title class_">Center</span> <span class="title class_">Aligned</span> | <span class="title class_">Right</span> <span class="title class_">Aligned</span> |</span><br><span class="line">|<span class="symbol">:------------</span> |<span class="symbol">:--------------</span><span class="symbol">:|</span> -------------<span class="symbol">:|</span></span><br><span class="line">| c11          | c12            | c13           |</span><br><span class="line">| c21          | c22            | c23           | </span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<table>
+<thead>
+<tr>
+<th align="left">Left Aligned</th>
+<th align="center">Center Aligned</th>
+<th align="right">Right Aligned</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">c11</td>
+<td align="center">c12</td>
+<td align="right">c13</td>
+</tr>
+<tr>
+<td align="left">c21</td>
+<td align="center">c22</td>
+<td align="right">c23</td>
+</tr>
+</tbody></table>
+<h3 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h3><p>可以在GitHub的READMEs，issues和requests中使用HTML的子集，支持的标签和属性可以参考<a target="_blank" rel="noopener" href="https://github.com/github/markup">github&#x2F;markup repository</a></p>
+<h3 id="GFM换行"><a href="#GFM换行" class="headerlink" title="GFM换行"></a>GFM换行</h3><p>标准Markdown要在一行的最后加两个空格符才表示换行，否则是不换行的；但是GFM则没有此要求</p>
+<pre><code>第一行(最后无两个空格)
+第二行
+</code></pre>
+<h3 id="任务列表"><a href="#任务列表" class="headerlink" title="任务列表"></a>任务列表</h3><p>GFM支持将列表变为<a target="_blank" rel="noopener" href="https://github.com/blog/1375%0A-task-lists-in-gfm-issues-pulls-comments">任务列表</a>，通过在列表的前面增加 <code>[ ]</code>或<code>[x]</code>(分别代码未完成和完成)，如：</p>
+<pre><code>+ [ ] a task list item
++ [ ] list syntax required
++ [ ] normal **formatting**,@emontions, #1232 refs
++ [ ] incomplete
++ [x] completed
+</code></pre>
+<p>看到的结果是checkboxes 列表，可以修改Markdown文本，可以Check或者Uncheck Boxes,文本会自动更新, 任务列表可以嵌套任务的深度,GFM建议最多嵌套1到2层，如：</p>
+<pre><code>+ [ ] a bigger project
+  + [ ] first subtask #1
+  + [ ] second subtask #2
++ [x] a small project
+  + [x] first substask #3
+</code></pre>
+<h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><p>特定的引用会自动被链接，如：</p>
+<pre><code>- SHA: a5c3785ed8d6a35868bc169f07e40e889087fd2e
+- User@SHA: jlord@a5c3785ed8d6a35868bc169f07e40e889087fd2e
+- User/Repository@SHA: jlord/sheetsee.js@a5c3785ed8d6a35868bc169f07e40e889087fd2e
+- #Num: #26
+- GH-Num: GH-26
+- User#Num: jlord#26
+- User/Repository#Num: jlord/sheetsee.js#26
+</code></pre>
+<h3 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h3><ul>
+<li>快速引用(<code>r</code>)</li>
+<li>@mentions自动生成名字和组(<code>@</code>)</li>
+<li>Emoji自动生成表情(<code>:</code>)</li>
+<li>Issue自动生成(<code>#</code>)</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="http://www.pchou.info/open-source/2014/07/07/something-about-markdown.html">Markdown的各种扩展</a></p>
+<p><a target="_blank" rel="noopener" href="https://help.github.com/articles/github-flavored-markdown/">GitHub Flavored Markdown</a></p>
+<p><a target="_blank" rel="noopener" href="https://help.github.com/articles/markdown-basics/">Markdown Basics</a></p>
+<p><a target="_blank" rel="noopener" href="https://help.github.com/articles/writing-on-github/">Writing on GitHub</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Frank Tao
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://www.taolingyang.com/2016/12/15/Markdown-GFM%E6%A0%BC%E5%BC%8F%E7%AE%80%E4%BB%8B/" title="GFM格式Markdown简介">http://www.taolingyang.com/2016/12/15/Markdown-GFM格式简介/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/GitHub/" rel="tag"># GitHub</a>
+              <a href="/tags/Markdown/" rel="tag"># Markdown</a>
+              <a href="/tags/%E6%A0%87%E8%AE%B0%E8%AF%AD%E8%A8%80/" rel="tag"># 标记语言</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2016/11/03/Markdown%E8%BF%9B%E9%98%B6/" rel="prev" title="Markdown进阶">
+                  <i class="fa fa-chevron-left"></i> Markdown进阶
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/01/23/Git%E5%B7%A5%E5%85%B7%E6%80%BB%E7%BB%93/" rel="next" title="Git工具总结">
+                  Git工具总结 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank Tao</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">412k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">6:15</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://railway-starter-production-f6c1.up.railway.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"请文明评论呀","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":false,"comment_count":true,"requiredFields":["nick"],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/2016/12/15/Markdown-GFM%E6%A0%BC%E5%BC%8F%E7%AE%80%E4%BB%8B/"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+  <script>
+	  (function(){
+		  var bp = document.createElement('script');
+		  var curProtocol = window.location.protocol.split(':')[0];
+		  if (curProtocol === 'https') {
+			  bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		  }
+		  else {
+			  bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		  }
+		  var s = document.getElementsByTagName("script")[0];
+		  s.parentNode.insertBefore(bp, s);
+	  })();
+  </script>
+</body>
+</html>

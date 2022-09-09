@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.taolingyang.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.13.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言 在处理3D图像数据时候，由于图像数据量大，采用传统的CPU方式进行图像算法处理，速度和性能不能满足项目要求，需要借助并行计算的架构进行处理。现在比较流行的并行计算框架有cuda，opencl，openmp等等。cuda虽然没有opencl这样的异构编程模型通用，可以同时使用在cpu,gpu,fpga,dsp等硬件平台上，但是cuda相比于opencl等并行计算框架比较成熟，且资源也比较多，g">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu14.04+CUDA8.0环境搭建">
+<meta property="og:url" content="http://www.taolingyang.com/2017/07/16/ubuntu14.04-cuda8-0%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/index.html">
+<meta property="og:site_name" content="Share Mind">
+<meta property="og:description" content="前言 在处理3D图像数据时候，由于图像数据量大，采用传统的CPU方式进行图像算法处理，速度和性能不能满足项目要求，需要借助并行计算的架构进行处理。现在比较流行的并行计算框架有cuda，opencl，openmp等等。cuda虽然没有opencl这样的异构编程模型通用，可以同时使用在cpu,gpu,fpga,dsp等硬件平台上，但是cuda相比于opencl等并行计算框架比较成熟，且资源也比较多，g">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-07-15T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-09-09T01:52:18.384Z">
+<meta property="article:author" content="Frank Tao">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="CUDA">
+<meta property="article:tag" content="HPC">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://www.taolingyang.com/2017/07/16/ubuntu14.04-cuda8-0%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://www.taolingyang.com/2017/07/16/ubuntu14.04-cuda8-0%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/","path":"2017/07/16/ubuntu14.04-cuda8-0环境搭建/","title":"Ubuntu14.04+CUDA8.0环境搭建"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Ubuntu14.04+CUDA8.0环境搭建 | Share Mind</title>
+  
+
+
+
+
+
+<link rel="dns-prefetch" href="https://railway-starter-production-f6c1.up.railway.app">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Share Mind</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Love Reading | Film | Climbing | Snooker</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CUDA%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.</span> <span class="nav-text">CUDA介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CUDA%E5%AE%89%E8%A3%85"><span class="nav-number">3.</span> <span class="nav-text">CUDA安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%89%8D%E5%87%86%E5%A4%87"><span class="nav-number">3.1.</span> <span class="nav-text">安装前准备</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5GPU%E6%98%AF%E5%90%A6%E6%98%AFCUDA-capable"><span class="nav-number">3.1.1.</span> <span class="nav-text">检查GPU是否是CUDA-capable</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5Linux%E7%89%88%E6%9C%AC%E6%98%AF%E5%90%A6%E6%94%AF%E6%8C%81CUDA"><span class="nav-number">3.1.2.</span> <span class="nav-text">检查Linux版本是否支持CUDA</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5Gcc%E7%89%88%E6%9C%AC"><span class="nav-number">3.1.3.</span> <span class="nav-text">检查Gcc版本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5%E6%98%AF%E5%90%A6%E5%AE%89%E8%A3%85%E4%BA%86Kernel-Header"><span class="nav-number">3.1.4.</span> <span class="nav-text">检查是否安装了Kernel Header</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85CUDA"><span class="nav-number">3.2.</span> <span class="nav-text">安装CUDA</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E6%9C%80%E6%96%B0runfile"><span class="nav-number">3.2.1.</span> <span class="nav-text">下载最新runfile</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A6%81%E7%94%A8nouveau"><span class="nav-number">3.2.2.</span> <span class="nav-text">禁用nouveau</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E9%97%AD%E5%9B%BE%E5%BD%A2%E5%8C%96%E7%95%8C%E9%9D%A2%E8%BF%9B%E5%85%A5%E5%AD%97%E7%AC%A6%E7%95%8C%E9%9D%A2%E5%AE%89%E8%A3%85CUDA"><span class="nav-number">3.2.3.</span> <span class="nav-text">关闭图形化界面进入字符界面安装CUDA</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">3.2.4.</span> <span class="nav-text">配置环境变量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%90%8E%E6%A3%80%E6%9F%A5"><span class="nav-number">3.3.</span> <span class="nav-text">安装后检查</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5NVIDIA%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E6%98%AF%E5%90%A6%E5%AE%89%E8%A3%85%E6%88%90%E5%8A%9F"><span class="nav-number">3.3.1.</span> <span class="nav-text">检查NVIDIA设备驱动是否安装成功</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5CUDA-Toolkit%E6%98%AF%E5%90%A6%E5%AE%89%E8%A3%85%E6%88%90%E5%8A%9F"><span class="nav-number">3.3.2.</span> <span class="nav-text">检查CUDA Toolkit是否安装成功</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5CUDA-Sample%E6%98%AF%E5%90%A6%E5%8F%AF%E4%BB%A5%E6%AD%A3%E5%B8%B8%E8%BF%90%E8%A1%8C"><span class="nav-number">3.3.3.</span> <span class="nav-text">检查CUDA Sample是否可以正常运行</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Frank Tao"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Frank Tao</p>
+  <div class="site-description" itemprop="description">welcome to taolingyang’s blog -~-</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/franktly" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;franktly" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/tao-ling-yang" title="ZhiHu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;tao-ling-yang" rel="noopener" target="_blank"><i class="fa fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/2273442920" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;2273442920" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+  <a href="https://github.com/franktly" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.taolingyang.com/2017/07/16/ubuntu14.04-cuda8-0%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Frank Tao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Share Mind">
+      <meta itemprop="description" content="welcome to taolingyang’s blog -~-">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Ubuntu14.04+CUDA8.0环境搭建 | Share Mind">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Ubuntu14.04+CUDA8.0环境搭建
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-07-16 00:00:00" itemprop="dateCreated datePublished" datetime="2017-07-16T00:00:00+08:00">2017-07-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/2017/07/16/ubuntu14.04-cuda8-0%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2017/07/16/ubuntu14.04-cuda8-0%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>6.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>在处理3D图像数据时候，由于图像数据量大，采用传统的CPU方式进行图像算法处理，速度和性能不能满足项目要求，需要借助并行计算的架构进行处理。现在比较流行的并行计算框架有cuda，opencl，openmp等等。cuda虽然没有opencl这样的异构编程模型通用，可以同时使用在cpu,gpu,fpga,dsp等硬件平台上，但是cuda相比于opencl等并行计算框架比较成熟，且资源也比较多，gpu硬件有多核处理的优势，因此cuda必然作为数据计算加速方案的第一选择。</p>
+<span id="more"></span>
+
+<h2 id="CUDA介绍"><a href="#CUDA介绍" class="headerlink" title="CUDA介绍"></a>CUDA介绍</h2><hr>
+<p>wiki上关于CUDA的解释:</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CUDA <span class="keyword">is</span> a parallel computing platform <span class="keyword">and</span> <span class="built_in">application</span> programming interface (API) model created <span class="keyword">by</span> Nvidia. It allows software developers <span class="keyword">and</span> software engineers <span class="keyword">to</span> use a CUDA-enabled graphics processing unit (GPU) <span class="keyword">for</span> general purpose processing – an approach termed GPGPU (General-Purpose computing <span class="keyword">on</span> Graphics Processing Units). The CUDA platform <span class="keyword">is</span> a software layer <span class="keyword">that</span> gives direct access <span class="keyword">to</span> <span class="keyword">the</span> GPU&#x27;s virtual instruction <span class="keyword">set</span> <span class="keyword">and</span> parallel computational elements, <span class="keyword">for</span> <span class="keyword">the</span> execution <span class="keyword">of</span> compute kernels.</span><br><span class="line">The CUDA platform <span class="keyword">is</span> designed <span class="keyword">to</span> work <span class="keyword">with</span> programming languages such <span class="keyword">as</span> C, C++, <span class="keyword">and</span> Fortran. This accessibility makes <span class="keyword">it</span> easier <span class="keyword">for</span> specialists <span class="keyword">in</span> parallel programming <span class="keyword">to</span> use GPU resources, <span class="keyword">in</span> contrast <span class="keyword">to</span> prior APIs like Direct3D <span class="keyword">and</span> OpenGL, which required advanced skills <span class="keyword">in</span> graphics programming. Also, CUDA supports programming frameworks such <span class="keyword">as</span> OpenACC <span class="keyword">and</span> OpenCL. When <span class="keyword">it</span> was <span class="keyword">first</span> introduced <span class="keyword">by</span> Nvidia, <span class="keyword">the</span> <span class="built_in">name</span> CUDA was an acronym <span class="keyword">for</span> Compute Unified Device Architecture, <span class="keyword">but</span> Nvidia subsequently dropped <span class="keyword">the</span> use <span class="keyword">of</span> <span class="keyword">the</span> acronym.</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>cuda主要是nvidia公司开发的在nvidia GPU硬件上进行GPGPU(通用目的的图形卡计算)的并行计算框架， 支持C&#x2F;C++&#x2F;Fortran等计算语言。</p>
+</blockquote>
+<h2 id="CUDA安装"><a href="#CUDA安装" class="headerlink" title="CUDA安装"></a>CUDA安装</h2><hr>
+<p>cuda支持windows,linux,macos等多种操作系统，由于本人使用的是ubuntu14.04LTS操作系统，因此这篇文章主要是在ubuntu操作系统上安装cuda8.0(截止2017.7.16,最新的cuda版本为8.0)的过程。</p>
+<h3 id="安装前准备"><a href="#安装前准备" class="headerlink" title="安装前准备"></a>安装前准备</h3><hr>
+<p>在使用CUDA在系统进行开发之前，需要满足以下几个条件:</p>
+<ul>
+<li>支持CUDA的GPU硬件，关于GPU支持情况可以去NV官网查看(<a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-gpus">https://developer.nvidia.com/cuda-gpus</a>)</li>
+<li>支持CUDA运行的Linux Kernel Header和GCC等工具链</li>
+<li>NVIDIA CUDA 工具包(<a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-downloads">https://developer.nvidia.com/cuda-downloads</a>)</li>
+</ul>
+<h4 id="检查GPU是否是CUDA-capable"><a href="#检查GPU是否是CUDA-capable" class="headerlink" title="检查GPU是否是CUDA-capable"></a>检查GPU是否是CUDA-capable</h4><hr>
+<p>shell终端输入以下命令：</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lspci <span class="string">| grep -i nvidia</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>会返回GPU版本信息，去NV官网查看是否在支持列表中(<a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-gpus">https://developer.nvidia.com/cuda-gpus</a>)</p>
+</blockquote>
+<p>本人笔记本返回:</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">01</span>:<span class="number">00</span>.<span class="number">0</span> <span class="number">3</span>D controller: NVIDIA Corporation GK107M<span class="meta"> [GeForce GT 750M] (rev a1)</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>本人电脑是GT750M型号的GPU硬件，GeForce系列Kepler架构的GPU，在支持列表中</p>
+</blockquote>
+<h4 id="检查Linux版本是否支持CUDA"><a href="#检查Linux版本是否支持CUDA" class="headerlink" title="检查Linux版本是否支持CUDA"></a>检查Linux版本是否支持CUDA</h4><hr>
+<p>shell终端分别输入以下命令查看Ubuntu版本和基本软硬件信息：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lsb_release -<span class="selector-tag">a</span></span><br><span class="line">uname -<span class="selector-tag">a</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>一般的Linux发行版均支持CUDA，通过查询系统信息确认系统操作系统版本和位数方便下载相应的软件开发包</p>
+</blockquote>
+<p>本人笔记本返回:</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">No</span> LSB modules are available.</span><br><span class="line"><span class="attribute">Distributor</span> ID:	Ubuntu</span><br><span class="line"><span class="attribute">Description</span>:	Ubuntu <span class="number">14</span>.<span class="number">04</span>.<span class="number">5</span> LTS</span><br><span class="line"><span class="attribute">Release</span>:	<span class="number">14</span>.<span class="number">04</span></span><br><span class="line"><span class="attribute">Codename</span>:	trusty</span><br><span class="line"></span><br><span class="line"><span class="attribute">Linux</span> franktly <span class="number">3</span>.<span class="number">13</span>.<span class="number">0</span>-<span class="number">123</span>-generic #<span class="number">172</span>-Ubuntu SMP Mon Jun <span class="number">26</span> <span class="number">18</span>:<span class="number">04</span>:<span class="number">35</span> UTC <span class="number">2017</span> x86_64 x86_64 x86_64 GNU/Linux</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>本人电脑是3.13 linux kernel版本，64位ubuntu14.04系统，支持CUDA8.0(CUDA8.0在ubuntu14.0上需要Kernel版本为3.13版本)</p>
+</blockquote>
+<h4 id="检查Gcc版本"><a href="#检查Gcc版本" class="headerlink" title="检查Gcc版本"></a>检查Gcc版本</h4><hr>
+<p>shell终端输入以下命令查看Gcc版本：</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc <span class="comment">--version</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>CUDA8.0在ubuntu14.04上需要4.8.2及其以上的Gcc版本支持，若Gcc版本过低可以去<a target="_blank" rel="noopener" href="http://gcc.gnu.org/">http://gcc.gnu.org/</a>下载比较新的</p>
+</blockquote>
+<p>本人笔记本返回:</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">gcc</span> (Ubuntu <span class="number">4</span>.<span class="number">8</span>.<span class="number">4</span>-<span class="number">2</span>ubuntu1~<span class="number">14</span>.<span class="number">04</span>.<span class="number">3</span>) <span class="number">4</span>.<span class="number">8</span>.<span class="number">4</span></span><br><span class="line"><span class="attribute">Copyright</span> (C) <span class="number">2013</span> Free Software Foundation, Inc.</span><br><span class="line"><span class="attribute">This</span> is free software; see the source for copying conditions.  There is NO</span><br><span class="line"><span class="attribute">warranty</span>; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>gcc版本是4.8.4,支持CUDA8.0</p>
+</blockquote>
+<h4 id="检查是否安装了Kernel-Header"><a href="#检查是否安装了Kernel-Header" class="headerlink" title="检查是否安装了Kernel Header"></a>检查是否安装了Kernel Header</h4><hr>
+<p>shell终端输入以下命令查看Kernel版本:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">uname</span> -r </span><br></pre></td></tr></table></figure>
+<p>shell终端输入以下命令安装对应Kernel版本的Kernel Header和Package Development:</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install linux-headers-<span class="constructor">$(<span class="params">uname</span> -<span class="params">r</span>)</span></span><br></pre></td></tr></table></figure>
+<p>至此，Ubuntu14.04上安装CUDA8.0的环境检查完成。</p>
+<h3 id="安装CUDA"><a href="#安装CUDA" class="headerlink" title="安装CUDA"></a>安装CUDA</h3><hr>
+<p>CUDA提供了Package Manager和runfile两种方式进行安装，此处介绍成功率比较高简单的runfile方式安装。</p>
+<h4 id="下载最新runfile"><a href="#下载最新runfile" class="headerlink" title="下载最新runfile"></a>下载最新runfile</h4><hr>
+<p>根据操作系统及位数在<a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-downloads">https://developer.nvidia.com/cuda-downloads</a>选择合适的runfile安装文件下载安装。</p>
+<h4 id="禁用nouveau"><a href="#禁用nouveau" class="headerlink" title="禁用nouveau"></a>禁用nouveau</h4><hr>
+<p>shell终端输入以下命令查看nouveau是否在运行：</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsmod <span class="string">| grep nouveau</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>若有输出表示在运行，否则表示没有运行</p>
+</blockquote>
+<p>若在运行，则需要通过以下方式禁用nouvea，首先在<code>/etc/modeprobe.d</code>路径中创建<code>blacklist-nouveau.config</code>文件，并在文件中加入以下内容：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">blacklist nouveau</span><br><span class="line">option nouveau <span class="attribute">modeset</span>=0</span><br></pre></td></tr></table></figure>
+<p>然后在shell终端输入：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">sudo update-initramfs -u</span></span><br></pre></td></tr></table></figure>
+
+<p>再次运行<code>lsmode | grep nouveau</code>检查是否禁用成功</p>
+<h4 id="关闭图形化界面进入字符界面安装CUDA"><a href="#关闭图形化界面进入字符界面安装CUDA" class="headerlink" title="关闭图形化界面进入字符界面安装CUDA"></a>关闭图形化界面进入字符界面安装CUDA</h4><hr>
+<ol>
+<li>重启电脑，在进入登录界面后，按下<code>alt+ctrl+F1</code>进入文本模式(text mode)，登录用户名和密码进入</li>
+<li>输入以下命令关闭图形用户界面：<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service lightdm stop</span><br></pre></td></tr></table></figure></li>
+<li>切换到下载的runfile文件路劲，运行：<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="keyword">sh</span> cuda_XXX_linux.<span class="keyword">run</span></span><br></pre></td></tr></table></figure></li>
+<li>输入以下命令重启图形用户界面：<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service lightdm <span class="literal">start</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>按照安装提示一步一步的安装，选择yes or no或输入相关路径，最终安装成功会提示intalled, 否则failed。安装过程中注意以下几点:</p>
+<ul>
+<li>在进行是否安装OpenGL库时候，对于多显卡系统(包含独立NV GPU显卡和集成的Intel或AMD显卡)，<strong>最好选择NO</strong> ，否则会出现黑屏</li>
+<li>在提示是否进行nvidia-xconfig替换时候，需要自定义的多显卡X系统配置，<strong>最好选择NO</strong></li>
+</ul>
+</blockquote>
+</li>
+</ol>
+<p>按下<code>alt+ctrl+F7</code>返回图形界面登录，若登录成功一般表示CUDA安装成功</p>
+<h4 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h4><hr>
+<p>编辑<code>/etc/profile</code>文件，添加以下两行将cuda相关工具和库加入系统路径：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export PATH=<span class="regexp">/usr/</span>local<span class="regexp">/cuda-XXX/</span>bin:<span class="variable">$PATH</span>(XXX为安装CUDA版本号)</span><br><span class="line">export LD_LIBRARY_PATH=<span class="regexp">/usr/</span>local<span class="regexp">/cudaXXX/</span>lib64(根据相应的位数选择相应的lib文件)</span><br></pre></td></tr></table></figure>
+
+<p>为了立即生效可以在shell终端输入：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">source</span> <span class="regexp">/etc/</span>profile</span><br></pre></td></tr></table></figure>
+
+<p>最后在shell终端输入：</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">env <span class="string">| grep cuda</span></span><br></pre></td></tr></table></figure>
+
+<p>查看环境变量是否设置成功</p>
+<h3 id="安装后检查"><a href="#安装后检查" class="headerlink" title="安装后检查"></a>安装后检查</h3><hr>
+<h4 id="检查NVIDIA设备驱动是否安装成功"><a href="#检查NVIDIA设备驱动是否安装成功" class="headerlink" title="检查NVIDIA设备驱动是否安装成功"></a>检查NVIDIA设备驱动是否安装成功</h4><hr>
+<p>在shell终端输入以下命令查看nvidia设备驱动情况：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat <span class="regexp">/proc/</span>driver<span class="regexp">/nvidia/</span>version</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>若返回显示NVIDIA设备驱动版本和Gcc版本则表示安装成功</p>
+</blockquote>
+<p>本人电脑返回：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">NVRM</span> version: NVIDIA UNIX x86_64 Kernel Module  <span class="number">375</span>.<span class="number">26</span>  Thu Dec  <span class="number">8</span> <span class="number">18</span>:<span class="number">36</span>:<span class="number">43</span> PST <span class="number">2016</span></span><br><span class="line"><span class="attribute">GCC</span> version:  gcc version <span class="number">4</span>.<span class="number">8</span>.<span class="number">4</span> (Ubuntu <span class="number">4</span>.<span class="number">8</span>.<span class="number">4</span>-<span class="number">2</span>ubuntu1~<span class="number">14</span>.<span class="number">04</span>.<span class="number">3</span>) </span><br></pre></td></tr></table></figure>
+
+<p>在shell终端输入以下命令查看nvidia设备文件是否存在：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> /dev | grep -i nvidia</span><br></pre></td></tr></table></figure>
+
+<p>本人电脑返回：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">nvidia0</span></span><br><span class="line">nvidiactl</span><br><span class="line">nvidia-uvm</span><br><span class="line">nvidia-uvm-tools</span><br></pre></td></tr></table></figure>
+
+<h4 id="检查CUDA-Toolkit是否安装成功"><a href="#检查CUDA-Toolkit是否安装成功" class="headerlink" title="检查CUDA Toolkit是否安装成功"></a>检查CUDA Toolkit是否安装成功</h4><hr>
+<p>在shell终端输入以下命令,查看cuda版本： </p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">nvcc -V</span></span><br></pre></td></tr></table></figure>
+
+<p>本人电脑返回：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">nvcc</span>: NVIDIA (R) Cuda compiler driver</span><br><span class="line"><span class="attribute">Copyright</span> (c) <span class="number">2005</span>-<span class="number">2016</span> NVIDIA Corporation</span><br><span class="line"><span class="attribute">Built</span> <span class="literal">on</span> Tue_Jan_10_13:<span class="number">22</span>:<span class="number">03</span>_CST_2017</span><br><span class="line"><span class="attribute">Cuda</span> compilation tools, release <span class="number">8</span>.<span class="number">0</span>, V8.<span class="number">0</span>.<span class="number">61</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>cuda版本为8.0 </p>
+</blockquote>
+<h4 id="检查CUDA-Sample是否可以正常运行"><a href="#检查CUDA-Sample是否可以正常运行" class="headerlink" title="检查CUDA Sample是否可以正常运行"></a>检查CUDA Sample是否可以正常运行</h4><hr>
+<p>在CUDA Sample的路径下(默认是安装在用户目录下的NVIDIA_CUDA_XXX_Samples文件夹下),输入：</p>
+<figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">make</span> -<span class="function"><span class="title">jX</span>(<span class="variable">X</span>表示系统<span class="variable">CPU</span>核数)</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>通过<code>cat /proc/cpuinfo | grep &quot;processor&quot; | sort -u | wc -l</code>命令查看逻辑cpu数<br>通过<code>cat /proc/cpuinfo | grep &quot;physical id&quot; | sort -u | wc -l</code>命令查看物理cpu数</p>
+</blockquote>
+<p>在编译生成的<code>NVIDIA_CUDA_XXX_Samples/bin/x86_64/linux/release/</code>目录下运行其中一个sample，如设备查询sample：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./deviceQuery</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>若有查询结果打印说明sample运行正常</p>
+</blockquote>
+<p>本人电脑运行结果为:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">/home/franktly/NVIDIA_CUDA-8.0_Samples/bin/x86_64/linux/release/deviceQuery</span> <span class="string">Starting...</span></span><br><span class="line"></span><br><span class="line"> <span class="string">CUDA</span> <span class="string">Device</span> <span class="string">Query</span> <span class="string">(Runtime</span> <span class="string">API)</span> <span class="string">version</span> <span class="string">(CUDART</span> <span class="string">static</span> <span class="string">linking)</span></span><br><span class="line"></span><br><span class="line"><span class="string">Detected</span> <span class="number">1</span> <span class="string">CUDA</span> <span class="string">Capable</span> <span class="string">device(s)</span></span><br><span class="line"></span><br><span class="line"><span class="attr">Device 0:</span> <span class="string">&quot;GeForce GT 750M&quot;</span></span><br><span class="line">  <span class="string">CUDA</span> <span class="string">Driver</span> <span class="string">Version</span> <span class="string">/</span> <span class="string">Runtime</span> <span class="string">Version</span>          <span class="number">8.0</span> <span class="string">/</span> <span class="number">8.0</span></span><br><span class="line">  <span class="attr">CUDA Capability Major/Minor version number:</span>    <span class="number">3.0</span></span><br><span class="line">  <span class="attr">Total amount of global memory:</span>                 <span class="number">4038 </span><span class="string">MBytes</span> <span class="string">(4233953280</span> <span class="string">bytes)</span></span><br><span class="line">  <span class="string">(</span> <span class="number">2</span><span class="string">)</span> <span class="string">Multiprocessors,</span> <span class="string">(192)</span> <span class="attr">CUDA Cores/MP:</span>     <span class="number">384</span> <span class="string">CUDA</span> <span class="string">Cores</span></span><br><span class="line">  <span class="attr">GPU Max Clock rate:</span>                            <span class="number">1085 </span><span class="string">MHz</span> <span class="string">(1.09</span> <span class="string">GHz)</span></span><br><span class="line">  <span class="attr">Memory Clock rate:</span>                             <span class="number">900</span> <span class="string">Mhz</span></span><br><span class="line">  <span class="attr">Memory Bus Width:</span>                              <span class="number">128</span><span class="string">-bit</span></span><br><span class="line">  <span class="attr">L2 Cache Size:</span>                                 <span class="number">262144</span> <span class="string">bytes</span></span><br><span class="line">  <span class="string">Maximum</span> <span class="string">Texture</span> <span class="string">Dimension</span> <span class="string">Size</span> <span class="string">(x,y,z)</span>         <span class="string">1D=(65536),</span> <span class="string">2D=(65536,</span> <span class="number">65536</span><span class="string">),</span> <span class="string">3D=(4096,</span> <span class="number">4096</span><span class="string">,</span> <span class="number">4096</span><span class="string">)</span></span><br><span class="line">  <span class="string">Maximum</span> <span class="string">Layered</span> <span class="string">1D</span> <span class="string">Texture</span> <span class="string">Size,</span> <span class="string">(num)</span> <span class="string">layers</span>  <span class="string">1D=(16384),</span> <span class="number">2048 </span><span class="string">layers</span></span><br><span class="line">  <span class="string">Maximum</span> <span class="string">Layered</span> <span class="string">2D</span> <span class="string">Texture</span> <span class="string">Size,</span> <span class="string">(num)</span> <span class="string">layers</span>  <span class="string">2D=(16384,</span> <span class="number">16384</span><span class="string">),</span> <span class="number">2048 </span><span class="string">layers</span></span><br><span class="line">  <span class="attr">Total amount of constant memory:</span>               <span class="number">65536</span> <span class="string">bytes</span></span><br><span class="line">  <span class="attr">Total amount of shared memory per block:</span>       <span class="number">49152</span> <span class="string">bytes</span></span><br><span class="line">  <span class="attr">Total number of registers available per block:</span> <span class="number">65536</span></span><br><span class="line">  <span class="attr">Warp size:</span>                                     <span class="number">32</span></span><br><span class="line">  <span class="attr">Maximum number of threads per multiprocessor:</span>  <span class="number">2048</span></span><br><span class="line">  <span class="attr">Maximum number of threads per block:</span>           <span class="number">1024</span></span><br><span class="line">  <span class="string">Max</span> <span class="string">dimension</span> <span class="string">size</span> <span class="string">of</span> <span class="string">a</span> <span class="string">thread</span> <span class="string">block</span> <span class="string">(x,y,z):</span> <span class="string">(1024,</span> <span class="number">1024</span><span class="string">,</span> <span class="number">64</span><span class="string">)</span></span><br><span class="line">  <span class="string">Max</span> <span class="string">dimension</span> <span class="string">size</span> <span class="string">of</span> <span class="string">a</span> <span class="string">grid</span> <span class="string">size</span>    <span class="string">(x,y,z):</span> <span class="string">(2147483647,</span> <span class="number">65535</span><span class="string">,</span> <span class="number">65535</span><span class="string">)</span></span><br><span class="line">  <span class="attr">Maximum memory pitch:</span>                          <span class="number">2147483647</span> <span class="string">bytes</span></span><br><span class="line">  <span class="attr">Texture alignment:</span>                             <span class="number">512</span> <span class="string">bytes</span></span><br><span class="line">  <span class="attr">Concurrent copy and kernel execution:</span>          <span class="literal">Yes</span> <span class="string">with</span> <span class="number">1</span> <span class="string">copy</span> <span class="string">engine(s)</span></span><br><span class="line">  <span class="attr">Run time limit on kernels:</span>                     <span class="literal">No</span></span><br><span class="line">  <span class="attr">Integrated GPU sharing Host Memory:</span>            <span class="literal">No</span></span><br><span class="line">  <span class="attr">Support host page-locked memory mapping:</span>       <span class="literal">Yes</span></span><br><span class="line">  <span class="attr">Alignment requirement for Surfaces:</span>            <span class="literal">Yes</span></span><br><span class="line">  <span class="attr">Device has ECC support:</span>                        <span class="string">Disabled</span></span><br><span class="line">  <span class="string">Device</span> <span class="string">supports</span> <span class="string">Unified</span> <span class="string">Addressing</span> <span class="string">(UVA):</span>      <span class="literal">Yes</span></span><br><span class="line">  <span class="attr">Device PCI Domain ID / Bus ID / location ID:</span>   <span class="number">0</span> <span class="string">/</span> <span class="number">1</span> <span class="string">/</span> <span class="number">0</span></span><br><span class="line">  <span class="attr">Compute Mode:</span></span><br><span class="line">     <span class="string">&lt;</span> <span class="string">Default</span> <span class="string">(multiple</span> <span class="string">host</span> <span class="string">threads</span> <span class="string">can</span> <span class="string">use</span> <span class="string">::cudaSetDevice()</span> <span class="string">with</span> <span class="string">device</span> <span class="string">simultaneously)</span> <span class="string">&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="string">deviceQuery,</span> <span class="string">CUDA</span> <span class="string">Driver</span> <span class="string">=</span> <span class="string">CUDART,</span> <span class="string">CUDA</span> <span class="string">Driver</span> <span class="string">Version</span> <span class="string">=</span> <span class="number">8.0</span><span class="string">,</span> <span class="string">CUDA</span> <span class="string">Runtime</span> <span class="string">Version</span> <span class="string">=</span> <span class="number">8.0</span><span class="string">,</span> <span class="string">NumDevs</span> <span class="string">=</span> <span class="number">1</span><span class="string">,</span> <span class="string">Device0</span> <span class="string">=</span> <span class="string">GeForce</span> <span class="string">GT</span> <span class="string">750M</span></span><br><span class="line"><span class="string">Result</span> <span class="string">=</span> <span class="string">PASS</span></span><br></pre></td></tr></table></figure>
+<p>可以看到，通过以上步骤，CUDA Sample运行成功， deviceQuery检测到一个CUDA设备，并打印出其相关属性。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><hr>
+<p>至此CUDA8.0在Ubuntu14.04系统上安装成功，并成功运行CUDA Samples, 后续会陆续具体的介绍CUDA的使用</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><hr>
+<p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/compute/cuda/8.0/Prod2/docs/sidebar/CUDA_Installation_Guide_Linux-pdf">https://developer.nvidia.com/compute/cuda/8.0/Prod2/docs/sidebar/CUDA_Installation_Guide_Linux-pdf</a><br><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/CUDA">https://en.wikipedia.org/wiki/CUDA</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/masa_fish/article/details/51882183">https://blog.csdn.net/masa_fish/article/details/51882183</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Frank Tao
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://www.taolingyang.com/2017/07/16/ubuntu14.04-cuda8-0%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" title="Ubuntu14.04+CUDA8.0环境搭建">http://www.taolingyang.com/2017/07/16/ubuntu14.04-cuda8-0环境搭建/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/CUDA/" rel="tag"># CUDA</a>
+              <a href="/tags/HPC/" rel="tag"># HPC</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/07/08/Vim%E7%BC%96%E8%BE%91%E5%99%A8%E6%80%BB%E7%BB%93/" rel="prev" title="Vim编辑器总结">
+                  <i class="fa fa-chevron-left"></i> Vim编辑器总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/09/15/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%A6%82%E8%BF%B0/" rel="next" title="设计模式概述">
+                  设计模式概述 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank Tao</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">412k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">6:15</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://railway-starter-production-f6c1.up.railway.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"请文明评论呀","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":false,"comment_count":true,"requiredFields":["nick"],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/2017/07/16/ubuntu14.04-cuda8-0%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+  <script>
+	  (function(){
+		  var bp = document.createElement('script');
+		  var curProtocol = window.location.protocol.split(':')[0];
+		  if (curProtocol === 'https') {
+			  bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		  }
+		  else {
+			  bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		  }
+		  var s = document.getElementsByTagName("script")[0];
+		  s.parentNode.insertBefore(bp, s);
+	  })();
+  </script>
+</body>
+</html>
