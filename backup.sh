@@ -23,5 +23,6 @@ do
 done
 
 cd ..\..\blog
+echo -n "" > log.txt
 echo "************* finish backup hexo source file ************* "
 

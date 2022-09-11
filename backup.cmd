@@ -29,5 +29,6 @@ if %errorlevel%==0 (
 
 :end
 cd ..\..\blog
+break>log.txt
 ECHO "************* finish backup hexo source file ************* "
 
