@@ -112,6 +112,7 @@ do
 done
 
 cd ..\..\blog
+echo -n "" > log.txt
 echo "************* finish backup hexo source file ************* "
 ```
 
@@ -148,6 +149,7 @@ if %errorlevel%==0 (
 
 :end
 cd ..\..\blog
+break>log.txt
 ECHO "************* finish backup hexo source file ************* "
 
 ```
